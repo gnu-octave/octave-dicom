@@ -1,0 +1,8 @@
+Name: dicom
+Version: 0.1
+Date: 2010-06
+Author: Andy Buckle
+Maintainer: Andy Buckle
+Description: Digital communications in medicine file io.
+License: GPL version 3 or later
+Dependencies: Grassroots Dicom (GDCM)
