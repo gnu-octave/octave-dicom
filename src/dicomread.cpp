@@ -73,33 +73,43 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 	// dim 1: rows (height)
 	// dim 2: number of frames
 	
+	dim_vector *dv_p;
+	
 	if( 2==ndim ) {
-		error(QUOTED(OCT_FN_NAME)": 2D. not implemented yet: %s",ndim, filename.c_str());
-		//create output arg
-		return retval;
+		dv_p=new dim_vector(dims[0], dims[1]); //this transposes first two dimensions
 	} else if (3==ndim) {
-		octave_idx_type cols = dims[0]; // NB cols, then rows in DICOM. octave
-		octave_idx_type rows = dims[1];
-		octave_idx_type frms = dims[2]; // third dim called frames in DICOM
-		if ( gdcm::PixelFormat::UINT32 != image.GetPixelFormat() ) {
-			error(QUOTED(OCT_FN_NAME)": pixel format not supported yet: %s", filename.c_str());
-			return retval;
-		}
-		if ( (unsigned short)1 != image.GetPixelFormat().GetSamplesPerPixel() ) {
-			error(QUOTED(OCT_FN_NAME)": only 1 sample per pixel supported. has %i : %s", 
-					image.GetPixelFormat().GetSamplesPerPixel(), filename.c_str());
-			return retval;
-		}
-		//                                should be (rows, cols, pages) in octave idiom
-		dim_vector dv(cols, rows, frms);//this transposes first two dimensions
-		uint32NDArray arr(dv);
-		image.GetBuffer((char *)arr.fortran_vec());
-		return octave_value(arr);
+		dv_p=new dim_vector(dims[0], dims[1], dims[2]); // should be (rows, cols, pages) in octave idiom
 	} else {
 		error(QUOTED(OCT_FN_NAME)": %i dimensions. not supported: %s",ndim, filename.c_str());
 		return retval;
 	}
-
+	
+	if ( gdcm::PixelFormat::UINT32 == image.GetPixelFormat() ) { //tested
+		uint32NDArray arr(*dv_p);
+		image.GetBuffer((char *)arr.fortran_vec());
+		delete dv_p;
+		return octave_value(arr);
+	} else if ( gdcm::PixelFormat::UINT16 == image.GetPixelFormat() ) { //tested
+		uint16NDArray arr(*dv_p);
+		image.GetBuffer((char *)arr.fortran_vec());
+		delete dv_p;
+		return octave_value(arr);
+	} else if ( gdcm::PixelFormat::UINT8 == image.GetPixelFormat() ) { //tested
+		uint8NDArray arr(*dv_p);
+		image.GetBuffer((char *)arr.fortran_vec());
+		delete dv_p;
+		return octave_value(arr);
+	} else if ( gdcm::PixelFormat::INT8 == image.GetPixelFormat() ) { // no example found to test
+		int8NDArray arr(*dv_p);
+		image.GetBuffer((char *)arr.fortran_vec());
+		delete dv_p;
+		return octave_value(arr);
+	} else {
+		octave_stdout << image.GetPixelFormat() << '\n' ;
+		error(QUOTED(OCT_FN_NAME)": pixel format not supported yet: %s", filename.c_str());
+		return retval;
+	}
+	
 }
 
 
