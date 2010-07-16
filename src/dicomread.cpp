@@ -104,6 +104,16 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		image.GetBuffer((char *)arr.fortran_vec());
 		delete dv_p;
 		return octave_value(arr);
+	} else if ( gdcm::PixelFormat::INT16 == image.GetPixelFormat() ) { // no example found to test
+		int16NDArray arr(*dv_p);
+		image.GetBuffer((char *)arr.fortran_vec());
+		delete dv_p;
+		return octave_value(arr);
+	} else if ( gdcm::PixelFormat::INT32 == image.GetPixelFormat() ) { // no example found to test
+		int32NDArray arr(*dv_p);
+		image.GetBuffer((char *)arr.fortran_vec());
+		delete dv_p;
+		return octave_value(arr);
 	} else {
 		octave_stdout << image.GetPixelFormat() << '\n' ;
 		error(QUOTED(OCT_FN_NAME)": pixel format not supported yet: %s", filename.c_str());
