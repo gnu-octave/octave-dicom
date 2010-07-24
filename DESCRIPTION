@@ -3,6 +3,11 @@ Version: 0.1
 Date: 2010-06
 Author: Andy Buckle
 Maintainer: Andy Buckle
-Description: Digital communications in medicine file io.
+Title: dicom: file io for medical images other data
+Description: Digital communications in medicine (DICOM) file io. 
+  Depends on Grassroots DICOM (GDCM): this package is not in any 
+  distros repos, as far as I know, so is not listed in the *Requirements
+  fields.
+Categories: imaging, medical
+Url: http://wiki.octave.org/wiki.pl?CategoryDicom
 License: GPL version 3 or later
-Dependencies: Grassroots Dicom (GDCM)
