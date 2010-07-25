@@ -18,8 +18,8 @@
  * 
  */
  
-#	include <stdlib.h> //for calloc, free
-#	include <stdio.h>  //for printf
+#include <stdlib.h> //for calloc, free
+#include <stdio.h>  //for printf
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -44,7 +44,9 @@
 #include "gdcmPrivateTag.h"
 #include "gdcmVR.h"
 #include "gdcmSequenceOfItems.h"
-              
+ 
+#include "dicomdict.h" 
+ 
 #define DICOM_ERR -1
 #define DICOM_OK 0
 #define DICOM_NOTHING_ASSIGNED 1
@@ -75,7 +77,7 @@ void dumpDataSet(Octave_map *om, const gdcm::DataSet *ds, int chatty, int sequen
 void getFileModTime(char *timeStr, const char *filename);
 void dumpElement(Octave_map *om, const gdcm::DataElement * elem, int chatty, int sequenceDepth);
 void dumpSequence(octave_value *ov, gdcm::SequenceOfItems *seq, int chatty, int sequenceDepth);
-int element2value(std::string *varname, octave_value *ov, const gdcm::DataElement * elem, int chatty, int sequenceDepth) ;
+int element2value(std::string & varname, octave_value *ov, const gdcm::DataElement * elem, int chatty, int sequenceDepth) ;
 
 int dicom_truncate_numchar=40;
 
@@ -159,9 +161,9 @@ void dumpDataSet(Octave_map *om, const gdcm::DataSet *ds, int chatty, int sequen
 
 void dumpElement(Octave_map *om, const gdcm::DataElement * elem, 
 				int chatty, int sequenceDepth) {
-	std::string varname("");
+	std::string varname;
 	octave_value ov;
-	if(DICOM_OK==element2value(&varname, &ov, elem, chatty, sequenceDepth)) {
+	if(DICOM_OK==element2value(varname, &ov, elem, chatty, sequenceDepth)) {
 		om->assign(varname.c_str(), ov);
 	} else {
 		if (0==varname.length()) return ;
@@ -169,28 +171,31 @@ void dumpElement(Octave_map *om, const gdcm::DataElement * elem,
 	}
 }
 
-int element2value(std::string *varname, octave_value *ov, const gdcm::DataElement * elem, 
+int element2value(std::string & varname, octave_value *ov, const gdcm::DataElement * elem, 
 				int chatty, int sequenceDepth) {
 	// get dicom dictionary
-	static const gdcm::Global& g = gdcm::Global::GetInstance();
-	static const gdcm::Dicts &dicts = g.GetDicts();
+	//static const gdcm::Global& g = gdcm::Global::GetInstance();
+	//static const gdcm::Dicts &dicts = g.GetDicts();
 	
 	const gdcm::Tag tag = elem->GetTag();
+		
 	// skip "Group Length" tags. note: these are deprecated in DICOM 2008
 	if(tag.GetElement() == (uint16_t)0) return DICOM_NOTHING_ASSIGNED;
-	const gdcm::DictEntry dictEntry = dicts.GetDictEntry(tag,(const char*)0);
+	//const gdcm::DictEntry dictEntry = dicts.GetDictEntry(tag,(const char*)0);
+	gdcm::DictEntry dictEntry ;
+	lookup_entry(dictEntry, tag);
 	const gdcm::VR vr= dictEntry.GetVR(); // value representation. ie DICOM type.
-	const char *tagName=dictEntry.GetName();
+	varname=dictEntry.GetName();
 	
-	int tagVarNameBufLen=127;
-	char *keyword=(char *)malloc((tagVarNameBufLen+1)*sizeof(char));
-	keyword=name2Keyword(keyword,&tagVarNameBufLen,tagName);
-	*varname=std::string(keyword);
+	//int tagVarNameBufLen=127;
+	//char *keyword=(char *)malloc((tagVarNameBufLen+1)*sizeof(char));
+	//keyword=name2Keyword(keyword,&tagVarNameBufLen,tagName);
+	//*varname=std::string(keyword);
 	
 	if(chatty) {
 		int i; //TODO: probably a better way to do this than using a loop
 		for(i=0;i<sequenceDepth;i++) octave_stdout << "  " ;
-		octave_stdout << tag << ":" << vr << ":" << keyword << ":" ;
+		octave_stdout << tag << ":" << vr << ":" << varname << ":" ;
 		// TODO: error if var name repeated. 
 	}
 #define strValBufLen 511
@@ -245,7 +250,7 @@ int element2value(std::string *varname, octave_value *ov, const gdcm::DataElemen
 		*ov=usval;
 		if(chatty) octave_stdout << '[' << usval << "]\n";
 	} else if (vr & gdcm::VR::OB) {// other byte
-		if (!strcmp(keyword,"PixelData")) {
+		if (tag==gdcm::Tag(0x7FE0,0x0010)) {
 			if(chatty) octave_stdout  << "skipping, leave for dicomread\n";
 			return DICOM_NOTHING_ASSIGNED;
 		}
@@ -269,7 +274,7 @@ int element2value(std::string *varname, octave_value *ov, const gdcm::DataElemen
 		if(chatty) octave_stdout << "   ### type not handled ###\n";
 		return DICOM_NOTHING_ASSIGNED;
 	}
-	free(keyword);
+	//free(keyword);
 	return DICOM_OK;
 }
 
@@ -291,7 +296,7 @@ void dumpSequence(octave_value *ov, gdcm::SequenceOfItems *seq, int chatty, int 
 		std::string key, lastKey;
 		for (octave_idx_type j=0; j<nSeq; iv.at(j)++, j++ ) {
 			octave_value subov;
-			element2value(&key, &subov, &(*iv.at(j)), chatty, sequenceDepth);
+			element2value(key, &subov, &(*iv.at(j)), chatty, sequenceDepth);
 			cv.at(i)(j)=subov;
 			if (0==j) {
 				sv.push_back(key);
