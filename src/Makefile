@@ -24,7 +24,7 @@ GDCMLIBFLAGS =	-lgdcmcharls -lgdcmzlib -lgdcmjpeg8 -lgdcmjpeg12 \
 -lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmMSFF  
 
 
-all: dicominfo.oct dicomdict.oct dicomread.oct dicomlookup.oct _gendicomdict.oct
+all: dicominfo.oct dicomdict.oct dicomread.oct dicomlookup.oct _gendicomdict.oct dicomwrite.oct
 
 
 dicomlookup.oct: dicomdict.o dicomlookup.o
@@ -36,6 +36,9 @@ dicomdict.oct: dicomdict.o
 dicominfo.oct: dicominfo.o dicomdict.o
 	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) dicominfo.o dicomdict.o -o dicominfo.oct
 
+dicomwrite.oct: dicomwrite.o dicomdict.o
+	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) dicomwrite.o dicomdict.o -o dicomwrite.oct
+
 dicomread.oct: dicomread.cpp
 	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) dicomread.cpp
 
@@ -45,6 +48,9 @@ _gendicomdict.oct: _gendicomdict.cpp
 
 dicominfo.o: dicomdict.h dicominfo.cpp
 	mkoctfile -c $(INCDIRFLAGS) dicominfo.cpp
+
+dicomwrite.o: dicomdict.h dicomwrite.cpp
+	mkoctfile -c $(INCDIRFLAGS) dicomwrite.cpp
 
 dicomdict.o: dicomdict.h dicomdict.cpp
 	mkoctfile -c $(INCDIRFLAGS) dicomdict.cpp
