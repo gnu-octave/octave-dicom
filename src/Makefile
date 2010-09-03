@@ -22,41 +22,42 @@ LIBDIRFLAGS =	-L/usr/local/lib
 GDCMLIBFLAGS =	-lgdcmcharls -lgdcmzlib -lgdcmjpeg8 -lgdcmjpeg12 \
 -lgdcmjpeg16 -lgdcmexpat -lgdcmopenjpeg -lgdcmCommon \
 -lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmMSFF  
+DEBUGFLAG =	-g
 
 
 all: dicominfo.oct dicomdict.oct dicomread.oct dicomlookup.oct _gendicomdict.oct dicomwrite.oct
 
 
 dicomlookup.oct: dicomdict.o dicomlookup.o
-	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) dicomlookup.o dicomdict.o -o dicomlookup.oct
+	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicomlookup.o dicomdict.o -o dicomlookup.oct
 
 dicomdict.oct: dicomdict.o
-	mkoctfile $(INCDIRFLAGS) dicomdict.o
+	mkoctfile $(INCDIRFLAGS) $(DEBUGFLAG) dicomdict.o
 
 dicominfo.oct: dicominfo.o dicomdict.o
-	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) dicominfo.o dicomdict.o -o dicominfo.oct
+	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicominfo.o dicomdict.o -o dicominfo.oct
 
 dicomwrite.oct: dicomwrite.o dicomdict.o
-	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) dicomwrite.o dicomdict.o -o dicomwrite.oct
+	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicomwrite.o dicomdict.o -o dicomwrite.oct
 
 dicomread.oct: dicomread.cpp
-	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) dicomread.cpp
+	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicomread.cpp
 
 _gendicomdict.oct: _gendicomdict.cpp
-	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) _gendicomdict.cpp
+	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) _gendicomdict.cpp
 
 
 dicominfo.o: dicomdict.h dicominfo.cpp
-	mkoctfile -c $(INCDIRFLAGS) dicominfo.cpp
+	mkoctfile -c $(INCDIRFLAGS) $(DEBUGFLAG) dicominfo.cpp
 
 dicomwrite.o: dicomdict.h dicomwrite.cpp
-	mkoctfile -c $(INCDIRFLAGS) dicomwrite.cpp
+	mkoctfile -c $(INCDIRFLAGS) $(DEBUGFLAG) dicomwrite.cpp
 
 dicomdict.o: dicomdict.h dicomdict.cpp
-	mkoctfile -c $(INCDIRFLAGS) dicomdict.cpp
+	mkoctfile -c $(INCDIRFLAGS) $(DEBUGFLAG) dicomdict.cpp
 
 dicomlookup.o: dicomdict.h dicomlookup.cpp
-	mkoctfile -c $(INCDIRFLAGS) dicomlookup.cpp
+	mkoctfile -c $(INCDIRFLAGS) $(DEBUGFLAG) dicomlookup.cpp
 
 clean:
 	rm *.o *.oct *~

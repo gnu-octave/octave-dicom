@@ -21,3 +21,13 @@
 void lookup_keyword(std::string & keyword, const gdcm::Tag & tag);
 void lookup_tag(gdcm::Tag & tag, const std::string & keyword);
 void lookup_entry(gdcm::DictEntry & entry, const gdcm::Tag & tag);
+bool is_present(const std::string & keyword);
+bool is_present(const gdcm::Tag & tag);
+
+/** DICOM value representions that make sense going straight to strings.
+  * contrast with some VRASCII types that hold numbers.
+  * may take some dates and times out of this and handle differently */
+#define VRSTRING (gdcm::VR::AE|gdcm::VR::AS|gdcm::VR::CS|gdcm::VR::DA\
+	|gdcm::VR::DT|gdcm::VR::LO|gdcm::VR::LT|gdcm::VR::PN|gdcm::VR::SH\
+	|gdcm::VR::ST|gdcm::VR::TM|gdcm::VR::UI|gdcm::VR::UT)
+

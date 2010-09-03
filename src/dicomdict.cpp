@@ -314,6 +314,15 @@ void lookup_tag(gdcm::Tag & tag, const std::string & keyword) {
 
 void lookup_entry(gdcm::DictEntry & entry, const gdcm::Tag & tag) {
 	if (0==tagmap.size()) load_dict(factory_dicom_dict_filename); // init if necessary
-	entry = dict[tagmap[tag]];
+	entry = gdcm::DictEntry(dict[tagmap[tag]]);
 }
 
+bool is_present(const std::string & keyword){
+	if (0==tagmap.size()) load_dict(factory_dicom_dict_filename); // init if necessary
+	return keymap.count(keyword)>(std::vector<std::string>::size_type)0 ;
+}
+
+bool is_present(const gdcm::Tag & tag){
+	if (0==tagmap.size()) load_dict(factory_dicom_dict_filename); // init if necessary
+	return tagmap.count(tag)>(std::vector<gdcm::Tag>::size_type)0 ;
+}

@@ -57,13 +57,6 @@
 #define QUOTED_(x) #x
 #define QUOTED(x) QUOTED_(x)
 
-/** value represention that make sense going straight to strings.
-  * contrast with some VRASCII types that hold numbers.
-  * may take some dates and times out of this and handle differently */
-#define VRSTRING (gdcm::VR::AE|gdcm::VR::AS|gdcm::VR::CS|gdcm::VR::DA\
-	|gdcm::VR::DT|gdcm::VR::LO|gdcm::VR::LT|gdcm::VR::PN|gdcm::VR::SH\
-	|gdcm::VR::ST|gdcm::VR::TM|gdcm::VR::UI|gdcm::VR::UT)
-
 #ifdef NOT_OCT
 #	define octave_stdout	std::cout
 #	define error			printf
@@ -180,9 +173,17 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 	const gdcm::Tag tag = elem->GetTag();
 		
 	// skip "Group Length" tags. note: these are deprecated in DICOM 2008
-	if(tag.GetElement() == (uint16_t)0) return DICOM_NOTHING_ASSIGNED;
+	if(tag.GetElement() == (uint16_t)0 || elem->GetByteValue() == NULL) return DICOM_NOTHING_ASSIGNED;
 	//const gdcm::DictEntry dictEntry = dicts.GetDictEntry(tag,(const char*)0);
 	gdcm::DictEntry dictEntry ;
+	if (!is_present(tag)) {
+		char fallbackVarname[64];
+		snprintf(fallbackVarname,63,"Private_%04X_%04X",tag.GetGroup(),tag.GetElement());
+		varname=std::string(fallbackVarname);
+		*ov=std::string("");
+		warning(QUOTED(OCT_FN_NAME)": %s", fallbackVarname);
+		return DICOM_NOTHING_ASSIGNED; //TODO maybe could carry on, if we know the VR
+	}
 	lookup_entry(dictEntry, tag);
 	const gdcm::VR vr= dictEntry.GetVR(); // value representation. ie DICOM type.
 	varname=dictEntry.GetName();
@@ -193,8 +194,7 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 	//*varname=std::string(keyword);
 	
 	if(chatty) {
-		int i; //TODO: probably a better way to do this than using a loop
-		for(i=0;i<sequenceDepth;i++) octave_stdout << "  " ;
+		octave_stdout << std::setw(2*sequenceDepth) << "" << std::setw(0) ;
 		octave_stdout << tag << ":" << vr << ":" << varname << ":" ;
 		// TODO: error if var name repeated. 
 	}
@@ -207,9 +207,9 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 		if(chatty) {
 			if (dicom_truncate_numchar>0) {
 				octave_stdout << '[' << std::string(strVal).substr(0,dicom_truncate_numchar) 
-					<< ( ((int)strlen(strVal)>dicom_truncate_numchar) ? "..." : "") << "]\n";
+					<< ( ((int)strlen(strVal)>dicom_truncate_numchar) ? "..." : "") << ']' << std::endl;
 			} else {
-				octave_stdout << '[' << strVal << "]\n";
+				octave_stdout << '[' << strVal << ']' << std::endl;
 			}
 		}
 		if (vr & VRSTRING) { //all straight to string types
@@ -220,7 +220,7 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 			Matrix vec=str2DoubleVec(strVal);
 			*ov=vec;
 		} else {
-			if(chatty) octave_stdout << "   ### string type not handled ###\n";
+			if(chatty) octave_stdout << "   ### string type not handled ###" << std::endl;
 			return DICOM_NOTHING_ASSIGNED;
 		}
 		if (strVal != strValBuf) free(strVal); // long string. malloc'd instead of using buf, now needs free'ng
@@ -228,7 +228,7 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 		uint32_t ulval ; 
 		memcpy(&ulval, elem->GetByteValue()->GetPointer(), 4);
 		*ov=ulval;
-		if(chatty) octave_stdout << '[' << ulval << ']' << "\n";
+		if(chatty) octave_stdout << '[' << ulval << ']' << std::endl;
 	} else if (vr & gdcm::VR::SQ) {
 		if(chatty) octave_stdout << " reading sequence. "; // \n provided in dumpSequence fn
 		gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = elem->GetValueAsSQ();
@@ -250,7 +250,7 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 		*ov=usval;
 		if(chatty) octave_stdout << '[' << usval << "]\n";
 	} else if (vr & gdcm::VR::OB) {// other byte
-		if (tag==gdcm::Tag(0x7FE0,0x0010)) {
+		if (tag==gdcm::Tag(0x7FE0,0x0010)) { // PixelData
 			if(chatty) octave_stdout  << "skipping, leave for dicomread\n";
 			return DICOM_NOTHING_ASSIGNED;
 		}
@@ -271,7 +271,7 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 			octave_stdout  << "]\n";
 		}
 	} else {
-		if(chatty) octave_stdout << "   ### type not handled ###\n";
+		if(chatty) octave_stdout << "   ### VR not handled ###" << std::endl;
 		return DICOM_NOTHING_ASSIGNED;
 	}
 	//free(keyword);
@@ -279,40 +279,27 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 }
 
 void dumpSequence(octave_value *ov, gdcm::SequenceOfItems *seq, int chatty, int sequenceDepth) {
-	const octave_idx_type nSeq=seq->GetNumberOfItems(); // objects in sequence
-	const octave_idx_type nElem=seq->GetItem(1).GetNestedDataSet().GetDES().size(); // values in object
-	if (chatty) octave_stdout << nSeq << " object" << ((nSeq==1)?"":"s, each ") << " with " 
-									  << nElem << " element" << ((nElem==1)?"":"s") << ".\n";
-	std::vector<std::string> sv;
-	std::vector<gdcm::DataSet::Iterator> iv;
-	std::vector<Cell> cv;
-	for (octave_idx_type i=1; i<=nSeq ;i++) {
-		iv.push_back(seq->GetItem(i).GetNestedDataSet().GetDES().begin()); 
-	}
-	for (octave_idx_type i=1; i<=nElem ;i++) {
-		cv.push_back(Cell(nSeq,1));
-	}
-	for (octave_idx_type i=0; i<nElem ;i++) {
-		std::string key, lastKey;
-		for (octave_idx_type j=0; j<nSeq; iv.at(j)++, j++ ) {
-			octave_value subov;
-			element2value(key, &subov, &(*iv.at(j)), chatty, sequenceDepth);
-			cv.at(i)(j)=subov;
-			if (0==j) {
-				sv.push_back(key);
-			} else if (key!=lastKey) {
-				warning(QUOTED(OCT_FN_NAME)":objects in sequence are not all the same");
-			}
-			lastKey=key;
-		}
-	}
+	const octave_idx_type nDataSet=seq->GetNumberOfItems(); // objects in sequence
+	if (chatty) octave_stdout << nDataSet << " object" << ((nDataSet==1)?"":"s") << std::endl;
+	char item_name_buf[16];
 	Octave_map om;
-	for (octave_idx_type i=0; i<nElem ;i++) {
-		om.assign(sv.at(i).c_str(), cv.at(i));
+	for (octave_idx_type j=1; j<=nDataSet; j++ ) {
+		const gdcm::DataSet::DataElementSet des=seq->GetItem(j).GetNestedDataSet().GetDES() ;
+		Octave_map subom;
+		for (gdcm::DataSet::Iterator it=des.begin(); it != des.end(); it++) {
+			std::string key("");
+			octave_value subov;
+			if( DICOM_OK==element2value(key, &subov, &(*it), chatty, sequenceDepth)) {
+				subom.assign(key.c_str(), subov);
+			} else {
+				if (0==key.length()) continue ;
+				subom.assign(key.c_str(), "not assigned");
+			}
+		}
+		snprintf(item_name_buf,15,"Item_%i",j);
+		om.assign(item_name_buf, subom);
 	}
 	*ov=om;
-	
-	// vectors goes out of scope here. i think destructor is called on all content.
 }
 
 void getFileModTime(char *timeStr, const char *filename) {
