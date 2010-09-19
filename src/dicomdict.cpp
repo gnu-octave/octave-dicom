@@ -22,6 +22,7 @@
  */
 
 #include "octave/oct.h"
+#include "load-path.h"
 
 #include "gdcmDict.h"
 #include "gdcmVR.h"
@@ -48,7 +49,8 @@ void insert(const char *k, const gdcm::Tag t, const gdcm::DictEntry e) {
 void load_dict(const char *filename);
 
 DEFUN_DLD (OCT_FN_NAME, args, nargout,
-		"TODO: write help") {
+"TODO: write help\n\
+Finds dictionary files anywhere in the path.\n") {
 	octave_value_list retval;  // create object to store return values
 	static std::string dic_filename(factory_dicom_dict_filename);
 	if (args.length()>2 || args.length()<1) {
@@ -237,11 +239,14 @@ void load_dict(const char * filename) {
 		keymap.clear() ;
 		dict.clear() ;
 	}
+	
+	// find dic if it is anywhere in the search path (same path as for m-files etc)
+	std::string resolved_filename=load_path::find_file(std::string(filename)) ;
 
-	std::ifstream fin(filename);
+	std::ifstream fin(resolved_filename.c_str());
 	if (!fin) {
-		std::cerr << "Failed to open dic" << std::endl ;
-	// TODO pass back and call octave error(...)
+		error( "Failed to open dic" ) ;
+		return ;
 	}
 
 	// Process each line

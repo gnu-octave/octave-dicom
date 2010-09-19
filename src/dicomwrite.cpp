@@ -102,6 +102,18 @@ info     struct, like that produced by dicominfo\n\
 		}
 	}
 	
+#if 1 /* debug */
+	gdcm::File fc=w.GetFile();
+	gdcm::DataSet dsc=fc.GetDataSet();
+	const gdcm::DataElement & sopclass = dsc.GetDataElement( gdcm::Tag(0x0008, 0x0016) ); // SOPClassUID
+	const gdcm::ByteValue *bv = sopclass.GetByteValue();
+	char * bufc=(char *) malloc((bv->GetLength()+1)*sizeof(char));
+	memcpy(bufc, bv->GetPointer(), bv->GetLength());
+	bufc[bv->GetLength()]='\0';
+	octave_stdout << bufc << '\n' ;
+	free(bufc);
+#endif
+	
 	if( !trial ) {
 		// if not writing image, use superclass
 		if (writing_image ? !w.ImageWriter::Write() : !w.Writer::Write()){ 
