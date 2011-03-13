@@ -81,7 +81,24 @@ int main( int argc, const char* argv[] ) {
 }
 #else
 DEFUN_DLD (OCT_FN_NAME, args, nargout,
-		"return some info from a dicom file: 1 arg: dicom filename") {
+		"-*- texinfo -*- \n\
+ @deftypefn  {Loadable Function} {} dicominfo (@var{filename}) \n\
+ @deftypefnx {Loadable Function} {} @var{info} = dicominfo (@var{filename}) \n\
+ @deftypefnx {Command} {} subplot @var{filename} \n\
+ @deftypefnx {Command} {} subplot @var{filename} @var{option} \n\
+ Get all data from a DICOM file, excluding any actual image. \n\
+ @var{info} is a nested struct containing the data. \n\
+ \n\
+ If no return argument is given, then there will be output similar to \n\
+ a DICOM dump. \n\
+ \n\
+ @var{option}:\n\
+ truncate=n\n\
+ where n is the number of characters to limit the dump output display to. \n\
+\n\
+ @seealso{dicomread} \n\
+ @end deftypefn \n\
+		") {
 	octave_value_list retval;  // create object to store return values
 	if ( 0 == args.length()) {
 		error(QUOTED(OCT_FN_NAME)": one arg required: dicom filename");
