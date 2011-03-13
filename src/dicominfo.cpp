@@ -83,6 +83,10 @@ int main( int argc, const char* argv[] ) {
 DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		"return some info from a dicom file: 1 arg: dicom filename") {
 	octave_value_list retval;  // create object to store return values
+	if ( 0 == args.length()) {
+		error(QUOTED(OCT_FN_NAME)": one arg required: dicom filename");
+		return retval; 
+	}
 	int chatty = !nargout; // dump output to stdout if not assigning to var
 	charMatrix ch = args(0).char_matrix_value ();
 	if (ch.rows()!=1) {
