@@ -82,10 +82,10 @@ int main( int argc, const char* argv[] ) {
 #else
 DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		"-*- texinfo -*- \n\
- @deftypefn  {Loadable Function} {} dicominfo (@var{filename}) \n\
- @deftypefnx {Loadable Function} {} @var{info} = dicominfo (@var{filename}) \n\
- @deftypefnx {Command} {} subplot @var{filename} \n\
- @deftypefnx {Command} {} subplot @var{filename} @var{option} \n\
+ @deftypefn  {Loadable Function} {} "QUOTED(OCT_FN_NAME)" (@var{filename}) \n\
+ @deftypefnx {Loadable Function} {} @var{info} = "QUOTED(OCT_FN_NAME)" (@var{filename}) \n\
+ @deftypefnx {Command} {} "QUOTED(OCT_FN_NAME)" @var{filename} \n\
+ @deftypefnx {Command} {} "QUOTED(OCT_FN_NAME)" @var{filename} @var{option} \n\
  Get all data from a DICOM file, excluding any actual image. \n\
  @var{info} is a nested struct containing the data. \n\
  \n\
@@ -94,7 +94,8 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
  \n\
  @var{option}:\n\
  truncate=n\n\
- where n is the number of characters to limit the dump output display to. \n\
+ where n is the number of characters to limit the dump output display to \
+ for each value. \n\
 \n\
  @seealso{dicomread} \n\
  @end deftypefn \n\

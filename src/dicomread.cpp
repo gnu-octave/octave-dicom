@@ -30,7 +30,15 @@
 #define QUOTED(x) QUOTED_(x)
 
 DEFUN_DLD (OCT_FN_NAME, args, nargout,
-		"return some info from a dicom file: 1 arg: dicom filename") {
+		"-*- texinfo -*- \n\
+ @deftypefn {Loadable Function} {} @var{image} = "QUOTED(OCT_FN_NAME)" (@var{filename}) \n\
+ Load the image from a DICOM file. \n\
+ @var{image} may be two or three dimensional, depending on the content of the file. \n\
+ An integer matrix will be returned, the number of bits will depend on the file. \n\
+\n\
+ @seealso{dicominfo} \n\
+ @end deftypefn \n\
+		") {
 	octave_value_list retval;  // create object to store return values
 	if ( 0 == args.length()) {
 		error(QUOTED(OCT_FN_NAME)": one arg required: dicom filename");
@@ -51,12 +59,6 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		if (chex.rows()!=1) {
 			error(QUOTED(OCT_FN_NAME)": arg should be a string, 1 row of chars");
 			return retval; 
-		}
-		std::string argex = chex.row_as_string (0);
-		if (!argex.compare(0,9,"truncate=")) {
-			dicom_truncate_numchar=atoi(argex.substr(9).c_str());
-		} else {
-			warning(QUOTED(OCT_FN_NAME)": arg not understood: %s", argex.c_str());
 		}
 	}
 #endif
