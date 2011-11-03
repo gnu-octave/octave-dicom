@@ -19,8 +19,8 @@
  */
 
 #include "octave/oct.h"
-
-#include "gdcmImageReader.h"
+#include <octave/ov-struct.h>
+#include "gdcm-2.0/gdcmImageReader.h"
               
 #define DICOM_ERR -1
 #define DICOM_OK 0
@@ -32,9 +32,13 @@
 DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		"-*- texinfo -*- \n\
  @deftypefn {Loadable Function} {} @var{image} = "QUOTED(OCT_FN_NAME)" (@var{filename}) \n\
+ @deftypefnx {Loadable Function} {} @var{image} = "QUOTED(OCT_FN_NAME)" (@var{structure}) \n\
+ \n\
  Load the image from a DICOM file. \n\
+ @var{filename} is a string (giving the filename).\n\
+ @var{structure} is a structure with a field @code{Filename} (such as returned by @code{dicominfo}).\n\
  @var{image} may be two or three dimensional, depending on the content of the file. \n\
- An integer matrix will be returned, the number of bits will depend on the file. \n\
+ An integer or float matrix will be returned, the number of bits will depend on the file. \n\
 \n\
  @seealso{dicominfo} \n\
  @end deftypefn \n\
@@ -44,13 +48,28 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		error(QUOTED(OCT_FN_NAME)": one arg required: dicom filename");
 		return retval; 
 	}
-	charMatrix ch = args(0).char_matrix_value ();
-	if (ch.rows()!=1) {
-		error(QUOTED(OCT_FN_NAME)": arg should be a filename, 1 row of chars");
+
+	std::string filename;
+	// argument processing
+	// check if 1st argument is a string or a struct with field Filename
+	// If so, assign to filename variable, otherwise exit.
+	if (args(0).is_string()) {
+	  filename = args(0).string_value();
+	}
+	else {
+	  octave_scalar_map arg0 = args(0).scalar_map_value ();
+          if (error_state) {
+	        error(QUOTED(OCT_FN_NAME)": arg should be a filename, 1 row of chars, or a struct returned by dicominfo");
 		return retval; 
+	  }
+	  if (!arg0.contains("Filename")) {
+	        error(QUOTED(OCT_FN_NAME)": if arg is a struct, it should have the Filename field");
+		return retval; 
+	  }
+	  octave_value tmp = arg0.getfield ("Filename");
+	  filename = tmp.string_value();
 	}
 		
-	std::string filename = ch.row_as_string(0);
 	
 #if 0 /* TODO support 'frames' stuff, see Matlab docs for dicomread */
 	int i; // parse any additional args

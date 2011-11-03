@@ -5,6 +5,9 @@
  *
  * Many thanks to Judd Storrs, who wrote most of the code in this
  * file. Anything ugly or wrong, I added later. Andy
+ *
+ * Minor changes Copyright Kris Thielemans 2011:
+ *  make dicomdict('get') and dicomdict('set',filename) work properly and add doc-string
  * 
  * The GNU Octave dicom package is free software: you can redistribute 
  * it and/or modify it under the terms of the GNU General Public 
@@ -24,9 +27,9 @@
 #include "octave/oct.h"
 #include "load-path.h"
 
-#include "gdcmDict.h"
-#include "gdcmVR.h"
-#include "gdcmVM.h"
+#include "gdcm-2.0/gdcmDict.h"
+#include "gdcm-2.0/gdcmVR.h"
+#include "gdcm-2.0/gdcmVM.h"
 
 #include "dicomdict.h"
 
@@ -35,6 +38,7 @@
 #define QUOTED(x) QUOTED_(x)
 
 const char * factory_dicom_dict_filename="octavedicom.dic";
+static std::string dic_filename(factory_dicom_dict_filename);
 
 std::map<gdcm::Tag, std::string> tagmap ;
 std::map<std::string, gdcm::Tag> keymap ;
@@ -46,13 +50,20 @@ void insert(const char *k, const gdcm::Tag t, const gdcm::DictEntry e) {
 	dict[k] = e ;
 }
 
-void load_dict(const char *filename);
 
 DEFUN_DLD (OCT_FN_NAME, args, nargout,
-"TODO: write help\n\
-Finds dictionary files anywhere in the path.\n") {
+		"-*- texinfo -*- \n\
+@deftypefn {Loadable Function} {@var{dictionary_name} =} "QUOTED(OCT_FN_NAME)" (@code{get}) \n\
+@deftypefnx {Loadable Function} {} "QUOTED(OCT_FN_NAME)" (@code{factory}) \n\
+@deftypefnx {Loadable Function} {} "QUOTED(OCT_FN_NAME)" (@code{set}, @var{dictionary_name}) \n\
+The first usage returns the filename of the dictionary that is currently being used.\n\
+Using @code{factory} resets the dictionary to the default.\n\
+Using @code{set} allows setting the dictionary for future operations.\n\
+In this case, the dictionary file @var{dictionary_name} can be anywhere in the path.\n\
+\n\
+@seealso{dicomread, dicomwrite}\n\
+@end deftypefn \n") {
 	octave_value_list retval;  // create object to store return values
-	static std::string dic_filename(factory_dicom_dict_filename);
 	if (args.length()>2 || args.length()<1) {
 		error(QUOTED(OCT_FN_NAME)": takes 1 or 2 arguments, got %i.",args.length ());
 		return retval; 
@@ -77,7 +88,7 @@ Finds dictionary files anywhere in the path.\n") {
 			
 			return retval;
 		} else {
-			error(QUOTED(OCT_FN_NAME)": single arg must either be 'set' or 'factory'.",args.length ());
+			error(QUOTED(OCT_FN_NAME)": single arg must either be 'get' or 'factory'.",args.length ());
 			return retval; 
 		}
 	}
@@ -92,6 +103,7 @@ Finds dictionary files anywhere in the path.\n") {
 		error(QUOTED(OCT_FN_NAME)": when 2 args are given, the first must be 'set'.",args.length ());
 		return retval; 
 	}
+	load_dict(arg1str.c_str());
 	//if (octave_dicom_dict == NULL) octave_dicom_dict = new OctaveDicomDict(); //TODO where should this be freed?
 	//octave_dicom_dict.load_file(arg1str.c_str()); // second arg is filename
 	return retval;
@@ -231,6 +243,9 @@ public:
   }
 };
 
+const char * const get_current_dict() {
+  return dic_filename.c_str();
+}
 
 void load_dict(const char * filename) {
 	// reset, if required
@@ -239,7 +254,7 @@ void load_dict(const char * filename) {
 		keymap.clear() ;
 		dict.clear() ;
 	}
-	
+
 	// find dic if it is anywhere in the search path (same path as for m-files etc)
 	std::string resolved_filename=load_path::find_file(std::string(filename)) ;
 
@@ -305,6 +320,8 @@ void load_dict(const char * filename) {
 			} while ( ++elem ) ;
 		} while ( ++group ) ;
 	}
+	// save filename
+	dic_filename = resolved_filename;
 }
 
 void lookup_keyword(std::string & keyword, const gdcm::Tag & tag) {

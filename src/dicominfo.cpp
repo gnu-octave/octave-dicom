@@ -3,12 +3,22 @@
  * Contact: blondandy using the sf.net system, 
  * <https://sourceforge.net/sendmessage.php?touser=1760416>
  * 
+ * Changes Copyright Kris Thielemans 2011:
+ * - support usage dicominfo(filename, 'dictionary', dictname)
+ * - support FL, FD and SL VRs, which means that many more fields are now read correctly from the dicom file.
+ * - check if the VR in the file is the same as the one in the dictionary. If not, issue a warning but use the VR from the file.
+ * - assign values to private dicom fields, just like with others
+ * - changed convention for private fields to use lower-case for the hexadecimal numbers to be compatible with Matlab
+ * - if an entry is not in the dictionary, determine its VR from the file (if possible) and assign anyway.
+ * - updated doc-string
+ *
+ *
  * The GNU Octave dicom package is free software: you can redistribute 
  * it and/or modify it under the terms of the GNU General Public 
  * License as published by the Free Software Foundation, either 
  * version 3 of the License, or (at your option) any later version.
  * 
- * The GNU Octave dicom packag is distributed in the hope that it 
+ * The GNU Octave dicom package is distributed in the hope that it 
  * will be useful, but WITHOUT ANY WARRANTY; without even the 
  * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
  * PURPOSE.  See the GNU General Public License for more details.
@@ -32,18 +42,18 @@
 #include "octave/oct.h"
 #include "octave/ov-struct.h"
 
-#include "gdcmSystem.h"
-#include "gdcmReader.h"
-#include "gdcmWriter.h"
-#include "gdcmAttribute.h"
-#include "gdcmDataSet.h"
-#include "gdcmGlobal.h"
-#include "gdcmDicts.h"
-#include "gdcmDict.h"
-#include "gdcmCSAHeader.h"
-#include "gdcmPrivateTag.h"
-#include "gdcmVR.h"
-#include "gdcmSequenceOfItems.h"
+#include "gdcm-2.0/gdcmSystem.h"
+#include "gdcm-2.0/gdcmReader.h"
+#include "gdcm-2.0/gdcmWriter.h"
+#include "gdcm-2.0/gdcmAttribute.h"
+#include "gdcm-2.0/gdcmDataSet.h"
+#include "gdcm-2.0/gdcmGlobal.h"
+#include "gdcm-2.0/gdcmDicts.h"
+#include "gdcm-2.0/gdcmDict.h"
+#include "gdcm-2.0/gdcmCSAHeader.h"
+#include "gdcm-2.0/gdcmPrivateTag.h"
+#include "gdcm-2.0/gdcmVR.h"
+#include "gdcm-2.0/gdcmSequenceOfItems.h"
  
 #include "dicomdict.h" 
  
@@ -82,22 +92,26 @@ int main( int argc, const char* argv[] ) {
 #else
 DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		"-*- texinfo -*- \n\
- @deftypefn  {Loadable Function} {} "QUOTED(OCT_FN_NAME)" (@var{filename}) \n\
- @deftypefnx {Loadable Function} {} @var{info} = "QUOTED(OCT_FN_NAME)" (@var{filename}) \n\
+ @deftypefn {Loadable Function} {@var{info}} = "QUOTED(OCT_FN_NAME)" (@var{filename}) \n\
+ @deftypefnx {Loadable Function} {@var{info}} = "QUOTED(OCT_FN_NAME)" (@var{filename}, @code{dictionary}, @var{dictionary-name}) \n\
+ @deftypefnx  {Loadable Function} {} "QUOTED(OCT_FN_NAME)" (@var{filename}, @var{options}) \n\
  @deftypefnx {Command} {} "QUOTED(OCT_FN_NAME)" @var{filename} \n\
- @deftypefnx {Command} {} "QUOTED(OCT_FN_NAME)" @var{filename} @var{option} \n\
+ @deftypefnx {Command} {} "QUOTED(OCT_FN_NAME)" @var{filename} @var{options} \n\
  Get all data from a DICOM file, excluding any actual image. \n\
  @var{info} is a nested struct containing the data. \n\
  \n\
  If no return argument is given, then there will be output similar to \n\
  a DICOM dump. \n\
  \n\
- @var{option}:\n\
- truncate=n\n\
- where n is the number of characters to limit the dump output display to \
+ If the @code{dictionary} argument is used, the given @var{dictionary-name} is used for this operation, \n\
+ otherwise, the dictionary set by @code{dicomdict} is used.\n\
+ \n\
+ @var{options}:\n\
+ @code{truncate=n}\n\
+ where n is the number of characters to limit the dump output display to @code{n}\
  for each value. \n\
 \n\
- @seealso{dicomread} \n\
+ @seealso{dicomread, dicomdict} \n\
  @end deftypefn \n\
 		") {
 	octave_value_list retval;  // create object to store return values
@@ -112,7 +126,13 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		return retval; 
 	}
 	std::string filename = ch.row_as_string (0);
-	
+
+	std::string current_dict = get_current_dict();
+	// TODO the dictionary can be set by the code below
+	// we really need to catch any errors in this function
+	// and reset the dictionary to current_dict.
+	// Currently that's only done when no error occured.
+
 	int i; // parse any additional args
 	for (i=1; i<args.length(); i++) {
 		charMatrix chex = args(i).char_matrix_value();
@@ -121,7 +141,21 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 			return retval; 
 		}
 		std::string argex = chex.row_as_string (0);
-		if (!argex.compare(0,9,"truncate=")) {
+		if (!argex.compare("dictionary") || !argex.compare("Dictionary")) {
+		        if (i+1==args.length()) {
+			      error(QUOTED(OCT_FN_NAME)": Dictionary needs another argument");
+			      return retval;
+			}
+			if (!args(i+1).is_string()) {
+			      error(QUOTED(OCT_FN_NAME)": Dictionary needs a string argument");
+			      return retval;
+			}
+			std::string dictionary = args(i+1).string_value();
+			load_dict(dictionary.c_str());
+			// ignore dictionary argument for further arg processing
+			++i;
+		}
+		else if (!argex.compare(0,9,"truncate=")) {
 			dicom_truncate_numchar=atoi(argex.substr(9).c_str());
 		} else {
 			warning(QUOTED(OCT_FN_NAME)": arg not understood: %s", argex.c_str());
@@ -130,6 +164,8 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 	
 	Octave_map om=dump(filename.c_str(),chatty);
 	retval(0)=om;
+
+	load_dict(current_dict.c_str());
 	return retval;
 }
 #endif
@@ -197,18 +233,29 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 	// skip "Group Length" tags. note: these are deprecated in DICOM 2008
 	if(tag.GetElement() == (uint16_t)0 || elem->GetByteValue() == NULL) return DICOM_NOTHING_ASSIGNED;
 	//const gdcm::DictEntry dictEntry = dicts.GetDictEntry(tag,(const char*)0);
+
+	gdcm::VR vr = elem->GetVR(); // value representation. ie DICOM 
+
 	gdcm::DictEntry dictEntry ;
 	if (!is_present(tag)) {
 		char fallbackVarname[64];
-		snprintf(fallbackVarname,63,"Private_%04X_%04X",tag.GetGroup(),tag.GetElement());
+		snprintf(fallbackVarname,63,"Private_%04x_%04x",tag.GetGroup(),tag.GetElement());
 		varname=std::string(fallbackVarname);
+#if 0
 		*ov=std::string("");
 		warning(QUOTED(OCT_FN_NAME)": %s", fallbackVarname);
 		return DICOM_NOTHING_ASSIGNED; //TODO maybe could carry on, if we know the VR
+#endif
 	}
-	lookup_entry(dictEntry, tag);
-	const gdcm::VR vr= dictEntry.GetVR(); // value representation. ie DICOM type.
-	varname=dictEntry.GetName();
+	else {
+	        lookup_entry(dictEntry, tag);
+		varname=dictEntry.GetName();
+		const gdcm::VR dictvr= dictEntry.GetVR(); // value representation. ie DICOM 	
+		if (dictvr != vr) {
+		  warning(QUOTED(OCT_FN_NAME)": %s has different VR from dictionary. Using VR from file", varname.c_str());
+		}
+	}
+
 	
 	//int tagVarNameBufLen=127;
 	//char *keyword=(char *)malloc((tagVarNameBufLen+1)*sizeof(char));
@@ -271,6 +318,21 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 		memcpy(&usval, elem->GetByteValue()->GetPointer(), 2);
 		*ov=usval;
 		if(chatty) octave_stdout << '[' << usval << "]\n";
+	} else if (vr & gdcm::VR::FL) {// float
+		float val ; 
+		memcpy(&val, elem->GetByteValue()->GetPointer(), 4);
+		*ov=val;
+		if(chatty) octave_stdout << '[' << val << "]\n";
+	} else if (vr & gdcm::VR::FD) {// double
+		double val ; 
+		memcpy(&val, elem->GetByteValue()->GetPointer(), sizeof(val));
+		*ov=val;
+		if(chatty) octave_stdout << '[' << val << "]\n";
+	} else if (vr & gdcm::VR::SL) {// signed long
+		int32_t val ; 
+		memcpy(&val, elem->GetByteValue()->GetPointer(), 4);
+		*ov=val;
+		if(chatty) octave_stdout << '[' << val << "]\n";
 	} else if (vr & gdcm::VR::OB) {// other byte
 		if (tag==gdcm::Tag(0x7FE0,0x0010)) { // PixelData
 			if(chatty) octave_stdout  << "skipping, leave for dicomread\n";

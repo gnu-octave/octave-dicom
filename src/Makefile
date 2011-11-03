@@ -17,10 +17,10 @@
   
  
 
-INCDIRFLAGS =	-I/usr/local/include/gdcm-2.0/
+INCDIRFLAGS =	
 LIBDIRFLAGS =	-L/usr/local/lib
-GDCMLIBFLAGS =	-lgdcmcharls -lgdcmzlib -lgdcmjpeg8 -lgdcmjpeg12 \
--lgdcmjpeg16 -lgdcmexpat -lgdcmopenjpeg -lgdcmCommon \
+GDCMLIBFLAGS =	-lgdcmcharls  -lgdcmjpeg8 -lgdcmjpeg12 \
+-lgdcmjpeg16 -lgdcmCommon \
 -lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmMSFF  
 DEBUGFLAG =	-g
 
@@ -60,4 +60,4 @@ dicomlookup.o: dicomdict.h dicomlookup.cpp
 	mkoctfile -c $(INCDIRFLAGS) $(DEBUGFLAG) dicomlookup.cpp
 
 clean:
-	rm *.o *.oct *~
+	rm -f *.o *.oct *~

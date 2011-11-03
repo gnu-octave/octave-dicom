@@ -17,6 +17,8 @@
  * Public License version 3.
  * 
  */
+void load_dict(const char *filename);
+const char * const get_current_dict();
 
 void lookup_keyword(std::string & keyword, const gdcm::Tag & tag);
 void lookup_tag(gdcm::Tag & tag, const std::string & keyword);
