@@ -25,7 +25,7 @@
  */
 
 #include "octave/oct.h"
-#include "load-path.h"
+#include "octave/load-path.h"
 
 #include "gdcm-2.0/gdcmDict.h"
 #include "gdcm-2.0/gdcmVR.h"
@@ -256,7 +256,13 @@ void load_dict(const char * filename) {
 	}
 
 	// find dic if it is anywhere in the search path (same path as for m-files etc)
-	std::string resolved_filename=load_path::find_file(std::string(filename)) ;
+#ifndef NOT_OCT
+	const std::string resolved_filename=load_path::find_file(std::string(filename)) ;
+#else
+        // for debugging: if not running in octave, find_file always returns ""
+	// so we just use the original filename
+	const std::string resolved_filename(filename);
+#endif
 
 	std::ifstream fin(resolved_filename.c_str());
 	if (!fin) {
