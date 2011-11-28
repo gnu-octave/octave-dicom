@@ -56,7 +56,9 @@
 #include "gdcm-2.0/gdcmSequenceOfItems.h"
  
 #include "dicomdict.h" 
- 
+
+
+  
 #define DICOM_ERR -1
 #define DICOM_OK 0
 #define DICOM_NOTHING_ASSIGNED 1
@@ -222,6 +224,84 @@ void dumpElement(Octave_map *om, const gdcm::DataElement * elem,
 	}
 }
 
+/* helper function for element2value below.
+   This function converts a 'simple' type (such as an (array of) floats or ints, etc)
+   to an octave_value, returning DICOM_NOTHING_ASSIGNED if the dicom element is empty
+   or DICOM_OK otherwise.
+
+   It is templated in 
+   - the VR Type, such that we can use GDCM's functions to 
+     convert data appropriately.
+   - valueType, i.e. float, or int etc
+   - octaveArrayType, i.e. Array<float>, or intNDArray<octave_int<int> >, etc
+
+  There are other helper functions below that find the template arguments.
+
+  Note, the octaveArrayType is currently necessary as we cannot use Array<int> etc, 
+  as octave_value does not have a constructor for Array<int>.
+*/
+template <gdcm::VR::VRType vrtype, typename valueType, typename octaveArrayType>
+static inline
+int element2simplevalueHelper2(octave_value *ov, const gdcm::DataElement *elem,
+			    const int chatty) {
+    if( elem->IsEmpty() )
+      return DICOM_NOTHING_ASSIGNED;
+
+#if 0 // KT if to choose between implementations
+    // original fast implementation using memcpy. However, ignores byteorder and VMs (i.e. arrays)
+    valueType val ; 
+    memcpy(&val, elem->GetByteValue()->GetPointer(), sizeof(valueType));
+    *ov=val;
+    if(chatty) octave_stdout << '[' << val << "]\n";
+#else
+    // save (but slow?) implementation that uses GDCM functions
+    typedef gdcm::Element<vrtype,gdcm::VM::VM1_n> el;
+    el.Set( elem->GetValue() );
+    // possible optimisation here. If there's only 1 element, maybe we can
+    // save time by not making array. However, because all octave values are
+    // arrays, maybe this doesn't matter. the "else" statement below works
+    // always in any case.
+    // If you want to try this optimisation, put #if 1 below
+#   if 0
+    if (el.GetLength()==1)
+      {
+	const valueType& val = el.GetValue();
+	*ov=val;
+	if(chatty) octave_stdout << '[' << val << "]\n";
+      }
+    else
+#   endif
+      {
+	octaveArrayType val(dim_vector (el.GetLength(),1));
+	for (unsigned i=0; i<el.GetLength(); ++i)
+	  val(i)  = el.GetValue(i); 
+	*ov=val;
+	if(chatty) octave_stdout << '[' << val << "]\n";
+      }
+#endif
+    return DICOM_OK;
+}
+
+/* Helper functions for elemement2value for integer and real types.
+   They simply call element2simplevalueHelper2 with the appropriate template arguments.
+*/
+template <gdcm::VR::VRType vrtype>
+static inline 
+int element2intvalueHelper(octave_value *ov, const gdcm::DataElement * elem,
+			   const int chatty) {
+  typedef typename gdcm::VRToType<vrtype >::Type valueType;
+  return element2simplevalueHelper2<vrtype,valueType,intNDArray<octave_int<valueType> > >(ov, elem, chatty);
+}
+
+
+template <gdcm::VR::VRType vrtype>
+static inline 
+int element2realvalueHelper(octave_value *ov, const gdcm::DataElement * elem,
+			   const int chatty) {
+  typedef typename gdcm::VRToType<vrtype >::Type valueType;
+  return element2simplevalueHelper2<vrtype,valueType,Array<valueType> >(ov, elem, chatty);
+}
+
 int element2value(std::string & varname, octave_value *ov, const gdcm::DataElement * elem, 
 				int chatty, int sequenceDepth) {
 	// get dicom dictionary
@@ -234,7 +314,7 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 	if(tag.GetElement() == (uint16_t)0 || elem->GetByteValue() == NULL) return DICOM_NOTHING_ASSIGNED;
 	//const gdcm::DictEntry dictEntry = dicts.GetDictEntry(tag,(const char*)0);
 
-	gdcm::VR vr = elem->GetVR(); // value representation. ie DICOM 
+	const gdcm::VR vr = elem->GetVR(); // value representation. ie DICOM 
 
 	gdcm::DictEntry dictEntry ;
 	if (!is_present(tag)) {
@@ -251,8 +331,8 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 	        lookup_entry(dictEntry, tag);
 		varname=dictEntry.GetName();
 		const gdcm::VR dictvr= dictEntry.GetVR(); // value representation. ie DICOM 	
-		if (dictvr != vr) {
-		  warning(QUOTED(OCT_FN_NAME)": %s has different VR from dictionary. Using VR from file", varname.c_str());
+		if (!vr.Compatible(vr)) {
+    		  warning(QUOTED(OCT_FN_NAME)": %s has different VR from dictionary. Using VR from file.", varname.c_str());
 		}
 	}
 
@@ -293,11 +373,6 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 			return DICOM_NOTHING_ASSIGNED;
 		}
 		if (strVal != strValBuf) free(strVal); // long string. malloc'd instead of using buf, now needs free'ng
-	} else if (vr & gdcm::VR::UL) { 
-		uint32_t ulval ; 
-		memcpy(&ulval, elem->GetByteValue()->GetPointer(), 4);
-		*ov=ulval;
-		if(chatty) octave_stdout << '[' << ulval << ']' << std::endl;
 	} else if (vr & gdcm::VR::SQ) {
 		if(chatty) octave_stdout << " reading sequence. "; // \n provided in dumpSequence fn
 		gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = elem->GetValueAsSQ();
@@ -306,33 +381,25 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 		intNDArray<octave_uint16> uint16pair(dim_vector(1,2));
 		octave_uint16 *fv=uint16pair.fortran_vec();
 		uint16_t *p=(uint16_t *)elem->GetByteValue()->GetPointer();
-		memcpy(fv,p,4);
+		memcpy(fv,p,4); // TODO. not sure if memcpy is ok
 		*ov=uint16pair;
 		if (chatty) {
 			char buf[16];
 			snprintf(buf,15,"[(%04X,%04X)]\n",p[0],p[1]);
 			octave_stdout << buf  ;
 		}
-	} else if (vr & gdcm::VR::US) {// unsigned short
-		uint16_t usval ; 
-		memcpy(&usval, elem->GetByteValue()->GetPointer(), 2);
-		*ov=usval;
-		if(chatty) octave_stdout << '[' << usval << "]\n";
 	} else if (vr & gdcm::VR::FL) {// float
-		float val ; 
-		memcpy(&val, elem->GetByteValue()->GetPointer(), 4);
-		*ov=val;
-		if(chatty) octave_stdout << '[' << val << "]\n";
+	  return element2realvalueHelper<gdcm::VR::FL>(ov, elem, chatty);
 	} else if (vr & gdcm::VR::FD) {// double
-		double val ; 
-		memcpy(&val, elem->GetByteValue()->GetPointer(), sizeof(val));
-		*ov=val;
-		if(chatty) octave_stdout << '[' << val << "]\n";
+	  return element2realvalueHelper<gdcm::VR::FD>(ov, elem, chatty);
+	} else if (vr & gdcm::VR::UL) {// unsigned long
+	  return element2intvalueHelper<gdcm::VR::UL>(ov, elem, chatty);
 	} else if (vr & gdcm::VR::SL) {// signed long
-		int32_t val ; 
-		memcpy(&val, elem->GetByteValue()->GetPointer(), 4);
-		*ov=val;
-		if(chatty) octave_stdout << '[' << val << "]\n";
+	  return element2intvalueHelper<gdcm::VR::SL>(ov, elem, chatty);
+	} else if (vr & gdcm::VR::US) {// unsigned short
+	  return element2intvalueHelper<gdcm::VR::US>(ov, elem, chatty);
+	} else if (vr & gdcm::VR::SS) {// signed short
+	  return element2intvalueHelper<gdcm::VR::SS>(ov, elem, chatty);
 	} else if (vr & gdcm::VR::OB) {// other byte
 		if (tag==gdcm::Tag(0x7FE0,0x0010)) { // PixelData
 			if(chatty) octave_stdout  << "skipping, leave for dicomread\n";
