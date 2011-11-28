@@ -255,7 +255,7 @@ int element2simplevalueHelper2(octave_value *ov, const gdcm::DataElement *elem,
     if(chatty) octave_stdout << '[' << val << "]\n";
 #else
     // save (but slow?) implementation that uses GDCM functions
-    typedef gdcm::Element<vrtype,gdcm::VM::VM1_n> el;
+    gdcm::Element<vrtype,gdcm::VM::VM1_n> el;
     el.Set( elem->GetValue() );
     // possible optimisation here. If there's only 1 element, maybe we can
     // save time by not making array. However, because all octave values are
