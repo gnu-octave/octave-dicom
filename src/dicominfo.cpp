@@ -11,7 +11,8 @@
  * - changed convention for private fields to use lower-case for the hexadecimal numbers to be compatible with Matlab
  * - if an entry is not in the dictionary, determine its VR from the file (if possible) and assign anyway.
  * - updated doc-string
- *
+ * - use gdcm functions for getting values as opposed to memcpy, and support arrays (VM>1)
+ * - don't skip sequences
  *
  * The GNU Octave dicom package is free software: you can redistribute 
  * it and/or modify it under the terms of the GNU General Public 
@@ -32,26 +33,24 @@
 #include <stdio.h>  //for printf
 
 #include <sys/stat.h>
-#include <unistd.h>
 #include <time.h>
 
 #include <iostream>
 #include <string>
-#include <map>
 
 #include "octave/oct.h"
 #include "octave/ov-struct.h"
 
-#include "gdcm-2.0/gdcmSystem.h"
+//#include "gdcm-2.0/gdcmSystem.h"
 #include "gdcm-2.0/gdcmReader.h"
-#include "gdcm-2.0/gdcmWriter.h"
-#include "gdcm-2.0/gdcmAttribute.h"
+//#include "gdcm-2.0/gdcmWriter.h"
+//#include "gdcm-2.0/gdcmAttribute.h"
 #include "gdcm-2.0/gdcmDataSet.h"
-#include "gdcm-2.0/gdcmGlobal.h"
-#include "gdcm-2.0/gdcmDicts.h"
+//#include "gdcm-2.0/gdcmGlobal.h"
+//#include "gdcm-2.0/gdcmDicts.h"
 #include "gdcm-2.0/gdcmDict.h"
-#include "gdcm-2.0/gdcmCSAHeader.h"
-#include "gdcm-2.0/gdcmPrivateTag.h"
+//#include "gdcm-2.0/gdcmCSAHeader.h"
+//#include "gdcm-2.0/gdcmPrivateTag.h"
 #include "gdcm-2.0/gdcmVR.h"
 #include "gdcm-2.0/gdcmSequenceOfItems.h"
  
@@ -129,27 +128,27 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 	}
 	std::string filename = ch.row_as_string (0);
 
-	std::string current_dict = get_current_dict();
-	// TODO the dictionary can be set by the code below
-	// we really need to catch any errors in this function
-	// and reset the dictionary to current_dict.
-	// Currently that's only done when no error occured.
+	// save current dictionary for the case that we're using a different dictionary while reading
+	const std::string current_dict = get_current_dict();
 
 	int i; // parse any additional args
 	for (i=1; i<args.length(); i++) {
 		charMatrix chex = args(i).char_matrix_value();
 		if (chex.rows()!=1) {
 			error(QUOTED(OCT_FN_NAME)": arg should be a string, 1 row of chars");
+			load_dict(current_dict.c_str()); // reset dictionary to initial value
 			return retval; 
 		}
 		std::string argex = chex.row_as_string (0);
 		if (!argex.compare("dictionary") || !argex.compare("Dictionary")) {
 		        if (i+1==args.length()) {
 			      error(QUOTED(OCT_FN_NAME)": Dictionary needs another argument");
+			      load_dict(current_dict.c_str()); // reset dictionary to initial value
 			      return retval;
 			}
 			if (!args(i+1).is_string()) {
 			      error(QUOTED(OCT_FN_NAME)": Dictionary needs a string argument");
+			      load_dict(current_dict.c_str()); // reset dictionary to initial value
 			      return retval;
 			}
 			std::string dictionary = args(i+1).string_value();
@@ -167,7 +166,7 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 	Octave_map om=dump(filename.c_str(),chatty);
 	retval(0)=om;
 
-	load_dict(current_dict.c_str());
+	load_dict(current_dict.c_str()); // reset dictionary to initial value
 	return retval;
 }
 #endif
@@ -182,6 +181,7 @@ Octave_map dump(const char filename[], int chatty) {
 	if( !reader.Read() ) {
 		error("Could not read: %s",filename);
 		return om; //TODO: set error state somehow so the main DEFUN_DLD function knows
+		           // KT this doesn't seem to be necessary. Presumably error() sets a flag that tells the interpreter it should abort
 	}
 	gdcm::File &file = reader.GetFile();
 	gdcm::DataSet &ds = file.GetDataSet();
@@ -307,25 +307,19 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 	// get dicom dictionary
 	//static const gdcm::Global& g = gdcm::Global::GetInstance();
 	//static const gdcm::Dicts &dicts = g.GetDicts();
-	
-	const gdcm::Tag tag = elem->GetTag();
-		
-	// skip "Group Length" tags. note: these are deprecated in DICOM 2008
-	if(tag.GetElement() == (uint16_t)0 || elem->GetByteValue() == NULL) return DICOM_NOTHING_ASSIGNED;
-	//const gdcm::DictEntry dictEntry = dicts.GetDictEntry(tag,(const char*)0);
+	const gdcm::Tag tag = elem->GetTag();		
+	const gdcm::VR vr = elem->GetVR(); // value representation
 
-	const gdcm::VR vr = elem->GetVR(); // value representation. ie DICOM 
+	// skip "Group Length" tags. note: these are deprecated in DICOM 2008
+	if(tag.GetElement() == (uint16_t)0 || (elem->GetByteValue() == NULL && vr != gdcm::VR::SQ)) 
+	  return DICOM_NOTHING_ASSIGNED;
+	//const gdcm::DictEntry dictEntry = dicts.GetDictEntry(tag,(const char*)0);
 
 	gdcm::DictEntry dictEntry ;
 	if (!is_present(tag)) {
 		char fallbackVarname[64];
 		snprintf(fallbackVarname,63,"Private_%04x_%04x",tag.GetGroup(),tag.GetElement());
 		varname=std::string(fallbackVarname);
-#if 0
-		*ov=std::string("");
-		warning(QUOTED(OCT_FN_NAME)": %s", fallbackVarname);
-		return DICOM_NOTHING_ASSIGNED; //TODO maybe could carry on, if we know the VR
-#endif
 	}
 	else {
 	        lookup_entry(dictEntry, tag);
