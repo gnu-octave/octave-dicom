@@ -3,12 +3,16 @@
  * Contact: blondandy using the sf.net system, 
  * <https://sourceforge.net/sendmessage.php?touser=1760416>
  * 
+ * Changes Copyright Kris Thielemans 2011:
+ * - support usage dicomread(struct-returned-by-dicominfo)
+ * - return image in same order as matlab
+ *
  * The GNU Octave dicom package is free software: you can redistribute 
  * it and/or modify it under the terms of the GNU General Public 
  * License as published by the Free Software Foundation, either 
  * version 3 of the License, or (at your option) any later version.
  * 
- * The GNU Octave dicom packag is distributed in the hope that it 
+ * The GNU Octave dicom package is distributed in the hope that it 
  * will be useful, but WITHOUT ANY WARRANTY; without even the 
  * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
  * PURPOSE.  See the GNU General Public License for more details.
@@ -92,18 +96,22 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 	
 	const gdcm::Image &image = reader.GetImage();
 
-	octave_idx_type ndim = image.GetNumberOfDimensions();
-	const unsigned int *dims = image.GetDimensions();
+	const octave_idx_type ndim = image.GetNumberOfDimensions();
+	const unsigned int * const dims = image.GetDimensions();
 	// dim 0: cols (width)
 	// dim 1: rows (height)
 	// dim 2: number of frames
 	
 	dim_vector *dv_p;
+	Array<octave_idx_type> perm_vect(dim_vector(ndim,1));
 	
+	// TODO check with non-square images if this needs to be dims[1],dims[0] etc
 	if( 2==ndim ) {
 		dv_p=new dim_vector(dims[0], dims[1]); //this transposes first two dimensions
+		perm_vect(0)=1; perm_vect(1)=0;
 	} else if (3==ndim) {
 		dv_p=new dim_vector(dims[0], dims[1], dims[2]); // should be (rows, cols, pages) in octave idiom
+		perm_vect(0)=1; perm_vect(1)=0; perm_vect(2)=2; 
 	} else {
 		error(QUOTED(OCT_FN_NAME)": %i dimensions. not supported: %s",ndim, filename.c_str());
 		return retval;
@@ -113,32 +121,32 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		uint32NDArray arr(*dv_p);
 		image.GetBuffer((char *)arr.fortran_vec());
 		delete dv_p;
-		return octave_value(arr);
+		return octave_value(arr.permute(perm_vect));
 	} else if ( gdcm::PixelFormat::UINT16 == image.GetPixelFormat() ) { //tested
 		uint16NDArray arr(*dv_p);
 		image.GetBuffer((char *)arr.fortran_vec());
 		delete dv_p;
-		return octave_value(arr);
+		return octave_value(arr.permute(perm_vect));
 	} else if ( gdcm::PixelFormat::UINT8 == image.GetPixelFormat() ) { //tested
 		uint8NDArray arr(*dv_p);
 		image.GetBuffer((char *)arr.fortran_vec());
 		delete dv_p;
-		return octave_value(arr);
+		return octave_value(arr.permute(perm_vect));
 	} else if ( gdcm::PixelFormat::INT8 == image.GetPixelFormat() ) { // no example found to test
 		int8NDArray arr(*dv_p);
 		image.GetBuffer((char *)arr.fortran_vec());
 		delete dv_p;
-		return octave_value(arr);
+		return octave_value(arr.permute(perm_vect));
 	} else if ( gdcm::PixelFormat::INT16 == image.GetPixelFormat() ) { // no example found to test
 		int16NDArray arr(*dv_p);
 		image.GetBuffer((char *)arr.fortran_vec());
 		delete dv_p;
-		return octave_value(arr);
+		return octave_value(arr.permute(perm_vect));
 	} else if ( gdcm::PixelFormat::INT32 == image.GetPixelFormat() ) { // no example found to test
 		int32NDArray arr(*dv_p);
 		image.GetBuffer((char *)arr.fortran_vec());
 		delete dv_p;
-		return octave_value(arr);
+		return octave_value(arr.permute(perm_vect));
 	} else {
 		octave_stdout << image.GetPixelFormat() << '\n' ;
 		error(QUOTED(OCT_FN_NAME)": pixel format not supported yet: %s", filename.c_str());
