@@ -9,7 +9,8 @@ svn export $PKG ~/$PKG
 VLINE=$(cat ~/$PKG/DESCRIPTION | grep Version:)
 PKG_VERSION=${VLINE#* }
 ARCHNAME=$PKG-$PKG_VERSION.tar.gz
-rm ~/dicom/mkpkg.sh
+rm    ~/dicom/mkpkg.sh
+rm -r ~/dicom/dcm_examples
 echo "Version=$PKG_VERSION"
 cd ~
 tar czf $ARCHNAME $PKG/

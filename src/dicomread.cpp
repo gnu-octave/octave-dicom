@@ -155,4 +155,8 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 	
 }
 
-
+/*
+%!test
+%! addpath('../inst'); % so it can find the dictionary
+%! % todo
+*/

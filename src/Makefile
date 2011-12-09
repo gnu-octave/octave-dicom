@@ -61,3 +61,17 @@ dicomlookup.o: dicomdict.h dicomlookup.cpp
 
 clean:
 	rm -f *.o *.oct *~
+
+test: all test_dicominfo test_dicomdict test_dicomread test_dicomlookup
+	
+test_dicominfo: 
+	octave -q --eval "test dicominfo.cpp"
+
+test_dicomdict: 
+	octave -q --eval "test dicomdict.cpp"
+
+test_dicomread: 
+	octave -q --eval "test dicomread.cpp"
+
+test_dicomlookup: 
+	octave -q --eval "test dicomlookup.cpp"

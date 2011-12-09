@@ -354,3 +354,9 @@ bool is_present(const gdcm::Tag & tag){
 	if (0==tagmap.size()) load_dict(factory_dicom_dict_filename); // init if necessary
 	return tagmap.count(tag)>(std::vector<gdcm::Tag>::size_type)0 ;
 }
+
+/*
+%!test
+%! addpath('../inst'); % so it can find the dictionary
+%! % todo
+*/

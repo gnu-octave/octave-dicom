@@ -72,3 +72,9 @@ keyword = dicomlookup(group, elem)  \n\
 	error(QUOTED(OCT_FN_NAME_LU)": takes 1 or 2 arguments, got %i. see help",args.length ());
 	return retval;
 }
+
+/*
+%!test
+%! addpath('../inst'); % so it can find the dictionary
+%! % todo
+*/

@@ -563,3 +563,15 @@ char* name2Keyword(char *d, int *d_len_p, const char* s) {
 	*tl = '\0';
 	return d;
 }
+
+/*
+%!test
+%! addpath('../inst'); % so it can find the dictionary
+%! dcmfile="../dcm_examples/RD.15MV.DCM";
+%! s=dicominfo(dcmfile);
+%! if ~strcmp(s.PatientName,"PHANTOM^IsodoseComparison^^^")
+%!   error("name read incorrectly: %s",s.PatientName);
+%! else
+%!   printf("name read OK: %s %s\n",dcmfile, s.PatientName);
+%! end
+*/
