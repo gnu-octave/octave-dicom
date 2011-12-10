@@ -308,14 +308,13 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 	//static const gdcm::Global& g = gdcm::Global::GetInstance();
 	//static const gdcm::Dicts &dicts = g.GetDicts();
 	const gdcm::Tag tag = elem->GetTag();		
-	gdcm::VR vr = elem->GetVR(); // value representation
+	const gdcm::VR vr = elem->GetVR(); // value representation
 
 	// skip "Group Length" tags. note: these are deprecated in DICOM 2008
 	if(tag.GetElement() == (uint16_t)0 || (elem->GetByteValue() == NULL && vr != gdcm::VR::SQ)) 
 	  return DICOM_NOTHING_ASSIGNED;
 	//const gdcm::DictEntry dictEntry = dicts.GetDictEntry(tag,(const char*)0);
 
-	// find dictionary entry for name and to possibly adjust the VR
 	gdcm::DictEntry dictEntry ;
 	if (!is_present(tag)) {
 		char fallbackVarname[64];
@@ -329,34 +328,9 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 		if (!vr.Compatible(vr)) {
     		  warning(QUOTED(OCT_FN_NAME)": %s has different VR from dictionary. Using VR from file.", varname.c_str());
 		}
-		// find vr from dictionary if it was not in the file
-		// lines copied from gdcmPrinter::PrintDataElement
-		if( vr == gdcm::VR::INVALID )
-		  {
-		    vr = dictvr;
-		  }
-		else if ( vr == gdcm::VR::UN && vr != gdcm::VR::INVALID ) // File is explicit, but still prefer vr from dict when UN
-		  {
-		    vr = dictvr;
-		  }
-		else // cool the file is Explicit !
-		  {
-		    // keep vr from file
-		  }
-#if 0
-		// gdcmPrinter goes on with the following fix for the 
-		// case where the VR derived from the dictionary is 'dual' (e.g. US_SS).
-		// However, we cannot do it here as we don't have 
-		// the FILE* F nor the dataset. 
-		// This means that these fields will not be assigned.
-		if( vr.IsDual() ) // This means vr was read from a dict entry:
-		  {
-		    vr = DataSetHelper::ComputeVR(*F,ds, tag);
-		  }
-#endif
 	}
 
-
+	
 	//int tagVarNameBufLen=127;
 	//char *keyword=(char *)malloc((tagVarNameBufLen+1)*sizeof(char));
 	//keyword=name2Keyword(keyword,&tagVarNameBufLen,tagName);
@@ -569,9 +543,7 @@ char* name2Keyword(char *d, int *d_len_p, const char* s) {
 %! addpath('../inst'); % so it can find the dictionary
 %! dcmfile="../dcm_examples/RD.15MV.DCM";
 %! s=dicominfo(dcmfile);
-%! if ~strcmp(s.PatientName,"PHANTOM^IsodoseComparison^^^")
-%!   error("name read incorrectly: %s",s.PatientName);
-%! else
-%!   printf("name read OK: %s %s\n",dcmfile, s.PatientName);
-%! end
+%! assert(s.PatientName,"PHANTOM^IsodoseComparison^^^");
+
+
 */
