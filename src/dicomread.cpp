@@ -158,5 +158,7 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 /*
 %!test
 %! addpath('../inst'); % so it can find the dictionary
+%! rd=dicomread('../dcm_examples/RD.15MV.DCM');
+%! assert(rd(100,101,30),uint16(2021));
 %! % todo
 */

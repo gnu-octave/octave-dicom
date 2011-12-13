@@ -358,5 +358,8 @@ bool is_present(const gdcm::Tag & tag){
 /*
 %!test
 %! addpath('../inst'); % so it can find the dictionary
+%! dicomdict factory ;
+%! [f n e]=fileparts(dicomdict('get'));
+%! assert([n e],"octavedicom.dic");
 %! % todo
 */

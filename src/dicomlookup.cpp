@@ -74,7 +74,16 @@ keyword = dicomlookup(group, elem)  \n\
 }
 
 /*
+
 %!test
 %! addpath('../inst'); % so it can find the dictionary
-%! % todo
+%! assert(dicomlookup(0x10,0x10),"PatientName");
+%! assert(dicomlookup("10","10"),"PatientName");
+%! assert(dicomlookup("0x10","0x10"),"PatientName");
+%! assert(dicomlookup(16,16),"PatientName");
+
+%!test
+%! [g e]=dicomlookup("PatientName");
+%! assert([g e], uint16([0x10 0x10]));
+%! 
 */
