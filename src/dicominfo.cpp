@@ -567,9 +567,13 @@ char* name2Keyword(char *d, int *d_len_p, const char* s) {
 /*
 %!test
 %! addpath('../inst'); % so it can find the dictionary
-%! dcmfile="../dcm_examples/RD.15MV.DCM";
-%! s=dicominfo(dcmfile);
+%! s=dicominfo("../dcm_examples/RD.15MV.DCM");
 %! assert(s.PatientName,"PHANTOM^IsodoseComparison^^^");
+
+%!test
+%! addpath('../inst'); % so it can find the dictionary
+%! s=dicominfo("../dcm_examples/RD.15MV.DCM");
+%! assert(s.ROIContourSequence.Item_1.ContourSequence.Item_1.ContourGeometricType,"POINT ");
 
 
 */
