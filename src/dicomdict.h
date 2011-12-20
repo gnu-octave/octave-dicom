@@ -17,14 +17,14 @@
  * Public License version 3.
  * 
  */
-void load_dict(const char *filename);
-const char * const get_current_dict();
+void load_dicom_dict(const char *filename);
+const char * const get_current_dicom_dict();
 
-void lookup_keyword(std::string & keyword, const gdcm::Tag & tag);
-void lookup_tag(gdcm::Tag & tag, const std::string & keyword);
-void lookup_entry(gdcm::DictEntry & entry, const gdcm::Tag & tag);
-bool is_present(const std::string & keyword);
-bool is_present(const gdcm::Tag & tag);
+void lookup_dicom_keyword(std::string & keyword, const gdcm::Tag & tag);
+void lookup_dicom_tag(gdcm::Tag & tag, const std::string & keyword);
+void lookup_dicom_entry(gdcm::DictEntry & entry, const gdcm::Tag & tag);
+bool dicom_is_present(const std::string & keyword);
+bool dicom_is_present(const gdcm::Tag & tag);
 
 /** DICOM value representions that make sense going straight to strings.
   * contrast with some VRASCII types that hold numbers.

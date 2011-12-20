@@ -47,7 +47,7 @@ keyword = dicomlookup(group, elem)  \n\
 		}
 		std::string keyword = arg0mat.row_as_string (0);
 		gdcm::Tag tag;
-		lookup_tag(tag, keyword);
+		lookup_dicom_tag(tag, keyword);
 		octave_uint16 group=tag.GetGroup();
 		octave_uint16 elem=tag.GetElement();
 		retval(0)=octave_value(group);
@@ -66,7 +66,7 @@ keyword = dicomlookup(group, elem)  \n\
 		}
 		gdcm::Tag tag(tagvals[0], tagvals[1]);
 		std::string keyword;
-		lookup_keyword(keyword, tag);
+		lookup_dicom_keyword(keyword, tag);
 		return octave_value(keyword);
 	}
 	error(QUOTED(OCT_FN_NAME_LU)": takes 1 or 2 arguments, got %i. see help",args.length ());

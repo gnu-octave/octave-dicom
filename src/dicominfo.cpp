@@ -129,30 +129,30 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 	std::string filename = ch.row_as_string (0);
 
 	// save current dictionary for the case that we're using a different dictionary while reading
-	const std::string current_dict = get_current_dict();
+	const std::string current_dict = get_current_dicom_dict();
 
 	int i; // parse any additional args
 	for (i=1; i<args.length(); i++) {
 		charMatrix chex = args(i).char_matrix_value();
 		if (chex.rows()!=1) {
 			error(QUOTED(OCT_FN_NAME)": arg should be a string, 1 row of chars");
-			load_dict(current_dict.c_str()); // reset dictionary to initial value
+			load_dicom_dict(current_dict.c_str()); // reset dictionary to initial value
 			return retval; 
 		}
 		std::string argex = chex.row_as_string (0);
 		if (!argex.compare("dictionary") || !argex.compare("Dictionary")) {
 		        if (i+1==args.length()) {
 			      error(QUOTED(OCT_FN_NAME)": Dictionary needs another argument");
-			      load_dict(current_dict.c_str()); // reset dictionary to initial value
+			      load_dicom_dict(current_dict.c_str()); // reset dictionary to initial value
 			      return retval;
 			}
 			if (!args(i+1).is_string()) {
 			      error(QUOTED(OCT_FN_NAME)": Dictionary needs a string argument");
-			      load_dict(current_dict.c_str()); // reset dictionary to initial value
+			      load_dicom_dict(current_dict.c_str()); // reset dictionary to initial value
 			      return retval;
 			}
 			std::string dictionary = args(i+1).string_value();
-			load_dict(dictionary.c_str());
+			load_dicom_dict(dictionary.c_str());
 			// ignore dictionary argument for further arg processing
 			++i;
 		}
@@ -166,7 +166,7 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 	Octave_map om=dump(filename.c_str(),chatty);
 	retval(0)=om;
 
-	load_dict(current_dict.c_str()); // reset dictionary to initial value
+	load_dicom_dict(current_dict.c_str()); // reset dictionary to initial value
 	return retval;
 }
 #endif
@@ -317,13 +317,13 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 
 	// find dictionary entry for name and to possibly adjust the VR
 	gdcm::DictEntry dictEntry ;
-	if (!is_present(tag)) {
+	if (!dicom_is_present(tag)) {
 		char fallbackVarname[64];
 		snprintf(fallbackVarname,63,"Private_%04x_%04x",tag.GetGroup(),tag.GetElement());
 		varname=std::string(fallbackVarname);
 	}
 	else {
-	        lookup_entry(dictEntry, tag);
+	        lookup_dicom_entry(dictEntry, tag);
 		varname=dictEntry.GetName();
 		const gdcm::VR dictvr= dictEntry.GetVR(); // value representation. ie DICOM 	
 		if (!vr.Compatible(vr)) {

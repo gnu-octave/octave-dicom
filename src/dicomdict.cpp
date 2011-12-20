@@ -84,7 +84,7 @@ In this case, the dictionary file @var{dictionary_name} can be anywhere in the p
 // 				octave_dicom_dict = new OctaveDicomDict(); //TODO where should this be freed?
 // 				printf("init OctaveDicomDict before loading factory\n");
 // 			}
-			load_dict(dic_filename.c_str());
+			load_dicom_dict(dic_filename.c_str());
 			
 			return retval;
 		} else {
@@ -103,7 +103,7 @@ In this case, the dictionary file @var{dictionary_name} can be anywhere in the p
 		error(QUOTED(OCT_FN_NAME)": when 2 args are given, the first must be 'set'.",args.length ());
 		return retval; 
 	}
-	load_dict(arg1str.c_str());
+	load_dicom_dict(arg1str.c_str());
 	//if (octave_dicom_dict == NULL) octave_dicom_dict = new OctaveDicomDict(); //TODO where should this be freed?
 	//octave_dicom_dict.load_file(arg1str.c_str()); // second arg is filename
 	return retval;
@@ -243,11 +243,11 @@ public:
   }
 };
 
-const char * const get_current_dict() {
+const char * const get_current_dicom_dict() {
   return dic_filename.c_str();
 }
 
-void load_dict(const char * filename) {
+void load_dicom_dict(const char * filename) {
 	// reset, if required
 	if (tagmap.size()>0) {
 		tagmap.clear() ;
@@ -330,28 +330,28 @@ void load_dict(const char * filename) {
 	dic_filename = resolved_filename;
 }
 
-void lookup_keyword(std::string & keyword, const gdcm::Tag & tag) {
-	if (0==tagmap.size()) load_dict(factory_dicom_dict_filename); // init if necessary
+void lookup_dicom_keyword(std::string & keyword, const gdcm::Tag & tag) {
+	if (0==tagmap.size()) load_dicom_dict(factory_dicom_dict_filename); // init if necessary
 	keyword = tagmap[tag];
 }
 
-void lookup_tag(gdcm::Tag & tag, const std::string & keyword) {
-	if (0==tagmap.size()) load_dict(factory_dicom_dict_filename); // init if necessary
+void lookup_dicom_tag(gdcm::Tag & tag, const std::string & keyword) {
+	if (0==tagmap.size()) load_dicom_dict(factory_dicom_dict_filename); // init if necessary
 	tag = gdcm::Tag(keymap[keyword]);
 }
 
-void lookup_entry(gdcm::DictEntry & entry, const gdcm::Tag & tag) {
-	if (0==tagmap.size()) load_dict(factory_dicom_dict_filename); // init if necessary
+void lookup_dicom_entry(gdcm::DictEntry & entry, const gdcm::Tag & tag) {
+	if (0==tagmap.size()) load_dicom_dict(factory_dicom_dict_filename); // init if necessary
 	entry = gdcm::DictEntry(dict[tagmap[tag]]);
 }
 
-bool is_present(const std::string & keyword){
-	if (0==tagmap.size()) load_dict(factory_dicom_dict_filename); // init if necessary
+bool dicom_is_present(const std::string & keyword){
+	if (0==tagmap.size()) load_dicom_dict(factory_dicom_dict_filename); // init if necessary
 	return keymap.count(keyword)>(std::vector<std::string>::size_type)0 ;
 }
 
-bool is_present(const gdcm::Tag & tag){
-	if (0==tagmap.size()) load_dict(factory_dicom_dict_filename); // init if necessary
+bool dicom_is_present(const gdcm::Tag & tag){
+	if (0==tagmap.size()) load_dicom_dict(factory_dicom_dict_filename); // init if necessary
 	return tagmap.count(tag)>(std::vector<gdcm::Tag>::size_type)0 ;
 }
 

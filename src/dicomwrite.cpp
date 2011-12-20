@@ -137,7 +137,7 @@ void struct2metadata(gdcm::ImageWriter *w, gdcm::File *file, const octave_value 
 	for (Octave_map::iterator it = om.begin(); it != om.end(); it++) {
 		std::string keyword(om.key(it));
 		Cell cell = om.contents(it);
-		if (!is_present(keyword)) {
+		if (!dicom_is_present(keyword)) {
 			if ( 0==keyword.compare("FileModDate") || 0==keyword.compare("Filename")) {
 				if (trial) octave_stdout << "from dicominfo, ignoring:" << keyword << ":[" << cell(0).string_value() << "]\n";
 				continue; //dicominfo adds these non-DICOM bits
@@ -212,7 +212,7 @@ void structarray2sequence(gdcm::SequenceOfItems & sq, Octave_map * om, bool tria
 
 void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag * tag, const std::string & keyword, bool trial, bool * handled, int sequenceDepth) {
 	gdcm::DictEntry entry;
-	if (!is_present(keyword)) {
+	if (!dicom_is_present(keyword)) {
 		if (trial) {
 			octave_stdout << std::setw(2*sequenceDepth) << "" << std::setw(0) ;
 			octave_stdout << keyword << ": not in dictionary" << std::endl ;
@@ -220,8 +220,8 @@ void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag *
 		*handled=false;
 		return ;
 	}
-	lookup_tag(*tag, keyword);
-	lookup_entry(entry, *tag);
+	lookup_dicom_tag(*tag, keyword);
+	lookup_dicom_entry(entry, *tag);
 	gdcm::VL len((uint32_t)ov->byte_size());
 	//gdcm::DataElement de(*tag, len, entry.GetVR()); 
 	de->SetTag(*tag); de->SetVL(len); de->SetVR(entry.GetVR());
