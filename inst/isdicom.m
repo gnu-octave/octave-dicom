@@ -148,3 +148,10 @@ function [tag,vr,keyword,vm] = READ_dicom_dict
 
 end %function
 
+%!test
+%! addpath('../inst'); % so it can find the dictionary, and m files
+%! assert(isdicom('../dcm_examples/RD.15MV.DCM'));
+%!test
+%! addpath('../inst');
+%! assert(~isdicom('../inst/isdicom.m'));
+
