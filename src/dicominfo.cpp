@@ -42,7 +42,7 @@
 #include "octave/ov-struct.h"
 
 //#include "gdcm-2.0/gdcmSystem.h"
-#include "gdcm-2.0/gdcmReader.h"
+#include "gdcm-2.4/gdcmReader.h"
 //#include "gdcm-2.0/gdcmWriter.h"
 //#include "gdcm-2.0/gdcmAttribute.h"
 #include "gdcm-2.0/gdcmDataSet.h"
