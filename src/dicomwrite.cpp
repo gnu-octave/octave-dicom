@@ -21,11 +21,11 @@
 #include "octave/oct.h"
 #include "octave/ov-struct.h"
 
-#include "gdcm-2.0/gdcmDictEntry.h"
-#include "gdcm-2.0/gdcmImage.h"
-#include "gdcm-2.0/gdcmImageWriter.h"
-#include "gdcm-2.0/gdcmFileDerivation.h"
-#include "gdcm-2.0/gdcmUIDGenerator.h"
+#include "gdcmDictEntry.h"
+#include "gdcmImage.h"
+#include "gdcmImageWriter.h"
+#include "gdcmFileDerivation.h"
+#include "gdcmUIDGenerator.h"
               
 #include "dicomdict.h"
               

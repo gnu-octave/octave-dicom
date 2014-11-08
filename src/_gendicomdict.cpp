@@ -28,17 +28,17 @@
 
 #include "octave/oct.h"
 
-#include "gdcm-2.0/gdcmSystem.h"
-#include "gdcm-2.0/gdcmReader.h"
-#include "gdcm-2.0/gdcmWriter.h"
-#include "gdcm-2.0/gdcmAttribute.h"
-#include "gdcm-2.0/gdcmDataSet.h"
-#include "gdcm-2.0/gdcmGlobal.h"
-#include "gdcm-2.0/gdcmDicts.h"
-#include "gdcm-2.0/gdcmDict.h"
-#include "gdcm-2.0/gdcmCSAHeader.h"
-#include "gdcm-2.0/gdcmPrivateTag.h"
-#include "gdcm-2.0/gdcmVR.h"
+#include "gdcmSystem.h"
+#include "gdcmReader.h"
+#include "gdcmWriter.h"
+#include "gdcmAttribute.h"
+#include "gdcmDataSet.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
+#include "gdcmDict.h"
+#include "gdcmCSAHeader.h"
+#include "gdcmPrivateTag.h"
+#include "gdcmVR.h"
 
 #define OCT_FN_NAME _gendicomdict
 #define QUOTED_(x) #x

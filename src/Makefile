@@ -17,7 +17,7 @@
   
  
 
-INCDIRFLAGS =	
+INCDIRFLAGS =	-I/usr/local/include/gdcm-2.4
 LIBDIRFLAGS =	-L/usr/local/lib
 GDCMLIBFLAGS =	-lgdcmcharls  -lgdcmjpeg8 -lgdcmjpeg12 \
 -lgdcmjpeg16 -lgdcmCommon \
@@ -25,7 +25,7 @@ GDCMLIBFLAGS =	-lgdcmcharls  -lgdcmjpeg8 -lgdcmjpeg12 \
 DEBUGFLAG =	-g
 
 
-all: dicominfo.oct dicomdict.oct dicomread.oct dicomlookup.oct _gendicomdict.oct dicomwrite.oct
+all: dicominfo.oct dicomdict.oct dicomread.oct dicomlookup.oct _gendicomdict.oct
 
 
 dicomlookup.oct: dicomdict.o dicomlookup.o

@@ -24,7 +24,7 @@
 
 #include "octave/oct.h"
 #include <octave/ov-struct.h>
-#include "gdcm-2.0/gdcmImageReader.h"
+#include "gdcmImageReader.h"
               
 #define DICOM_ERR -1
 #define DICOM_OK 0
