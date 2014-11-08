@@ -14,8 +14,9 @@
 #   
 #   Please see the file, "COPYING" for further details of GNU General 
 #   Public License version 3.
-  
- 
+
+MKOCTFILE ?= mkoctfile -Wall
+OCTAVE ?= octave
 
 INCDIRFLAGS =	-I/usr/local/include/gdcm-2.4
 LIBDIRFLAGS =	-L/usr/local/lib
@@ -29,35 +30,35 @@ all: dicominfo.oct dicomdict.oct dicomread.oct dicomlookup.oct _gendicomdict.oct
 
 
 dicomlookup.oct: dicomdict.o dicomlookup.o
-	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicomlookup.o dicomdict.o -o dicomlookup.oct
+	$MKOCTFILE $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicomlookup.o dicomdict.o -o dicomlookup.oct
 
 dicomdict.oct: dicomdict.o
-	mkoctfile $(INCDIRFLAGS) $(DEBUGFLAG) dicomdict.o
+	$MKOCTFILE $(INCDIRFLAGS) $(DEBUGFLAG) dicomdict.o
 
 dicominfo.oct: dicominfo.o dicomdict.o
-	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicominfo.o dicomdict.o -o dicominfo.oct
+	$MKOCTFILE $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicominfo.o dicomdict.o -o dicominfo.oct
 
 dicomwrite.oct: dicomwrite.o dicomdict.o
-	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicomwrite.o dicomdict.o -o dicomwrite.oct
+	$MKOCTFILE $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicomwrite.o dicomdict.o -o dicomwrite.oct
 
 dicomread.oct: dicomread.cpp
-	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicomread.cpp
+	$MKOCTFILE $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) dicomread.cpp
 
 _gendicomdict.oct: _gendicomdict.cpp
-	mkoctfile $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) _gendicomdict.cpp
+	$MKOCTFILE $(INCDIRFLAGS) $(LIBDIRFLAGS) $(GDCMLIBFLAGS) $(DEBUGFLAG) _gendicomdict.cpp
 
 
 dicominfo.o: dicomdict.h dicominfo.cpp
-	mkoctfile -c $(INCDIRFLAGS) $(DEBUGFLAG) dicominfo.cpp
+	$MKOCTFILE -c $(INCDIRFLAGS) $(DEBUGFLAG) dicominfo.cpp
 
 dicomwrite.o: dicomdict.h dicomwrite.cpp
-	mkoctfile -c $(INCDIRFLAGS) $(DEBUGFLAG) dicomwrite.cpp
+	$MKOCTFILE -c $(INCDIRFLAGS) $(DEBUGFLAG) dicomwrite.cpp
 
 dicomdict.o: dicomdict.h dicomdict.cpp
-	mkoctfile -c $(INCDIRFLAGS) $(DEBUGFLAG) dicomdict.cpp
+	$MKOCTFILE -c $(INCDIRFLAGS) $(DEBUGFLAG) dicomdict.cpp
 
 dicomlookup.o: dicomdict.h dicomlookup.cpp
-	mkoctfile -c $(INCDIRFLAGS) $(DEBUGFLAG) dicomlookup.cpp
+	$MKOCTFILE -c $(INCDIRFLAGS) $(DEBUGFLAG) dicomlookup.cpp
 
 clean:
 	rm -f *.o *.oct *~
@@ -65,16 +66,16 @@ clean:
 test: test_dicominfo test_dicomdict test_dicomread test_dicomlookup test_isdicom
 	
 test_dicominfo: dicominfo.oct
-	octave -q --eval "test dicominfo.cpp"
+	$OCTAVE -q --eval "test dicominfo.cpp"
 
 test_dicomdict: dicomdict.oct
-	octave -q --eval "test dicomdict.cpp"
+	$OCTAVE -q --eval "test dicomdict.cpp"
 
 test_dicomread: dicomread.oct
-	octave -q --eval "test dicomread.cpp"
+	$OCTAVE -q --eval "test dicomread.cpp"
 
 test_dicomlookup: dicomlookup.oct
-	octave -q --eval "test dicomlookup.cpp"
+	$OCTAVE -q --eval "test dicomlookup.cpp"
 
 test_isdicom: 
-	octave -q --eval "test ../isdicom.m"
+	$OCTAVE -q --eval "test ../isdicom.m"
