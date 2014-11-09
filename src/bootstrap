@@ -1,0 +1,8 @@
+#!/bin/bash
+## Octave-Forge dicom package bootstrap script
+## Run this to generate the configure script
+
+set -e      # halt if unhandled error
+
+aclocal     # gather the CMAKE_FIND_PACKAGE
+autoconf    # generate configure script

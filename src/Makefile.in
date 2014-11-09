@@ -1,0 +1,38 @@
+MKOCTFILE ?= mkoctfile -Wall
+OCTAVE ?= octave
+
+GDCM_CPPFLAGS = @GDCM_CXXFLAGS@
+
+## Ideally we'd get @GDCM_LIB_FLAGS@ from configure but that would be -rdynamic
+## which mkoctfile does not handle
+GDCM_LIB_FLAGS = -lgdcmjpeg8 -lgdcmjpeg12 \
+-lgdcmjpeg16 -lgdcmCommon \
+-lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmMSFF
+
+DEBUGFLAG =	-g
+
+need_dict = dicominfo.oct dicomwrite.oct dicomlookup.oct
+
+## isdicom is different because it's on ..inst/
+test_files = dicominfo.cpp dicomdict.cpp dicomread.cpp dicomlookup.cpp
+
+all: $(need_dict) dicomdict.oct dicomread.oct _gendicomdict.oct
+
+%.o: %.cpp
+	$(MKOCTFILE) $(GDCM_CPPFLAGS) $(DEBUGFLAG) -c $<
+
+$(need_dict): %.oct: %.cpp dicomdict.o
+	$(MKOCTFILE) $(GDCM_CPPFLAGS) $(GDCM_LIB_FLAGS) $(DEBUGFLAG) $^
+
+%.oct: %.cpp
+	$(MKOCTFILE) $(GDCM_CPPFLAGS) $(GDCM_LIB_FLAGS) $(DEBUGFLAG) $<
+
+clean:
+	rm -f *.o *.oct *~
+
+test:
+	for file in $(test_files); do \
+		$(OCTAVE) -q --eval "test $$file"; \
+	done
+	$(OCTAVE) -q --eval "test ../inst/isdicom.m"
+
