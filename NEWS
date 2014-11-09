@@ -1,0 +1,10 @@
+ Summary of important user-visible changes for dicom x.y.z (yyyy/mm/dd):
+-------------------------------------------------------------------------
+
+ ** The function isdicom has been completely rewritten and will perform
+    much faster for invalid dicom files.  It also no longer accepts a cell
+    array of strings since it reduces its usefulness by other functions.
+    Such use can be replaced with:
+
+      cellfun (@isdicom, cell_array_filenames)
+

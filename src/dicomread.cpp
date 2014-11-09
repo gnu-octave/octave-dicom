@@ -24,8 +24,68 @@
 
 #include "octave/oct.h"
 #include <octave/ov-struct.h>
+#include <octave/file-stat.h>
+
 #include "gdcmImageReader.h"
-              
+using namespace gdcm;
+
+static bool
+isdicom (const std::string& filename)
+{
+  gdcm::Reader reader;
+  reader.SetFileName (filename.c_str ());
+  // gdcm::Reader.Read() will return false if the file does not exists but
+  // also prints to stderr so we check it first.
+  return file_stat (filename).exists () && reader.Read ();
+}
+
+// PKG_ADD: autoload ("isdicom", "dicomread.oct");
+// PKG_DEL: autoload ("isdicom", "dicomread.oct", "remove");
+DEFUN_DLD (isdicom, args, ,
+"-*- texinfo -*- \n\
+@deftypefn {Loadable Function} {} isdicom (@var{filename}) \n\
+Return true if @var{filename} is a valid DICOM file.\n\
+\n\
+@seealso{dicomdict, dicominfo, dicomread, dicomwrite} \n\
+@end deftypefn")
+{
+  const octave_idx_type nargin = args.length ();
+  if (nargin != 1)
+    {
+      print_usage ();
+      return octave_value_list ();
+    }
+
+  // Do NOT have this function accept a cell array of strings.
+  //
+  // This function should return true or false if its input is valid input
+  // for a function that reads a DICOM file.  While it is tempting, and very
+  // easy to implement, to have this function accept a cell array of strings
+  // and return a boolNDArray, a cell array is not valid and will cause any
+  // function that uses it to first check if it's a cell array.  It will also
+  // prevent it from being used by imformats and any other image IO function
+  // in Octave core
+
+  const std::string filename = args(0).string_value ();
+  if (error_state)
+    {
+      error ("isdicom: FILENAME must be a string");
+      return octave_value_list ();
+    }
+
+  return octave_value (isdicom (filename));
+}
+
+/*
+%!test
+%! fpath = tmpnam ();
+%! urlwrite ("http://imagej.nih.gov/ij/images/CT%20Scan.dcm", fpath);
+%! assert (isdicom (fpath), true);
+
+%!test
+%! assert (isdicom (which ("gray")), false);
+*/
+
 #define DICOM_ERR -1
 #define DICOM_OK 0
 
