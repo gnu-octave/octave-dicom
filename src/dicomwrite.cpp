@@ -43,7 +43,7 @@
 // TODO all fns here should throw exceptions, not use this "std::string & err" arg
 
 void struct2metadata(gdcm::ImageWriter *w, gdcm::File *file, const octave_value  & ov, bool trial, int sequenceDepth) ;
-void structarray2sequence(gdcm::SequenceOfItems & sq, Octave_map * om, bool trial, int sequenceDepth);
+void structarray2sequence(gdcm::SequenceOfItems & sq, octave_map * om, bool trial, int sequenceDepth);
 void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag * tag, const std::string & keyword, bool trial, bool * handled, int sequenceDepth);
 void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) ;
 void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file);
@@ -132,9 +132,9 @@ void struct2metadata(gdcm::ImageWriter *w, gdcm::File *file, const octave_value 
 	}
 	gdcm::DataSet ds;
 	gdcm::FileMetaInformation hds;
-	Octave_map om=ov.map_value();
+	octave_map om=ov.map_value();
 	uint32_t skipped = 0;
-	for (Octave_map::iterator it = om.begin(); it != om.end(); it++) {
+	for (octave_map::iterator it = om.begin(); it != om.end(); it++) {
 		std::string keyword(om.key(it));
 		Cell cell = om.contents(it);
 		if (!dicom_is_present(keyword)) {
@@ -179,17 +179,17 @@ void struct2metadata(gdcm::ImageWriter *w, gdcm::File *file, const octave_value 
 	return ;
 }
 
-void structarray2sequence(gdcm::SequenceOfItems & sq, Octave_map * om, bool trial, int sequenceDepth) {
-	for (Octave_map::iterator it = om->begin(); it != om->end(); it++) {
+void structarray2sequence(gdcm::SequenceOfItems & sq, octave_map * om, bool trial, int sequenceDepth) {
+	for (octave_map::iterator it = om->begin(); it != om->end(); it++) {
 		gdcm::Item item;
 		// item.SetVLToUndefined(); //TODO: does VL need to be set for items that contain datasets?
 		gdcm::DataSet &nds = item.GetNestedDataSet();
 		std::string itemname(om->key(it));
 		// TODO: test itemname is something like Item_n.
 		Cell cell = om->contents(it);
-		Octave_map subom = cell(0).map_value();
+		octave_map subom = cell(0).map_value();
 		// octave_stdout << itemname <<std::endl;
-		for (Octave_map::iterator subit = subom.begin(); subit != subom.end(); subit++) {
+		for (octave_map::iterator subit = subom.begin(); subit != subom.end(); subit++) {
 			std::string subkeyword(subom.key(subit));
 			gdcm::DataElement de;
 			gdcm::Tag tag;
@@ -289,7 +289,7 @@ void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag *
 		}
 		octave_stdout << std::endl;
 		//int nObj = ov->numel() ;
-		Octave_map subom = ov->map_value();
+		octave_map subom = ov->map_value();
 		gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
 		try {
 			structarray2sequence(*sq, &subom, trial, ++sequenceDepth) ;

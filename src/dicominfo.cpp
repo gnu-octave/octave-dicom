@@ -76,10 +76,10 @@
 char* byteval2string(char * d, int d_len_p, const gdcm::ByteValue *bv);
 char* name2Keyword(char *d, int *d_len_p, const char* s);
 Matrix str2DoubleVec(const char*);
-Octave_map dump(const char filename[], int chatty);
-void dumpDataSet(Octave_map *om, const gdcm::DataSet *ds, int chatty, int sequenceDepth);
+octave_map dump(const char filename[], int chatty);
+void dumpDataSet(octave_map *om, const gdcm::DataSet *ds, int chatty, int sequenceDepth);
 void getFileModTime(char *timeStr, const char *filename);
-void dumpElement(Octave_map *om, const gdcm::DataElement * elem, int chatty, int sequenceDepth);
+void dumpElement(octave_map *om, const gdcm::DataElement * elem, int chatty, int sequenceDepth);
 void dumpSequence(octave_value *ov, gdcm::SequenceOfItems *seq, int chatty, int sequenceDepth);
 int element2value(std::string & varname, octave_value *ov, const gdcm::DataElement * elem, int chatty, int sequenceDepth) ;
 
@@ -163,7 +163,7 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		}
 	}
 	
-	Octave_map om=dump(filename.c_str(),chatty);
+	octave_map om=dump(filename.c_str(),chatty);
 	retval(0)=om;
 
 	load_dicom_dict(current_dict.c_str()); // reset dictionary to initial value
@@ -172,9 +172,9 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 #endif
 
 
-Octave_map dump(const char filename[], int chatty) {
+octave_map dump(const char filename[], int chatty) {
 	// output struct
-	Octave_map om;
+	octave_map om;
 	// Instantiate the reader:
 	gdcm::Reader reader;
 	reader.SetFileName( filename );
@@ -187,10 +187,10 @@ Octave_map dump(const char filename[], int chatty) {
 	gdcm::DataSet &ds = file.GetDataSet();
 	gdcm::FileMetaInformation &hds=file.GetHeader();
 	
-	om.assign("Filename",filename);
+	om.assign("Filename", octave_value(filename));
 	char dateStr[TIME_STR_LEN+1];
 	getFileModTime(dateStr, filename);
-	om.assign("FileModDate", dateStr);
+	om.assign("FileModDate", octave_value(dateStr));
 	if(chatty) octave_stdout << "# file info\nFilename:" 
 		<< filename << "\nFileModDate:" << dateStr << '\n';
 	
@@ -202,7 +202,7 @@ Octave_map dump(const char filename[], int chatty) {
 	return om;
 }
 
-void dumpDataSet(Octave_map *om, const gdcm::DataSet *ds, int chatty, int sequenceDepth) {
+void dumpDataSet(octave_map *om, const gdcm::DataSet *ds, int chatty, int sequenceDepth) {
 	
 	const gdcm::DataSet::DataElementSet DES=ds->GetDES(); // gdcm::DataSet::DataElementSet is a std::set
 	gdcm::DataSet::Iterator it;
@@ -212,7 +212,7 @@ void dumpDataSet(Octave_map *om, const gdcm::DataSet *ds, int chatty, int sequen
 	}
 }
 
-void dumpElement(Octave_map *om, const gdcm::DataElement * elem, 
+void dumpElement(octave_map *om, const gdcm::DataElement * elem, 
 				int chatty, int sequenceDepth) {
 	std::string varname;
 	octave_value ov;
@@ -220,7 +220,7 @@ void dumpElement(Octave_map *om, const gdcm::DataElement * elem,
 		om->assign(varname.c_str(), ov);
 	} else {
 		if (0==varname.length()) return ;
-		om->assign(varname.c_str(), "not assigned");
+		om->assign(varname.c_str(), octave_value("not assigned"));
 	}
 }
 
@@ -453,10 +453,10 @@ void dumpSequence(octave_value *ov, gdcm::SequenceOfItems *seq, int chatty, int 
 	const octave_idx_type nDataSet=seq->GetNumberOfItems(); // objects in sequence
 	if (chatty) octave_stdout << nDataSet << " object" << ((nDataSet==1)?"":"s") << std::endl;
 	char item_name_buf[16];
-	Octave_map om;
+	octave_map om;
 	for (octave_idx_type j=1; j<=nDataSet; j++ ) {
 		const gdcm::DataSet::DataElementSet des=seq->GetItem(j).GetNestedDataSet().GetDES() ;
-		Octave_map subom;
+		octave_map subom;
 		for (gdcm::DataSet::Iterator it=des.begin(); it != des.end(); it++) {
 			std::string key("");
 			octave_value subov;
@@ -464,7 +464,7 @@ void dumpSequence(octave_value *ov, gdcm::SequenceOfItems *seq, int chatty, int 
 				subom.assign(key.c_str(), subov);
 			} else {
 				if (0==key.length()) continue ;
-				subom.assign(key.c_str(), "not assigned");
+				subom.assign(key.c_str(), octave_value("not assigned"));
 			}
 		}
 		snprintf(item_name_buf,15,"Item_%i",j);
