@@ -4,5 +4,5 @@
 
 set -e      # halt if unhandled error
 
-aclocal     # gather the CMAKE_FIND_PACKAGE
+aclocal -Im4 # gather the CMAKE_FIND_PACKAGE
 autoconf    # generate configure script
