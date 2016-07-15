@@ -91,13 +91,13 @@ int main( int argc, const char* argv[] ) {
 	return 0;
 }
 #else
-DEFUN_DLD (OCT_FN_NAME, args, nargout,
+DEFUN_DLD (dicominfo, args, nargout,
 		"-*- texinfo -*- \n\
- @deftypefn {Loadable Function} {@var{info}} = "QUOTED(OCT_FN_NAME)" (@var{filename}) \n\
- @deftypefnx {Loadable Function} {@var{info}} = "QUOTED(OCT_FN_NAME)" (@var{filename}, @code{dictionary}, @var{dictionary-name}) \n\
- @deftypefnx  {Loadable Function} {} "QUOTED(OCT_FN_NAME)" (@var{filename}, @var{options}) \n\
- @deftypefnx {Command} {} "QUOTED(OCT_FN_NAME)" @var{filename} \n\
- @deftypefnx {Command} {} "QUOTED(OCT_FN_NAME)" @var{filename} @var{options} \n\
+ @deftypefn {Loadable Function} {@var{info}} = dicominfo (@var{filename}) \n\
+ @deftypefnx {Loadable Function} {@var{info}} = dicominfo (@var{filename}, @code{dictionary}, @var{dictionary-name}) \n\
+ @deftypefnx  {Loadable Function} {} dicominfo (@var{filename}, @var{options}) \n\
+ @deftypefnx {Command} {} dicominfo @var{filename} \n\
+ @deftypefnx {Command} {} dicominfo @var{filename} @var{options} \n\
  Get all data from a DICOM file, excluding any actual image. \n\
  @var{info} is a nested struct containing the data. \n\
  \n\

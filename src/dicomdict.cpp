@@ -51,11 +51,11 @@ void insert(const char *k, const gdcm::Tag t, const gdcm::DictEntry e) {
 }
 
 
-DEFUN_DLD (OCT_FN_NAME, args, nargout,
+DEFUN_DLD (dicomdict, args, nargout,
 		"-*- texinfo -*- \n\
-@deftypefn {Loadable Function} {@var{dictionary_name} =} "QUOTED(OCT_FN_NAME)" (@code{get}) \n\
-@deftypefnx {Loadable Function} {} "QUOTED(OCT_FN_NAME)" (@code{factory}) \n\
-@deftypefnx {Loadable Function} {} "QUOTED(OCT_FN_NAME)" (@code{set}, @var{dictionary_name}) \n\
+@deftypefn {Loadable Function} {@var{dictionary_name} =} dicomdict (@code{get}) \n\
+@deftypefnx {Loadable Function} {} dicomdict (@code{factory}) \n\
+@deftypefnx {Loadable Function} {} dicomdict (@code{set}, @var{dictionary_name}) \n\
 The first usage returns the filename of the dictionary that is currently being used.\n\
 Using @code{factory} resets the dictionary to the default.\n\
 Using @code{set} allows setting the dictionary for future operations.\n\

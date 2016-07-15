@@ -48,7 +48,7 @@ void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag *
 void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) ;
 void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file);
 
-DEFUN_DLD (OCT_FN_NAME, args, nargout,"\
+DEFUN_DLD (dicomwrite, args, nargout,"\
 dicomwrite(im, filename)\n\
 dicomwrite(im, filename, info)\n\
 im       image data or empty matrix, [], if only metadata save is required\n\
