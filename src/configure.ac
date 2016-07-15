@@ -1,6 +1,8 @@
 AC_PREREQ([2.67])
 AC_INIT([Octave-Forge dicom package], [0.1.1+])
 
+AC_PROG_SED
+
 AC_PROG_CXX
 AC_LANG(C++)
 
@@ -10,6 +12,9 @@ dnl a project.cmake config file which has the correct flags to use.  The
 dnl CMAKE_FIND_PACKAGE macro is provided by CMake.
 dnl
 CMAKE_FIND_PACKAGE([GDCM], [CXX])
+
+## Remove -rdynamics which mkoctfile does not handle.
+GDCM_LIBS=$(echo "$GDCM_LIBS" | $SED "s,-rdynamic,,")
 
 ## set temporarily to search for the headers only
 OLD_CPPFLAGS=$CPPFLAGS
