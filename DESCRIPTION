@@ -11,5 +11,4 @@ SystemRequirements: libgdcm2.0 (>= 2.0.16)
 Categories: imaging, medical
 Problems: dicomwrite is not useable
 Url: http://octave.org/wiki/index.php?title=Dicom
-Autoload: yes
 License: GPL version 3 or later

@@ -8,3 +8,6 @@
 
       cellfun (@isdicom, cell_array_filenames)
 
+ ** The dicom package no longer autoloads by default.  Please load the
+    package manually with `pkg load dicom' or add it to the `.octaverc'
+    file to load it automatically at the start of each Octave session.
