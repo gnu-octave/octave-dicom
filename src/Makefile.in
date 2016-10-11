@@ -20,9 +20,8 @@ $(need_dict): %.oct: %.cpp dicomdict.o
 	$(MKOCTFILE) $(GDCM_CPPFLAGS) $(GDCM_LIBS) $<
 
 clean:
-	rm -f *.o *.oct *~
+	$(RM) *.o *.oct *~
 
-test:
-	for file in $(test_files); do \
-		$(OCTAVE) -q --eval "test $$file"; \
-	done
+distclean: clean
+	$(RM) Makefile config.log autom4te.cache
+	$(RM) -r CMakeFiles
