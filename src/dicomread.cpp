@@ -161,51 +161,46 @@ DEFUN_DLD (dicomread, args, nargout,
 	// dim 0: cols (width)
 	// dim 1: rows (height)
 	// dim 2: number of frames
-	
-	dim_vector *dv_p;
+
+	dim_vector dv;
 	Array<octave_idx_type> perm_vect(dim_vector(ndim,1));
-	
+	perm_vect(0) = 1;
+	perm_vect(1) = 0;
+
 	// TODO check with non-square images if this needs to be dims[1],dims[0] etc
 	if( 2==ndim ) {
-		dv_p=new dim_vector(dims[0], dims[1]); //this transposes first two dimensions
-		perm_vect(0)=1; perm_vect(1)=0;
+		dv = dim_vector(dims[0], dims[1]); //this transposes first two dimensions
 	} else if (3==ndim) {
-		dv_p=new dim_vector(dims[0], dims[1], dims[2]); // should be (rows, cols, pages) in octave idiom
-		perm_vect(0)=1; perm_vect(1)=0; perm_vect(2)=2; 
+		dv = dim_vector(dims[0], dims[1], dims[2]); // should be (rows, cols, pages) in octave idiom
+		perm_vect(2)=2;
 	} else {
 		error(QUOTED(OCT_FN_NAME)": %i dimensions. not supported: %s",ndim, filename.c_str());
 		return retval;
 	}
-	
+
 	if ( gdcm::PixelFormat::UINT32 == image.GetPixelFormat() ) { //tested
-		uint32NDArray arr(*dv_p);
+		uint32NDArray arr(dv);
 		image.GetBuffer((char *)arr.fortran_vec());
-		delete dv_p;
 		return octave_value(arr.permute(perm_vect));
 	} else if ( gdcm::PixelFormat::UINT16 == image.GetPixelFormat() ) { //tested
-		uint16NDArray arr(*dv_p);
+		uint16NDArray arr(dv);
 		image.GetBuffer((char *)arr.fortran_vec());
-		delete dv_p;
 		return octave_value(arr.permute(perm_vect));
 	} else if ( gdcm::PixelFormat::UINT8 == image.GetPixelFormat() ) { //tested
-		uint8NDArray arr(*dv_p);
+		uint8NDArray arr(dv);
 		image.GetBuffer((char *)arr.fortran_vec());
-		delete dv_p;
 		return octave_value(arr.permute(perm_vect));
 	} else if ( gdcm::PixelFormat::INT8 == image.GetPixelFormat() ) { // no example found to test
-		int8NDArray arr(*dv_p);
+		int8NDArray arr(dv);
 		image.GetBuffer((char *)arr.fortran_vec());
-		delete dv_p;
 		return octave_value(arr.permute(perm_vect));
 	} else if ( gdcm::PixelFormat::INT16 == image.GetPixelFormat() ) { // no example found to test
-		int16NDArray arr(*dv_p);
+		int16NDArray arr(dv);
 		image.GetBuffer((char *)arr.fortran_vec());
-		delete dv_p;
 		return octave_value(arr.permute(perm_vect));
 	} else if ( gdcm::PixelFormat::INT32 == image.GetPixelFormat() ) { // no example found to test
-		int32NDArray arr(*dv_p);
+		int32NDArray arr(dv);
 		image.GetBuffer((char *)arr.fortran_vec());
-		delete dv_p;
 		return octave_value(arr.permute(perm_vect));
 	} else {
 		octave_stdout << image.GetPixelFormat() << '\n' ;
