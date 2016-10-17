@@ -16,6 +16,8 @@ CMAKE_FIND_PACKAGE([GDCM], [CXX])
 ## Remove -rdynamics which mkoctfile does not handle.
 GDCM_LIBS=$(echo "$GDCM_LIBS" | $SED "s,-rdynamic,,")
 
+GDCM_LIBS="$GDCM_LIBS -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmMSFF"
+
 ## set temporarily to search for the headers only
 OLD_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="$CPPFLAGS $GDCM_CXXFLAGS"
