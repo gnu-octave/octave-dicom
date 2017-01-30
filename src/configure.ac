@@ -1,5 +1,6 @@
 AC_PREREQ([2.67])
 AC_INIT([Octave-Forge dicom package], [0.1.1+])
+AC_CANONICAL_HOST
 
 AC_PROG_SED
 
@@ -17,6 +18,13 @@ CMAKE_FIND_PACKAGE([GDCM], [CXX])
 GDCM_LIBS=$(echo "$GDCM_LIBS" | $SED "s,-rdynamic,,")
 
 GDCM_LIBS="$GDCM_LIBS -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmMSFF"
+
+# Mac needs core framework
+case $host_os in
+  darwin*)
+    GDCM_LIBS="$GDCMLIBS -Wl,-framework -Wli,CoreFoundation"
+    ;;
+esac
 
 ## set temporarily to search for the headers only
 OLD_CPPFLAGS=$CPPFLAGS
