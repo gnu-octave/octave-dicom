@@ -450,25 +450,28 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 }
 
 void dumpSequence(octave_value *ov, gdcm::SequenceOfItems *seq, int chatty, int sequenceDepth) {
-	const octave_idx_type nDataSet=seq->GetNumberOfItems(); // objects in sequence
-	if (chatty) octave_stdout << nDataSet << " object" << ((nDataSet==1)?"":"s") << std::endl;
-	char item_name_buf[16];
 	octave_map om;
-	for (octave_idx_type j=1; j<=nDataSet; j++ ) {
-		const gdcm::DataSet::DataElementSet des=seq->GetItem(j).GetNestedDataSet().GetDES() ;
+	octave_idx_type item_no = 0;
+	for (gdcm::SequenceOfItems::Iterator sit=seq->Begin(); sit != seq->End(); sit++) {
+		gdcm::DataSet ds=sit->GetNestedDataSet();
 		octave_map subom;
-		for (gdcm::DataSet::Iterator it=des.begin(); it != des.end(); it++) {
+		std::ostringstream item_name_buf;
+		gdcm::Item mi = *sit;
+		item_no ++;
+		if (chatty) octave_stdout << "object " << item_no << " " << mi.GetTag() << std::endl;
+		for (gdcm::DataSet::Iterator dit=ds.Begin(); dit != ds.End(); dit++) {
 			std::string key("");
 			octave_value subov;
-			if( DICOM_OK==element2value(key, &subov, &(*it), chatty, sequenceDepth)) {
+			if( DICOM_OK==element2value(key, &subov, &(*dit), chatty, sequenceDepth)) {
 				subom.assign(key.c_str(), subov);
 			} else {
 				if (0==key.length()) continue ;
 				subom.assign(key.c_str(), octave_value("not assigned"));
 			}
+			if (chatty) octave_stdout << "object sub map " << subom.nfields() << std::endl;
 		}
-		snprintf(item_name_buf,15,"Item_%i",j);
-		om.assign(item_name_buf, subom);
+		item_name_buf << "Item_" << item_no;
+		om.assign(item_name_buf.str().c_str(), octave_value(subom));
 	}
 	*ov=om;
 }
