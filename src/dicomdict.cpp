@@ -288,11 +288,11 @@ void load_dicom_dict(const char * filename) {
 			continue ;
 		}
 
-		char tgroup[4] ;
-		char telem[4] ;
-		char tvr[8] ;
-		char key[128] ;
-		char tvm[8] ;
+		char tgroup[4+1] ;
+		char telem[4+1] ;
+		char tvr[8+1] ;
+		char key[128+1] ;
+		char tvm[8+1] ;
 
 		// Tokenize line
 		if ( sscanf(line.c_str(), "(%4s,%4s) %8s %128s %8s", tgroup, telem, tvr, key, tvm ) != 5 ) {
