@@ -6,8 +6,19 @@
 ## notice and this notice are preserved.  This file is offered as-is,
 ## without any warranty.
 
-PACKAGE := $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
-VERSION := $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
+## Some shell programs
+MD5SUM    ?= md5sum
+SED       ?= sed
+GREP      ?= grep
+TAR       ?= tar
+GZIP      ?= gzip
+
+## Helper function
+TOLOWER   := $(SED) -e 'y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'
+
+PACKAGE := $(shell $(SED) -n -e 's/^Name: *\(\w\+\)/\1/p' DESCRIPTION | $(TOLOWER))
+VERSION := $(shell $(SED) -n -e 's/^Version: *\(\w\+\)/\1/p' DESCRIPTION | $(TOLOWER))
+DEPENDS := $(shell $(SED) -n -e 's/^Depends[^,]*, \(.*\)/\1/p' DESCRIPTION | $(SED) 's/ *([^()]*),*/ /g')
 
 TARGET_DIR      := target
 RELEASE_DIR     := $(TARGET_DIR)/$(PACKAGE)-$(VERSION)
@@ -17,13 +28,15 @@ HTML_TARBALL    := $(TARGET_DIR)/$(PACKAGE)-html.tar.gz
 
 M_SOURCES   := $(wildcard inst/*.m)
 CC_SOURCES  := $(wildcard src/*.cpp)
+CC_TST_SOURCES := $(shell $(GREP) --files-with-matches '^%!' $(CC_SOURCES))
+TST_SOURCES := $(patsubst src/%.cpp,inst/test/%.cpp-tst,$(CC_TST_SOURCES))
 OCT_FILES   := $(patsubst %.cpp,%.oct,$(CC_SOURCES))
-PKG_ADD     := $(shell grep -sPho '(?<=(//|\#\#) PKG_ADD: ).*' $(CC_SOURCES) $(M_SOURCES))
+PKG_ADD     := $(shell $(GREP) -sPho '(?<=(//|\#\#) PKG_ADD: ).*' $(CC_SOURCES) $(M_SOURCES))
 
 OCTAVE ?= octave --no-window-system --silent
 MKOCTFILE ?= mkoctfile
 
-.PHONY: help dist html release install all check run clean
+.PHONY: help dist html release install all check run clean test_files
 
 help:
 	@echo "Targets:"
@@ -39,13 +52,15 @@ help:
 	@echo "   clean   - Remove releases, html documentation, and oct files"
 
 %.tar.gz: %
-	tar -c -f - --posix -C "$(TARGET_DIR)/" "$(notdir $<)" | gzip -9n > "$@"
+	$(TAR) -c -f - --posix -C "$(TARGET_DIR)/" "$(notdir $<)" | $(GZIP) -9n > "$@"
 
 $(RELEASE_DIR): .hg/dirstate
 	@echo "Creating package version $(VERSION) release ..."
 	$(RM) -r "$@"
 	hg archive --exclude ".hg*" --type files "$@"
 	cd "$@/src" && ./bootstrap && $(RM) -r "autom4te.cache"
+	# need to build any tests
+	cd "$@" && $(MAKE) test_files
 	chmod -R a+rX,u+w,go-w "$@"
 
 $(HTML_DIR): install
@@ -56,6 +71,18 @@ $(HTML_DIR): install
 	  --eval "pkg load $(PACKAGE);" \
 	  --eval 'generate_package_html ("${PACKAGE}", "$@", "octave-forge");'
 	chmod -R a+rX,u+w,go-w $@
+
+# test file recipes
+$(TST_SOURCES): inst/test/%.cpp-tst: src/%.cpp | inst/test
+	@echo "Extracting tests from $< ..."
+	@$(RM) -f "$@" "$@-t"
+	@(	echo "## Generated from $<"; \
+                $(GREP) '^%!' "$<") > "$@"
+
+inst/test:
+	@mkdir -p "$@"
+
+test_files: $(TST_SOURCES)
 
 dist: $(RELEASE_TARBALL)
 html: $(HTML_TARBALL)
@@ -73,10 +100,10 @@ all: $(CC_SOURCES)
 	cd src/ && ./bootstrap && ./configure
 	$(MAKE) -C src/
 
-check: all
+check: all test_files
 	$(OCTAVE) --path "inst/" --path "src/" \
 	  --eval '${PKG_ADD}' \
-	  --eval '__run_test_suite__ ({"inst/", "src/"}, {})'
+	  --eval '__run_test_suite__ ({"inst/"}, {})'
 
 run: all
 	$(OCTAVE) --persist --path "inst/" --path "src/" \

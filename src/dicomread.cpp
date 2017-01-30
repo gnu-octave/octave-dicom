@@ -211,9 +211,18 @@ DEFUN_DLD (dicomread, args, nargout,
 }
 
 /*
+%!shared testfile
+%! testfile = urlwrite ( ...
+%!   'http://sourceforge.net/p/octave/code/11601/tree/trunk/octave-forge/extra/dicom/dcm_examples/RD.15MV.DCM?format=raw', ...
+%!   tempname() );
+
 %!test
 %! addpath('../inst'); % so it can find the dictionary
-%! rd=dicomread('../dcm_examples/RD.15MV.DCM');
+%! rd=dicomread(testfile);
 %! assert(rd(100,101,30),uint16(2021));
 %! % todo
+
+%! if exist (testfile, 'file')
+%!   delete (testfile);
+%! endif
 */
