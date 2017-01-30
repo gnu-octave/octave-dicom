@@ -1,6 +1,13 @@
  Summary of important user-visible changes for dicom x.y.z (yyyy/mm/dd):
 -------------------------------------------------------------------------
 
+ ** Updated install to detect gdcm library using cmake
+
+ ** install source tests as part of package
+
+ Summary of important user-visible changes for dicom 0.1.1 (2011/11):
+-------------------------------------------------------------------------
+
  ** The function isdicom has been completely rewritten and will perform
     much faster for invalid dicom files.  It also no longer accepts a cell
     array of strings since it reduces its usefulness by other functions.
