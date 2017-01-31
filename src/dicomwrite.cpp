@@ -79,7 +79,7 @@ info     struct, like that produced by dicominfo\n\
 
 	gdcm::SmartPointer<gdcm::File> file = new gdcm::File; // should delete be used later?
 	
-	if (3<args.length()) { // no metadata supplied, need to make some
+	if (3 > args.length()) { // no metadata supplied, need to make some
 		try {
 			genMinimalMetaData(&w, file);
 		} catch (std::exception) {
@@ -102,7 +102,8 @@ info     struct, like that produced by dicominfo\n\
 		}
 	}
 	
-#if 1 /* debug */
+#if 0 /* debug */
+	//NOTE: debug code currently crashes octave - do not use without rework
 	gdcm::File fc=w.GetFile();
 	gdcm::DataSet dsc=fc.GetDataSet();
 	const gdcm::DataElement & sopclass = dsc.GetDataElement( gdcm::Tag(0x0008, 0x0016) ); // SOPClassUID
@@ -322,22 +323,39 @@ void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) {
 	char * matbuf; // to be set to point to octave matrix 
 	
 	if (pixval->is_uint8_type()) {
-		matbuf=(char * )pixval->uint8_array_value().fortran_vec();
+		uint8NDArray data = pixval->uint8_array_value().transpose();
+                uint8_t * buf = new uint8_t[data.numel ()];
+         	memcpy(buf, data.fortran_vec(), data.numel()*sizeof(uint8_t));
+		matbuf=(char * )buf;
 		im->GetPixelFormat().SetScalarType(gdcm::PixelFormat::UINT8);
 	} else if (pixval->is_uint16_type()) {
-		matbuf=(char * )pixval->uint16_array_value().fortran_vec();
+		uint16NDArray data = pixval->uint16_array_value().transpose();
+                uint16_t * buf = new uint16_t[data.numel ()];
+         	memcpy(buf, data.fortran_vec(), data.numel()*sizeof(uint16_t));
+		matbuf=(char * )buf;
 		im->GetPixelFormat().SetScalarType(gdcm::PixelFormat::UINT16);
 	} else if (pixval->is_uint32_type()) {
-		matbuf=(char * )pixval->uint32_array_value().fortran_vec();
+		uint32NDArray data = pixval->uint32_array_value().transpose();
+                uint32_t * buf = new uint32_t[data.numel ()];
+         	memcpy(buf, data.fortran_vec(), data.numel()*sizeof(uint32_t));
+		matbuf=(char * )buf;
 		im->GetPixelFormat().SetScalarType(gdcm::PixelFormat::UINT32);
 	} else if (pixval->is_int8_type()) {
-		matbuf=(char * )pixval->int8_array_value().fortran_vec();
+		int8NDArray data = pixval->int8_array_value().transpose();
+                int8_t * buf = new int8_t[data.numel ()];
+         	memcpy(buf, data.fortran_vec(), data.numel()*sizeof(int8_t));
+		matbuf=(char * )buf;
 		im->GetPixelFormat().SetScalarType(gdcm::PixelFormat::INT8);
 	} else if (pixval->is_int16_type()) {
-		matbuf=(char * )pixval->int16_array_value().fortran_vec();
+		int16NDArray data = pixval->int16_array_value().transpose();
+                int16_t * buf = new int16_t[data.numel ()];
+         	memcpy(buf, data.fortran_vec(), data.numel()*sizeof(int16_t));
+		matbuf=(char * )buf;
 		im->GetPixelFormat().SetScalarType(gdcm::PixelFormat::INT16);
 	} else if (pixval->is_int32_type()) {
-		matbuf=(char * )pixval->int32_array_value().fortran_vec();
+		int32NDArray data = pixval->int32_array_value().transpose();
+                int32_t * buf = new int32_t[data.numel ()];
+         	memcpy(buf, data.fortran_vec(), data.numel()*sizeof(int32_t));
 		im->GetPixelFormat().SetScalarType(gdcm::PixelFormat::INT32);
 	} else { // TODO: gdcm::PixelFormat has float types too. 
 		error(QUOTED(OCT_FN_NAME)": cannot write this type"); 
@@ -346,6 +364,7 @@ void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) {
 	
 	unsigned long buflen=im->GetBufferLength();
 	if (buflen != pixval->byte_size()) { 
+		delete [] matbuf;
 		error(QUOTED(OCT_FN_NAME)": prepared DICOM buffer size(%i) does not match Octave array buffer size(%i).",buflen,pixval->byte_size());
 		throw std::exception() ;
 	}
@@ -354,6 +373,8 @@ void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) {
 	pixeldata.SetByteValue( matbuf, buflen );
 
 	im->SetDataElement( pixeldata );
+
+	delete [] matbuf;
 	
 	w->SetImage( *im );
 	return ;
@@ -389,3 +410,15 @@ void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file){
 
 	return ;
 }
+/*
+%!test
+%! addpath ('../inst'); % so it can find the dictionary
+%! testfile = tempname ();
+%! wdata = uint8 (10*rand (10,10));
+%! dicomwrite (wdata, testfile);
+%! rdata = dicomread (testfile);
+%! assert(wdata, rdata);
+%! if exist (testfile, 'file')
+%!   delete (testfile);
+%! endif
+*/
