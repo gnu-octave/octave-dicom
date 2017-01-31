@@ -7,6 +7,8 @@
 
  ** dicominfo updated to support sequences of unknown length
 
+ ** moved isdicom to own .oct file
+
  Summary of important user-visible changes for dicom 0.1.1 (2011/11):
 -------------------------------------------------------------------------
 
