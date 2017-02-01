@@ -37,8 +37,8 @@ using namespace gdcm;
 
 DEFUN_DLD (dicomread, args, nargout,
 		"-*- texinfo -*- \n\
- @deftypefn {Loadable Function} {} @var{image} = dicomread (@var{filename}) \n\
- @deftypefnx {Loadable Function} {} @var{image} = dicomread (@var{structure}) \n\
+ @deftypefn {Loadable Function} @var{image} = dicomread (@var{filename}) \n\
+ @deftypefnx {Loadable Function} @var{image} = dicomread (@var{structure}) \n\
  \n\
  Load the image from a DICOM file. \n\
  @var{filename} is a string (giving the filename).\n\

@@ -56,6 +56,9 @@ DEFUN_DLD (dicomdict, args, nargout,
 @deftypefn {Loadable Function} {@var{dictionary_name} =} dicomdict (@code{get}) \n\
 @deftypefnx {Loadable Function} {} dicomdict (@code{factory}) \n\
 @deftypefnx {Loadable Function} {} dicomdict (@code{set}, @var{dictionary_name}) \n\
+\n\
+Get or set the active dicom data dictionary.\n\
+\n\
 The first usage returns the filename of the dictionary that is currently being used.\n\
 Using @code{factory} resets the dictionary to the default.\n\
 Using @code{set} allows setting the dictionary for future operations.\n\

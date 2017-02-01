@@ -48,12 +48,19 @@ void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag *
 void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) ;
 void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file);
 
-DEFUN_DLD (dicomwrite, args, nargout,"\
-dicomwrite(im, filename)\n\
-dicomwrite(im, filename, info)\n\
-im       image data or empty matrix, [], if only metadata save is required\n\
-filename to write dicom to. if [], then function runs in verbose trial mode.\n\
-info     struct, like that produced by dicominfo\n\
+DEFUN_DLD (dicomwrite, args, nargout,
+		"-*- texinfo -*- \n\
+@deftypefn {Loadable Function} {} dicomwrite(@var{im}, @var{filename})\n\
+@deftypefnx {Loadable Function} {} dicomwrite(@var{im}, @var{filename}, @var{info})\n\
+\n\
+Write a DICOM format file to @var{filename}.\n\
+\n\
+@var{im} is image data or empty matrix, [], if only metadata save is required\n\
+@var{filename} is filename to write dicom to. if [], then function runs in verbose trial mode.\n\
+@var{info} struct, like that produced by dicominfo\n\
+\n\
+@seealso{dicomread, dicominfo}\n\
+@end deftypefn \n\
 ") {
 	octave_value_list retval;  // create object to store return values
 	if(2>args.length()) {

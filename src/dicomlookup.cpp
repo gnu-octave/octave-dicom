@@ -34,9 +34,23 @@
 
 // build_against_gdcm dicomlookup.cpp dicomdict.cpp -o dicomlookup.oct
 
-DEFUN_DLD (OCT_FN_NAME_LU, args, nargout,"\
-keyword = dicomlookup(group, elem)  \n\
-[group elem] = dicomlookup(keyword) \n\
+DEFUN_DLD (OCT_FN_NAME_LU, args, nargout,
+		"-*- texinfo -*- \n\
+@deftypefn {Loadable Function} @var{keyword} = dicomlookup (@var{group}, @var{element}) \n\
+@deftypefnx {Loadable Function} [@var{group}, @var{element}] = dicomlookup (@var{keyword}) \n\
+\n\
+Lookup an attribute in the DICOM data dictionary.\n\
+\n\
+@var{keyword} = dicomlookup (@var{group}, @var{element}) will look in the current dicom \n\
+dictionary for a specified @var{group} and @var{element} tag and returns string name \n\
+of the attribute.\n\
+\n\
+[@var{group}, @var{element}] = dicomlookup (@var{keyword}) will look in the current dicom \n\
+dictionary for a specified @var{keyword} string and returns the @var{group} and @var{element}\n \
+for keyword.\n\
+\n\
+@seealso{dicomdict}\n\
+@end deftypefn \n\
 ") {
 	octave_value_list retval;  // create object to store return values
 	if (args.length()==1) { // keyword to tag
