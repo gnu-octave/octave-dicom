@@ -86,4 +86,6 @@ keyword = dicomlookup(group, elem)  \n\
 %! [g e]=dicomlookup("PatientName");
 %! assert([g e], uint16([0x10 0x10]));
 %! 
+
+%!fail ("dicomlookup")
 */

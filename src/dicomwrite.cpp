@@ -411,14 +411,32 @@ void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file){
 	return ;
 }
 /*
-%!test
+%!shared testfile1, testfile2
 %! addpath ('../inst'); % so it can find the dictionary
-%! testfile = tempname ();
+%! testfile1 = tempname ();
+%! testfile2 = tempname ();
+
+%!test
 %! wdata = uint8 (10*rand (10,10));
-%! dicomwrite (wdata, testfile);
-%! rdata = dicomread (testfile);
+%! dicomwrite (wdata, testfile1);
+%! rdata = dicomread (testfile1);
 %! assert(wdata, rdata);
-%! if exist (testfile, 'file')
-%!   delete (testfile);
+
+%!fail ("dicominfo", "dicominfo: one arg required: dicom filename");
+%!fail ("dicominfo ([])");
+%!fail ("dicominfo ([],1)");
+
+%!test
+%! wdata = uint8 (10*rand (10,10));
+%! dicomwrite (wdata, testfile1);
+%! info = dicominfo (testfile1);
+%! dicomwrite (wdata, testfile2, info);
+
+%!test
+%! if exist (testfile1, 'file')
+%!   delete (testfile1);
+%! endif
+%! if exist (testfile2, 'file')
+%!   delete (testfile2);
 %! endif
 */

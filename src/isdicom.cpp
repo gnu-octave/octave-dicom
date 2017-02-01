@@ -78,4 +78,6 @@ Return true if @var{filename} is a valid DICOM file.\n\
 
 %!test
 %! assert (isdicom (which ("gray")), false);
+
+%!fail ("isdicom")
 */
