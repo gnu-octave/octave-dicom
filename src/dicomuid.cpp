@@ -67,5 +67,5 @@ Generate a DICOM unique id . \n\
 %!test
 %! id1 = dicomuid ();
 %! id2 = dicomuid();
-%! assert (strcmp (id1, id2));
+%! assert (strcmp (id1, id2), false);
 */
