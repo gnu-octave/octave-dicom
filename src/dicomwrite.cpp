@@ -327,7 +327,7 @@ void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) {
 	im->SetPhotometricInterpretation( gdcm::PhotometricInterpretation::MONOCHROME1 );
 	
 	// prepare to make data from mat available
-	char * matbuf; // to be set to point to octave matrix 
+	char * matbuf = 0; // to be set to point to octave matrix 
 	
 	if (pixval->is_uint8_type()) {
 		uint8NDArray data = pixval->uint8_array_value().transpose();
