@@ -359,6 +359,10 @@ bool dicom_is_present(const gdcm::Tag & tag){
 }
 
 /*
+%!fail ("dicomdict")
+%!fail ("dicomdict(1)")
+%!fail ("dicomdict('set')")
+
 %!test
 %! addpath('../inst'); % so it can find the dictionary
 %! dicomdict factory ;
