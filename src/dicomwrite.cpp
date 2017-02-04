@@ -440,6 +440,15 @@ void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file){
 %! dicomwrite (wdata, testfile2, info);
 
 %!test
+%! wdata = uint8 (10*rand (10,10));
+%! s.PatientName = "fred";
+%! s.PatientID = "1";
+%! dicomwrite (wdata, testfile2, s);
+%! p = dicominfo (testfile2);
+%! assert (p.PatientName, "fred")
+%! assert (p.PatientID, "1")
+
+%!test
 %! if exist (testfile1, 'file')
 %!   delete (testfile1);
 %! endif
