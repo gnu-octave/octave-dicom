@@ -91,7 +91,6 @@ DEFUN_DLD (dicomread, args, nargout,
 	gdcm::ImageReader reader;
 	reader.SetFileName( filename.c_str() );
 	if( !reader.Read() ) {
-		octave_stdout << "filename:" << filename << '\n' ;
 		error(QUOTED(OCT_FN_NAME)": Could not read DICOM file with image: %s",filename.c_str());
 		return retval;
 	}
@@ -157,6 +156,10 @@ DEFUN_DLD (dicomread, args, nargout,
 %! testfile = urlwrite ( ...
 %!   'http://sourceforge.net/p/octave/code/11601/tree/trunk/octave-forge/extra/dicom/dcm_examples/RD.15MV.DCM?format=raw', ...
 %!   tempname() );
+
+%!fail ("dicomread");
+%!fail ("dicomread (1)");
+%!fail ("dicomread ('hopefully_a_non_existant_file')");
 
 %!test
 %! addpath('../inst'); % so it can find the dictionary
