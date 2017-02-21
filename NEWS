@@ -1,4 +1,4 @@
- Summary of important user-visible changes for dicom x.y.z (yyyy/mm/dd):
+ Summary of important user-visible changes for dicom 0.2.0 (2017/02/20):
 -------------------------------------------------------------------------
 
  ** Updated install to detect gdcm library using cmake
@@ -8,6 +8,8 @@
  ** dicominfo updated to support sequences of unknown length
 
  ** moved isdicom to own .oct file
+
+ ** updated function documentation 
 
  ** added dicomuid function 
 

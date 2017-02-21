@@ -1,5 +1,5 @@
 AC_PREREQ([2.67])
-AC_INIT([Octave-Forge dicom package], [0.1.1+])
+AC_INIT([Octave-Forge dicom package], [0.2.0])
 AC_CANONICAL_HOST
 
 AC_PROG_SED
