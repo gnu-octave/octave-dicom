@@ -1,6 +1,8 @@
 AC_PREREQ([2.67])
 AC_INIT([Octave-Forge dicom package], [0.2.0])
 AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+target_arch="${target_cpu}-${target_os}"
 
 AC_PROG_SED
 
@@ -8,11 +10,13 @@ AC_PROG_CXX
 AC_LANG(C++)
 
 dnl
-dnl GDCM headers are in a version specific path.  They use CMake and provide
-dnl a project.cmake config file which has the correct flags to use.  The
-dnl CMAKE_FIND_PACKAGE macro is provided by CMake.
+dnl GDCM headers are in a version specific path.  They use CMake and
+dnl provide a project.cmake config file which has the correct flags to
+dnl use.  The CMAKE_FIND_PACKAGE macro is provided by CMake. It has
+dnl been slightly changed to make cmake consider architecture
+dnl dependent directories.
 dnl
-CMAKE_FIND_PACKAGE([GDCM], [CXX])
+CMAKE_FIND_PACKAGE([GDCM], [CXX], , , , [target_arch])
 
 ## Remove -rdynamics which mkoctfile does not handle.
 GDCM_LIBS=$(echo "$GDCM_LIBS" | $SED "s,-rdynamic,,")
