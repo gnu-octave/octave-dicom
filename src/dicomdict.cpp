@@ -71,6 +71,10 @@ In this case, the dictionary file @var{dictionary_name} can be anywhere in the p
 		error(QUOTED(OCT_FN_NAME)": takes 1 or 2 arguments, got %i.",args.length ());
 		return retval; 
 	}
+	if (! args(0).is_string ()) {
+		error(QUOTED(OCT_FN_NAME)": requires string as first argument");
+		return retval; 
+	}
 	charMatrix arg0mat = args(0).char_matrix_value ();
 	if (arg0mat.rows()!=1) {
 		error(QUOTED(OCT_FN_NAME)": first arg should be a single row string of chars.");

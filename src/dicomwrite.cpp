@@ -67,6 +67,11 @@ Write a DICOM format file to @var{filename}.\n\
 		error(QUOTED(OCT_FN_NAME)": should have at least 2 arguments");
 		return retval; 
 	}
+	if (! args(1).is_string ()) {
+		error(QUOTED(OCT_FN_NAME)": second argument should be a string filename");
+		return retval; 
+	}
+
 	charMatrix ch = args(1).char_matrix_value ();
 	bool trial = false;
 	if (0 == ch.numel()) {
