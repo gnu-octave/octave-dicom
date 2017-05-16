@@ -74,7 +74,7 @@ OLD_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="$CPPFLAGS $GDCM_CXXFLAGS"
 
 ## All the GDCM headers we use (we should probably have something less ugly)
-GDCM_HEADERS=$(grep -hoP '(?<=^#include ")gdcm.*(?=")' *.cpp *.h)
+GDCM_HEADERS=$($SED -n 's,^#include.*"\(gdcm[^"]*\)\".*$,\1,p' *.cpp *.h)
 AC_CHECK_HEADERS($GDCM_HEADERS, ,
   AC_MSG_ERROR([Unable to find GDCM headers (do you have CMake installed?)]),
 )

@@ -110,9 +110,11 @@ DEFUN_DLD (dicomread, args, nargout,
 
 	// TODO check with non-square images if this needs to be dims[1],dims[0] etc
 	if( 2==ndim ) {
-		dv = dim_vector(dims[0], dims[1]); //this transposes first two dimensions
+		//this transposes first two dimensions
+		dv = dim_vector(octave_idx_type(dims[0]), octave_idx_type(dims[1]));
 	} else if (3==ndim) {
-		dv = dim_vector(dims[0], dims[1], dims[2]); // should be (rows, cols, pages) in octave idiom
+		// should be (rows, cols, pages) in octave idiom
+		dv = dim_vector(octave_idx_type(dims[0]), octave_idx_type(dims[1]), octave_idx_type(dims[2])); 
 		perm_vect(2)=2;
 	} else {
 		error(QUOTED(OCT_FN_NAME)": %i dimensions. not supported: %s",ndim, filename.c_str());
