@@ -6,8 +6,47 @@ target_arch="${target_cpu}-${target_os}"
 
 AC_PROG_SED
 
+AC_PATH_PROG([MKOCTFILE], [mkoctfile])
+if test -z "$MKOCTFILE"; then
+  AC_MSG_ERROR([*** 'mkoctfile' not found.])
+fi
+
 AC_PROG_CXX
 AC_LANG(C++)
+
+## octave API tests
+save_CXX="$CXX"
+save_CXXFLAGS="$CXXFLAGS"
+CXX=`${MKOCTFILE} -p CXX`
+CXXFLAGS="$CXXFLAGS -I`$MKOCTFILE -p OCTINCLUDEDIR`"
+
+# need to use interpreter->get_load_path in dev version of octave,
+# prior to that methods of load_path were static
+AC_CACHE_CHECK(
+  [interpreter get_load_path],
+  [octave_cv_interpreter_get_load_path],
+  [AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM([
+      #include <oct.h>
+      #include <octave.h>
+      #include <interpreter.h>
+      #include <load-path.h>
+      ],
+      [
+        octave::load_path &p = octave::application::the_interpreter ()->get_load_path ();
+      ])],
+    [octave_cv_interpreter_get_load_path=yes],
+    [octave_cv_interpreter_get_load_path=no])
+  ])
+if test "$octave_cv_interpreter_get_load_path" = "yes" ; then
+  HAVE_OCTAVE_LOAD_PATH=1
+else
+  HAVE_OCTAVE_LOAD_PATH=0
+fi
+AC_SUBST(HAVE_OCTAVE_LOAD_PATH)
+
+CC=$save_CXX
+CXXFLAGS=$save_CXXFLAGS
 
 dnl
 dnl GDCM headers are in a version specific path.  They use CMake and

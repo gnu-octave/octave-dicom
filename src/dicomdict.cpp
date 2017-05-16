@@ -25,6 +25,8 @@
  */
 
 #include "octave/oct.h"
+#include "octave/octave.h"
+#include "octave/interpreter.h"
 #include "octave/load-path.h"
 
 #include "gdcmDict.h"
@@ -263,13 +265,20 @@ void load_dicom_dict(const char * filename) {
 	}
 
 	// find dic if it is anywhere in the search path (same path as for m-files etc)
+	std::string resolved_filename(filename);
 #ifndef NOT_OCT
-	const std::string resolved_filename=load_path::find_file(std::string(filename)) ;
+#if HAVE_OCTAVE_LOAD_PATH == 1
+	octave::interpreter *interp = octave::application::the_interpreter ();
+	if (interp) {
+		octave::load_path& lp = interp->get_load_path ();
+		resolved_filename = lp.find_file (std::string (filename));
+	}
+	else
+		warning ("load_dicom_dict: interpreter context missing");
 #else
-        // for debugging: if not running in octave, find_file always returns ""
-	// so we just use the original filename
-	const std::string resolved_filename(filename);
-#endif
+	resolved_filename=load_path::find_file(std::string(filename));
+#endif // HAVE_OCTAVE_LOAD_PATH
+#endif // NOT_OCT
 
 	std::ifstream fin(resolved_filename.c_str());
 	if (!fin) {
