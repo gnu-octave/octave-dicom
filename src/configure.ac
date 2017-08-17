@@ -79,6 +79,57 @@ dnl dependent directories.
 dnl
 CMAKE_FIND_PACKAGE([GDCM], [CXX], , , , [target_arch])
 
+# newer cmake seems to have issues so if found nothing, and dont have anything set, then try hard way
+if test "$GDCM_CXXFLAGS$GDCM_LIBS" == "" ; then
+  AC_MSG_WARN([No GDCM detected using cmake - trying fallback detection])
+  #AC_LANG(C++)
+
+  save_LDFLAGS=$LDFLAGS
+  save_CPPFLAGS=$CPPFLAGS
+
+  # find headers first
+  AC_MSG_CHECKING([for gdcm headers path])
+  found_gdcm_header=
+  for p in [ /usr/include /usr/local/include /opt/include ]; do
+    for v in [  gdcm gdcm-2.0 gdcm-2.2 gdcm-2.4 gdcm-2.6 gdcm-2.8]; do
+
+    CPPFLAGS="-I$p/$v $save_CPPFLAGS"
+    AC_COMPILE_IFELSE(
+      [AC_LANG_PROGRAM([
+        #include <gdcmVersion.h>
+        ],
+        [
+          int i=0;
+        ])],
+      [found_gdcm_header="$p/$v"],
+      [])
+    done
+  done
+
+  if test "$found_gdcm_header" == "" ; then
+    AC_MSG_RESULT([not found])
+    AC_MSG_ERROR([Unable to find GDCM headers]),
+  else
+    AC_MSG_RESULT([$found_gdcm_header])
+    GDCM_CXXFLAGS="-I$found_gdcm_header"
+  fi
+
+  # check can use the libraries - later on we add the libs we are going to use to 
+  # GDCM_LIBS anyway, so dont need set GDCM_LIBS here
+  AC_MSG_CHECKING([for gdcm libraries])
+  CPPFLAGS="$GDCM_CXXFLAGS $save_CPPFLAGS"
+  LDFLAGS="$LDFLAGS -lgdcmCommon"
+  AC_LINK_IFELSE(
+    [AC_LANG_PROGRAM([#include <gdcmVersion.h>], 
+      [(void)gdcm::Version::GetBuildVersion()])],
+    [AC_MSG_RESULT([yes])], 
+    [AC_MSG_RESULT([no])])
+
+  LDFLAGS=$saved_LDFLAGS
+  CPPFLAGS=$save_CPPFLAGS
+
+fi
+
 ## Remove -rdynamics which mkoctfile does not handle.
 GDCM_LIBS=$(echo "$GDCM_LIBS" | $SED "s,-rdynamic,,")
 

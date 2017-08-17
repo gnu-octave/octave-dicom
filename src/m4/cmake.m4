@@ -25,6 +25,7 @@ fi
 #     PathScale, Cray, SCO, MIPSpro, MSVC
 # $4: optional extra arguments to cmake, e.g. "-DCMAKE_SIZEOF_VOID_P=8"
 # $5: optional path to cmake binary
+# $6: architecture
 AC_DEFUN([CMAKE_FIND_PACKAGE], [
 AC_REQUIRE([CMAKE_FIND_BINARY])dnl
 
@@ -45,9 +46,7 @@ if $failed; then
     unset $1[]_LIBS
 
     AC_MSG_RESULT([no])
-    $6
 else
     AC_MSG_RESULT([yes])
-    $5
 fi[]dnl
 ])
