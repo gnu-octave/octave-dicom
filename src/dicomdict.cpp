@@ -268,7 +268,7 @@ void load_dicom_dict(const char * filename) {
 	std::string resolved_filename(filename);
 #ifndef NOT_OCT
 #if HAVE_OCTAVE_LOAD_PATH == 1
-	octave::interpreter *interp = octave::application::the_interpreter ();
+	octave::interpreter *interp = octave::interpreter::the_interpreter ();
 	if (interp) {
 		octave::load_path& lp = interp->get_load_path ();
 		resolved_filename = lp.find_file (std::string (filename));

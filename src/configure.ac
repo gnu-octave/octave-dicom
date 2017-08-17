@@ -33,7 +33,7 @@ AC_CACHE_CHECK(
       #include <load-path.h>
       ],
       [
-        octave::load_path &p = octave::application::the_interpreter ()->get_load_path ();
+        octave::load_path &p = octave::interpreter::the_interpreter ()->get_load_path ();
       ])],
     [octave_cv_interpreter_get_load_path=yes],
     [octave_cv_interpreter_get_load_path=no])
