@@ -41,19 +41,16 @@
 #include "octave/oct.h"
 #include "octave/ov-struct.h"
 
-//#include "gdcm-2.0/gdcmSystem.h"
 #include "gdcmReader.h"
-//#include "gdcm-2.0/gdcmWriter.h"
-//#include "gdcm-2.0/gdcmAttribute.h"
 #include "gdcmDataSet.h"
-//#include "gdcm-2.0/gdcmGlobal.h"
-//#include "gdcm-2.0/gdcmDicts.h"
 #include "gdcmDict.h"
-//#include "gdcm-2.0/gdcmCSAHeader.h"
-//#include "gdcm-2.0/gdcmPrivateTag.h"
 #include "gdcmVR.h"
 #include "gdcmSequenceOfItems.h"
  
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "dicomdict.h" 
 
 

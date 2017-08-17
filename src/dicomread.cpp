@@ -25,6 +25,10 @@
 #include "octave/oct.h"
 #include <octave/ov-struct.h>
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "gdcmImageReader.h"
 using namespace gdcm;
 

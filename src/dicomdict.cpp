@@ -29,6 +29,10 @@
 #include "octave/interpreter.h"
 #include "octave/load-path.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "gdcmDict.h"
 #include "gdcmVR.h"
 #include "gdcmVM.h"

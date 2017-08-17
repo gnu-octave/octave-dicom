@@ -28,6 +28,10 @@
 
 #include <typeinfo>
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define OCT_FN_NAME_LU dicomlookup
 #define QUOTED_(x) #x
 #define QUOTED(x) QUOTED_(x)

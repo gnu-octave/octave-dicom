@@ -1,10 +1,8 @@
 MKOCTFILE ?= mkoctfile -Wall
 OCTAVE ?= octave
 
-GDCM_CPPFLAGS = @GDCM_CXXFLAGS@
+GDCM_CPPFLAGS = @GDCM_CXXFLAGS@ @DEFS@
 GDCM_LIBS = @GDCM_LIBS@
-
-OCTAVE_DEFS = -DHAVE_OCTAVE_LOAD_PATH=@HAVE_OCTAVE_LOAD_PATH@
 
 need_dict = dicominfo.oct dicomwrite.oct dicomlookup.oct
 
@@ -13,10 +11,10 @@ test_files = dicominfo.cpp dicomdict.cpp dicomread.cpp dicomlookup.cpp isdicom.c
 all: $(need_dict) dicomdict.oct dicomread.oct _gendicomdict.oct isdicom.oct dicomuid.oct
 
 %.o: %.cpp
-	$(MKOCTFILE) $(OCTAVE_DEFS) $(GDCM_CPPFLAGS) -c $<
+	$(MKOCTFILE) $(GDCM_CPPFLAGS) -c $<
 
 $(need_dict): %.oct: %.cpp dicomdict.o
-	$(MKOCTFILE) $(OCTAVE_DEFS) $(GDCM_CPPFLAGS) $(GDCM_LIBS) $^
+	$(MKOCTFILE) $(GDCM_CPPFLAGS) $(GDCM_LIBS) $^
 
 %.oct: %.cpp
 	$(MKOCTFILE) $(OCTAVE_DEFS) $(GDCM_CPPFLAGS) $(GDCM_LIBS) $<

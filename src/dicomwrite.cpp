@@ -21,6 +21,10 @@
 #include "octave/oct.h"
 #include "octave/ov-struct.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "gdcmDictEntry.h"
 #include "gdcmImage.h"
 #include "gdcmImageWriter.h"
@@ -139,7 +143,7 @@ Write a DICOM format file to @var{filename}.\n\
 }
 
 void struct2metadata(gdcm::ImageWriter *w, gdcm::File *file, const octave_value  & ov, bool trial, int sequenceDepth) {
-	if(!ov.is_map()){
+	if(!ov.OV_ISMAP()){
 		error(QUOTED(OCT_FN_NAME)": 3rd arg should be struct holding metadata. it is %s",ov.type_name().c_str()); 
 		throw std::exception() ;
 	}
@@ -297,7 +301,7 @@ void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag *
 		if (trial) octave_stdout << '[' << buf << ']' << std::endl;
 		de->SetByteValue( buf, gdcm::VL((uint32_t)strlen(buf)) );
 	} else if ( entry.GetVR() & gdcm::VR::SQ) { // sequence
-		if (!ov->is_map()) { 
+		if (!ov->OV_ISMAP()) { 
 			warning(QUOTED(OCT_FN_NAME)": dicomdict gives VR of SQ for %s, octave value is %s", keyword.c_str(), ov->class_name().c_str());
 		}
 		octave_stdout << std::endl;

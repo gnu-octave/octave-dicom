@@ -19,6 +19,10 @@
 #include "octave/oct.h"
 #include <octave/ov-struct.h>
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <gdcmUIDGenerator.h>
 using namespace gdcm;
 

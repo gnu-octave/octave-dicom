@@ -1,5 +1,8 @@
 AC_PREREQ([2.67])
 AC_INIT([Octave-Forge dicom package], [0.2.0])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIRS([m4])
+
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 target_arch="${target_cpu}-${target_os}"
@@ -17,8 +20,15 @@ AC_LANG(C++)
 ## octave API tests
 save_CXX="$CXX"
 save_CXXFLAGS="$CXXFLAGS"
+save_LIBS="$LIBS"
+save_LDFLAGS="$LDFLAGS"
+
 CXX=`${MKOCTFILE} -p CXX`
-CXXFLAGS="$CXXFLAGS -I`$MKOCTFILE -p OCTINCLUDEDIR`"
+OCTINCLUDEDIR=${OCTINCLUDEDIR:-`$MKOCTFILE -p INCFLAGS`}
+OCTLIBDIR=${OCTLIBDIR:-`$MKOCTFILE -p OCTLIBDIR`}
+CXXFLAGS="$OCTINCLUDEDIR $CXXFLAGS"
+LDFLAGS="-L$OCTLIBDIR $LDFLAGS"
+LIBS="-loctinterp $LIBS"
 
 # need to use interpreter->get_load_path in dev version of octave,
 # prior to that methods of load_path were static
@@ -27,10 +37,10 @@ AC_CACHE_CHECK(
   [octave_cv_interpreter_get_load_path],
   [AC_COMPILE_IFELSE(
     [AC_LANG_PROGRAM([
-      #include <oct.h>
-      #include <octave.h>
-      #include <interpreter.h>
-      #include <load-path.h>
+      #include <octave/oct.h>
+      #include <octave/octave.h>
+      #include <octave/interpreter.h>
+      #include <octave/load-path.h>
       ],
       [
         octave::load_path &p = octave::interpreter::the_interpreter ()->get_load_path ();
@@ -39,14 +49,26 @@ AC_CACHE_CHECK(
     [octave_cv_interpreter_get_load_path=no])
   ])
 if test "$octave_cv_interpreter_get_load_path" = "yes" ; then
-  HAVE_OCTAVE_LOAD_PATH=1
-else
-  HAVE_OCTAVE_LOAD_PATH=0
+  AC_DEFINE(HAVE_OCTAVE_LOAD_PATH,[1],[Whether we have the interpreter load path])
 fi
-AC_SUBST(HAVE_OCTAVE_LOAD_PATH)
+
+OF_OCTAVE_LIST_ALT_SYMS([
+
+[dnl
+  [is_map],
+  [isstruct],
+  [[octave_value ().isstruct ();]],
+  [OV_ISMAP],
+  [],
+  []
+]
+
+],[oct-alt-includes.h])
 
 CC=$save_CXX
 CXXFLAGS=$save_CXXFLAGS
+LIBS="$save_LIBS"
+LDFLAGS="$save_LDFLAGS"
 
 dnl
 dnl GDCM headers are in a version specific path.  They use CMake and
