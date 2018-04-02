@@ -1,7 +1,9 @@
- Summary of important user-visible changes for dicom 0.2.0+ (XXXX/XX/XX):
+ Summary of important user-visible changes for dicom 0.2.1 (2018/04/02):
 -------------------------------------------------------------------------
 
  ** added checks for depreciated functions, using config.h 
+
+ ** added fallback gdcm detection in cmake fails
 
  Summary of important user-visible changes for dicom 0.2.0 (2017/02/20):
 -------------------------------------------------------------------------
