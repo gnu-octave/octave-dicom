@@ -2,6 +2,8 @@
  * The GNU Octave dicom package is Copyright Andy Buckle 2010
  * Contact: blondandy using the sf.net system, 
  * <https://sourceforge.net/sendmessage.php?touser=1760416>
+ *
+ * Changes (C) 2018 John Donoghue <john.donoghue.ieee.org>
  * 
  * The GNU Octave dicom package is free software: you can redistribute 
  * it and/or modify it under the terms of the GNU General Public 
@@ -18,9 +20,13 @@
  * 
  */
 
-#include "octave/oct.h"
+#include <octave/oct.h>
 #include <octave/ov-struct.h>
 #include <octave/file-stat.h>
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "gdcmImageReader.h"
 using namespace gdcm;
@@ -32,7 +38,7 @@ isdicom (const std::string& filename)
   reader.SetFileName (filename.c_str ());
   // gdcm::Reader.Read() will return false if the file does not exists but
   // also prints to stderr so we check it first.
-  return file_stat (filename).exists () && reader.Read ();
+  return OCTAVE__FILE_STAT (filename).exists () && reader.Read ();
 }
 
 DEFUN_DLD (isdicom, args, ,

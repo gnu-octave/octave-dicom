@@ -61,6 +61,15 @@ OF_OCTAVE_LIST_ALT_SYMS([
   [OV_ISMAP],
   [],
   []
+],
+
+[dnl
+  [file_stat],
+  [octave::sys::file_stat],
+  [[octave::sys::file_stat();]],
+  [OCTAVE__FILE_STAT],
+  [#include <octave/file-stat.h>],
+  [#include <octave/file-stat.h>]
 ]
 
 ],[oct-alt-includes.h])
