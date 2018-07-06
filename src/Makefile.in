@@ -1,5 +1,4 @@
 MKOCTFILE ?= mkoctfile -Wall
-OCTAVE ?= octave
 
 GDCM_CPPFLAGS = @GDCM_CXXFLAGS@ @DEFS@
 GDCM_LIBS = @GDCM_LIBS@

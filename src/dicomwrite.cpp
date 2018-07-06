@@ -98,13 +98,13 @@ Write a DICOM format file to @var{filename}.\n\
 	if (3 > args.length()) { // no metadata supplied, need to make some
 		try {
 			genMinimalMetaData(&w, file);
-		} catch (std::exception) {
+		} catch (std::exception&) {
 			return retval ;
 		}
 	} else { // 3rd arg should be struct to turn into metadata
 		try {
 			struct2metadata(&w, file, args(2), trial, 0 /* depth of indent for SQ nesting */);
-		} catch (std::exception) {
+		} catch (std::exception&) {
 			return retval ;
 		}
 	}
@@ -113,7 +113,7 @@ Write a DICOM format file to @var{filename}.\n\
 		octave_value pixval = args(0);
 		try {
 			octaveVal2dicomImage(&w, &pixval);
-		} catch (std::exception) {
+		} catch (std::exception&) {
 			return retval ;
 		}
 	}
@@ -173,7 +173,7 @@ void struct2metadata(gdcm::ImageWriter *w, gdcm::File *file, const octave_value 
 		bool handled ;
 		try {
 			value2element(&de, &cell(0), &tag, keyword, trial, &handled, sequenceDepth);
-		} catch (std::exception) {
+		} catch (std::exception&) {
 			return;
 		}
 		if (handled) {
@@ -213,7 +213,7 @@ void structarray2sequence(gdcm::SequenceOfItems & sq, octave_map * om, bool tria
 			bool handled;
 			try {
 				value2element(&de, &(subom.contents(subit)(0)), &tag, subkeyword, trial, &handled, sequenceDepth);
-			} catch (std::exception) {
+			} catch (std::exception&) {
 				return;
 			}
 			if (!handled) {
@@ -310,7 +310,7 @@ void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag *
 		gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
 		try {
 			structarray2sequence(*sq, &subom, trial, ++sequenceDepth) ;
-		} catch (std::exception) {
+		} catch (std::exception&) {
 			return;
 		}
 		sequenceDepth--;

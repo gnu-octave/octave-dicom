@@ -396,9 +396,9 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 		dumpSequence(ov, sqi, chatty, sequenceDepth+1);
 	} else if (vr & gdcm::VR::AT) { // attribute tag
 		intNDArray<octave_uint16> uint16pair(dim_vector(1,2));
-		octave_uint16 *fv=uint16pair.fortran_vec();
 		uint16_t *p=(uint16_t *)elem->GetByteValue()->GetPointer();
-		memcpy(fv,p,4); // TODO. not sure if memcpy is ok
+                uint16pair(0) = p[0];
+                uint16pair(1) = p[1];
 		*ov=uint16pair;
 		if (chatty) {
 			char buf[16];
@@ -424,9 +424,11 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 		}
 		const uint32_t len=elem->GetByteValue()->GetLength();
 		intNDArray<octave_uint8> bytearr(dim_vector(1,len));
-		octave_uint8 *fv=bytearr.fortran_vec(); 
-		const char *p=elem->GetByteValue()->GetPointer();
-		memcpy(fv,p , len);
+		const uint8_t *p=(uint8_t *)elem->GetByteValue()->GetPointer();
+                for (uint32_t i=0; i<len; i++)
+                  {
+                     bytearr(i) = p[i];
+                  }
 		*ov=bytearr;
 		if (chatty) {
 			uint32_t i;
