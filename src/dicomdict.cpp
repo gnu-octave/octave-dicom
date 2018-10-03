@@ -326,7 +326,7 @@ void load_dicom_dict(const char * filename) {
 		gdcm::VM vm = vmMap[tvm] ;
 
 		// Warn if keyword cannot be used in octave
-		if ( ! valid_identifier(key) ) {
+		if ( ! OCTAVE__VALID_IDENTIFIER (key) ) {
 			std::cerr << "WARNING: Invalid identifier '" << key << "'" << std::endl << std::flush ;
 		}
 

@@ -64,6 +64,15 @@ OF_OCTAVE_LIST_ALT_SYMS([
 ],
 
 [dnl
+  [valid_identifier],
+  [octave::valid_identifier],
+  [[octave::valid_identifier("");]],
+  [OCTAVE__VALID_IDENTIFIER],
+  [],
+  []
+],
+
+[dnl
   [file_stat],
   [octave::sys::file_stat],
   [[octave::sys::file_stat();]],
