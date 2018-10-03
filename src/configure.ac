@@ -99,7 +99,7 @@ if test "$GDCM_CXXFLAGS$GDCM_LIBS" == "" ; then
   # find headers first
   AC_MSG_CHECKING([for gdcm headers path])
   found_gdcm_header=
-  for p in [ /usr/include /usr/local/include /opt/include ]; do
+  for p in [ /usr/include /usr/local/include /opt/include /mingw32/include /mingw64/include ]; do
     for v in [  gdcm gdcm-2.0 gdcm-2.2 gdcm-2.4 gdcm-2.6 gdcm-2.8]; do
 
     CPPFLAGS="-I$p/$v $save_CPPFLAGS"
