@@ -78,7 +78,7 @@ Return true if @var{filename} is a valid DICOM file.\n\
 
 /*
 %!test
-%! fpath = tmpnam ();
+%! fpath = tempname ();
 %! urlwrite ("http://imagej.nih.gov/ij/images/CT%20Scan.dcm", fpath);
 %! assert (isdicom (fpath), true);
 

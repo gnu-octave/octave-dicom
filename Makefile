@@ -1,10 +1,12 @@
 ## Copyright 2015-2016 Carnë Draug
 ## Copyright 2015-2016 Oliver Heimlich
+## Copyright 2018 John Donoghue
 ##
 ## Copying and distribution of this file, with or without modification,
 ## are permitted in any medium without royalty provided the copyright
 ## notice and this notice are preserved.  This file is offered as-is,
 ## without any warranty.
+TOPDIR := $(shell pwd)
 
 ## Some shell programs
 MD5SUM    ?= md5sum
@@ -101,9 +103,9 @@ all: $(CC_SOURCES)
 	$(MAKE) -C src/
 
 check: all test_files
-	$(OCTAVE) --path "inst/" --path "src/" \
+	$(OCTAVE) --path "$(TOPDIR)/inst/" --path "$(TOPDIR)/src/" \
 	  --eval '${PKG_ADD}' \
-	  --eval '__run_test_suite__ ({"inst/"}, {})'
+	  --eval '__run_test_suite__ ({"$(TOPDIR)/inst"}, {})'
 
 run: all
 	$(OCTAVE) --persist --path "inst/" --path "src/" \
