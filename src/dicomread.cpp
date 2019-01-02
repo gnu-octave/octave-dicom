@@ -121,7 +121,7 @@ DEFUN_DLD (dicomread, args, nargout,
 		dv = dim_vector(octave_idx_type(dims[0]), octave_idx_type(dims[1]), octave_idx_type(dims[2])); 
 		perm_vect(2)=2;
 	} else {
-		error(QUOTED(OCT_FN_NAME)": %i dimensions. not supported: %s",ndim, filename.c_str());
+		error(QUOTED(OCT_FN_NAME)": %i dimensions. not supported: %s",(int)ndim, filename.c_str());
 		return retval;
 	}
 

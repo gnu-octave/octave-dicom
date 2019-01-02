@@ -87,7 +87,7 @@ for keyword.\n\
 		lookup_dicom_keyword(keyword, tag);
 		return octave_value(keyword);
 	}
-	error(QUOTED(OCT_FN_NAME_LU)": takes 1 or 2 arguments, got %i. see help",args.length ());
+	error(QUOTED(OCT_FN_NAME_LU)": takes 1 or 2 arguments, got %i. see help", (int)args.length ());
 	return retval;
 }
 

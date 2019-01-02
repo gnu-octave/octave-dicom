@@ -74,7 +74,7 @@ In this case, the dictionary file @var{dictionary_name} can be anywhere in the p
 @end deftypefn \n") {
 	octave_value_list retval;  // create object to store return values
 	if (args.length()>2 || args.length()<1) {
-		error(QUOTED(OCT_FN_NAME)": takes 1 or 2 arguments, got %i.",args.length ());
+		error(QUOTED(OCT_FN_NAME)": takes 1 or 2 arguments, got %i.", (int)args.length ());
 		return retval; 
 	}
 	if (! args(0).is_string ()) {
@@ -101,7 +101,7 @@ In this case, the dictionary file @var{dictionary_name} can be anywhere in the p
 			
 			return retval;
 		} else {
-			error(QUOTED(OCT_FN_NAME)": single arg must either be 'get' or 'factory'.",args.length ());
+			error(QUOTED(OCT_FN_NAME)": single arg must either be 'get' or 'factory'.");
 			return retval; 
 		}
 	}
@@ -113,7 +113,7 @@ In this case, the dictionary file @var{dictionary_name} can be anywhere in the p
 	}
 	std::string arg1str = arg1mat.row_as_string (0);
 	if (arg0str != std::string("set")) {
-		error(QUOTED(OCT_FN_NAME)": when 2 args are given, the first must be 'set'.",args.length ());
+		error(QUOTED(OCT_FN_NAME)": when 2 args are given, the first must be 'set'.");
 		return retval; 
 	}
 	load_dicom_dict(arg1str.c_str());

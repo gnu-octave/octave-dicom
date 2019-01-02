@@ -54,7 +54,7 @@ DEFUN_DLD (OCT_FN_NAME, args, nargout,
 		"extract data from gdcm libs to make a dict for octave") {
 	octave_value_list retval;  // create object to store return values
 	if (args.length () != 0) {
-		error(QUOTED(OCT_FN_NAME)": no arguments required, got %i.",args.length ());
+		error(QUOTED(OCT_FN_NAME)": no arguments required, got %i.", (int)args.length ());
 		return retval; 
 	}
 	

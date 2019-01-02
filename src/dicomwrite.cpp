@@ -187,7 +187,7 @@ void struct2metadata(gdcm::ImageWriter *w, gdcm::File *file, const octave_value 
 	}
 	if (skipped>0) {
 		// TODO: this does not count elements nested in SQs
-		warning(QUOTED(OCT_FN_NAME)": skipped %i keyword-value pairs. not in dictionary\n",skipped);
+		warning(QUOTED(OCT_FN_NAME)": skipped %u keyword-value pairs. not in dictionary\n",skipped);
 	}
 	// TODO are these set functions taking a copy? if they take a reference to objects that are about to go out of scope, we have a problem
 	file->SetDataSet((gdcm::DataSet &)ds);
@@ -323,7 +323,7 @@ void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag *
 // TODO set HighBit etc using octave class. or cast pixel data using metadata, or just give error if they don't agree
 void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) {
 	if (pixval->ndims() != 2) {
-		error(QUOTED(OCT_FN_NAME)": image has %i dimensions. not implemented. ", pixval->ndims());
+		error(QUOTED(OCT_FN_NAME)": image has %i dimensions. not implemented. ", (int)pixval->ndims());
 		throw std::exception();
 	}
 	
@@ -381,7 +381,7 @@ void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) {
 	unsigned long buflen=im->GetBufferLength();
 	if (buflen != pixval->byte_size()) { 
 		delete [] matbuf;
-		error(QUOTED(OCT_FN_NAME)": prepared DICOM buffer size(%i) does not match Octave array buffer size(%i).",buflen,pixval->byte_size());
+		error(QUOTED(OCT_FN_NAME)": prepared DICOM buffer size(%lu) does not match Octave array buffer size(%i).",buflen, (int)pixval->byte_size());
 		throw std::exception() ;
 	}
 
