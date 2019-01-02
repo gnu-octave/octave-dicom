@@ -8,6 +8,8 @@ AC_CANONICAL_TARGET
 target_arch="${target_cpu}-${target_os}"
 
 AC_PROG_SED
+AC_CHECK_PROG([UNIQ],[uniq],[uniq],[cat])
+AC_CHECK_PROG([SORT],[sort],[sort],[cat])
 
 AC_PATH_PROG([MKOCTFILE], [mkoctfile])
 if test -z "$MKOCTFILE"; then
@@ -165,7 +167,7 @@ OLD_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="$CPPFLAGS $GDCM_CXXFLAGS"
 
 ## All the GDCM headers we use (we should probably have something less ugly)
-GDCM_HEADERS=$($SED -n 's,^#include.*"\(gdcm[^"]*\)\".*$,\1,p' *.cpp *.h)
+GDCM_HEADERS=$($SED -n 's,^#include.*"\(gdcm[^"]*\)\".*$,\1,p' *.cpp *.h | $SORT | $UNIQ)
 AC_CHECK_HEADERS($GDCM_HEADERS, ,
   AC_MSG_ERROR([Unable to find GDCM headers (do you have CMake installed?)]),
 )
