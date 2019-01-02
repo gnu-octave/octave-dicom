@@ -22,5 +22,6 @@ clean:
 	$(RM) *.o *.oct *~
 
 distclean: clean
-	$(RM) Makefile config.log autom4te.cache
+	$(RM) Makefile config.log
+	$(RM) -r autom4te.cache
 	$(RM) -r CMakeFiles
