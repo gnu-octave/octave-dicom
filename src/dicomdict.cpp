@@ -8,6 +8,8 @@
  *
  * Minor changes Copyright Kris Thielemans 2011:
  *  make dicomdict('get') and dicomdict('set',filename) work properly and add doc-string
+ *
+ * Minor changes Copyright John Donoghue 2018-2019:
  * 
  * The GNU Octave dicom package is free software: you can redistribute 
  * it and/or modify it under the terms of the GNU General Public 
@@ -26,7 +28,9 @@
 
 #include "octave/oct.h"
 #include "octave/octave.h"
-#include "octave/interpreter.h"
+#if HAVE_OCTAVE_LOAD_PATH == 1
+  #include "octave/interpreter.h"
+#endif
 #include "octave/load-path.h"
 
 #ifdef HAVE_CONFIG_H
