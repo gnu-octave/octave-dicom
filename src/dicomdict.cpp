@@ -28,13 +28,14 @@
 
 #include "octave/oct.h"
 #include "octave/octave.h"
-#if HAVE_OCTAVE_LOAD_PATH == 1
-  #include "octave/interpreter.h"
-#endif
 #include "octave/load-path.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
+
+#if HAVE_OCTAVE_LOAD_PATH == 1
+  #include "octave/interpreter.h"
 #endif
 
 #include "gdcmDict.h"
