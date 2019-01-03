@@ -2,6 +2,7 @@ AC_PREREQ([2.67])
 AC_INIT([Octave-Forge dicom package], [0.2.1])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIRS([m4])
+AH_TOP([#include "undef-ah-octave.h"])
 
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
