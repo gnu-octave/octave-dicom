@@ -159,7 +159,7 @@ GDCM_LIBS="$GDCM_LIBS -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmMSFF"
 # Mac needs core framework
 case $host_os in
   darwin*)
-    GDCM_LIBS="$GDCMLIBS -Wl,-framework -Wli,CoreFoundation"
+    GDCM_LIBS="$GDCM_LIBS -framework CoreFoundation"
     ;;
 esac
 
