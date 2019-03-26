@@ -14,13 +14,12 @@ SED       ?= sed
 GREP      ?= grep
 TAR       ?= tar
 GZIP      ?= gzip
+CUT       ?= cut
+TR        ?= tr
 
-## Helper function
-TOLOWER   := $(SED) -e 'y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/'
-
-PACKAGE := $(shell $(SED) -n -e 's/^Name: *\(\w\+\)/\1/p' DESCRIPTION | $(TOLOWER))
-VERSION := $(shell $(SED) -n -e 's/^Version: *\(\w\+\)/\1/p' DESCRIPTION | $(TOLOWER))
-DEPENDS := $(shell $(SED) -n -e 's/^Depends[^,]*, \(.*\)/\1/p' DESCRIPTION | $(SED) 's/ *([^()]*),*/ /g')
+PACKAGE := $(shell $(GREP) "^Name: " DESCRIPTION | $(CUT) -f2 -d" " | \
+$(TR) '[:upper:]' '[:lower:]')
+VERSION := $(shell $(GREP) "^Version: " DESCRIPTION | $(CUT) -f2 -d" ")
 
 TARGET_DIR      := target
 RELEASE_DIR     := $(TARGET_DIR)/$(PACKAGE)-$(VERSION)
@@ -33,7 +32,7 @@ CC_SOURCES  := $(wildcard src/*.cpp)
 CC_TST_SOURCES := $(shell $(GREP) --files-with-matches '^%!' $(CC_SOURCES))
 TST_SOURCES := $(patsubst src/%.cpp,inst/test/%.cpp-tst,$(CC_TST_SOURCES))
 OCT_FILES   := $(patsubst %.cpp,%.oct,$(CC_SOURCES))
-PKG_ADD     := $(shell $(GREP) -sPho '(?<=(//|\#\#) PKG_ADD: ).*' $(CC_SOURCES) $(M_SOURCES))
+PKG_ADD     := 
 
 OCTAVE ?= octave --no-window-system --silent
 MKOCTFILE ?= mkoctfile
