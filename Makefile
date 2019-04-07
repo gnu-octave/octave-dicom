@@ -21,6 +21,14 @@ PACKAGE := $(shell $(GREP) "^Name: " DESCRIPTION | $(CUT) -f2 -d" " | \
 $(TR) '[:upper:]' '[:lower:]')
 VERSION := $(shell $(GREP) "^Version: " DESCRIPTION | $(CUT) -f2 -d" ")
 
+HG           := hg
+HG_CMD        = $(HG) --config alias.$(1)=$(1) --config defaults.$(1)= $(1)
+HG_ID        := $(shell $(call HG_CMD,identify) --id | sed -e 's/+//' )
+HG_TIMESTAMP := $(firstword $(shell $(call HG_CMD,log) --rev $(HG_ID) --template '{date|hgdate}'))
+
+TAR_REPRODUCIBLE_OPTIONS := --sort=name --mtime="@$(HG_TIMESTAMP)" --owner=0 --group=0 --numeric-owner
+TAR_OPTIONS  := --format=ustar $(TAR_REPRODUCIBLE_OPTIONS)
+
 TARGET_DIR      := target
 RELEASE_DIR     := $(TARGET_DIR)/$(PACKAGE)-$(VERSION)
 RELEASE_TARBALL := $(TARGET_DIR)/$(PACKAGE)-$(VERSION).tar.gz
@@ -53,12 +61,13 @@ help:
 	@echo "   clean   - Remove releases, html documentation, and oct files"
 
 %.tar.gz: %
-	$(TAR) -c -f - --posix -C "$(TARGET_DIR)/" "$(notdir $<)" | $(GZIP) -9n > "$@"
+	$(TAR) -cf - $(TAR_OPTIONS) -C "$(TARGET_DIR)/" "$(notdir $<)" | gzip -9n > $@
+	-rm -rf $<
 
 $(RELEASE_DIR): .hg/dirstate
 	@echo "Creating package version $(VERSION) release ..."
 	$(RM) -r "$@"
-	hg archive --exclude ".hg*" --type files "$@"
+	$(call HG_CMD,archive) --exclude ".hg*" --type files --rev $(HG_ID) "$@"
 	cd "$@/src" && ./bootstrap && $(RM) -r "autom4te.cache"
 	# need to build any tests
 	cd "$@" && $(MAKE) test_files
@@ -72,6 +81,7 @@ $(HTML_DIR): install
 	  --eval "pkg load $(PACKAGE);" \
 	  --eval 'generate_package_html ("${PACKAGE}", "$@", "octave-forge");'
 	chmod -R a+rX,u+w,go-w $@
+	-rm -rf $<
 
 # test file recipes
 $(TST_SOURCES): inst/test/%.cpp-tst: src/%.cpp | inst/test
