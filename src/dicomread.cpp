@@ -168,7 +168,6 @@ DEFUN_DLD (dicomread, args, nargout,
 %!fail ("dicomread ('hopefully_a_non_existant_file')");
 
 %!test
-%! addpath('../inst'); % so it can find the dictionary
 %! rd=dicomread(testfile);
 %! assert(rd(100,101,30),uint16(2021));
 %! % todo

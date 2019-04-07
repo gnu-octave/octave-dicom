@@ -386,7 +386,7 @@ bool dicom_is_present(const gdcm::Tag & tag){
 %!fail ("dicomdict('set')")
 
 %!test
-%! addpath('../inst'); % so it can find the dictionary
+%! % assumes dictionary is in the load path so it can find the dictionary
 %! dicomdict factory ;
 %! [f n e]=fileparts(dicomdict('get'));
 %! assert([n e],"octavedicom.dic");

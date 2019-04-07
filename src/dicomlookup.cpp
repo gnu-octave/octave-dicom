@@ -94,7 +94,6 @@ for keyword.\n\
 /*
 
 %!test
-%! addpath('../inst'); % so it can find the dictionary
 %! assert(dicomlookup(0x10,0x10),"PatientName");
 %! assert(dicomlookup("10","10"),"PatientName");
 %! assert(dicomlookup("0x10","0x10"),"PatientName");

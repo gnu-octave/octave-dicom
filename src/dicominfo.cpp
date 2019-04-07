@@ -577,12 +577,10 @@ char* name2Keyword(char *d, int *d_len_p, const char* s) {
 %!fail("dicominfo(1)")
 
 %!test
-%! addpath('../inst'); % so it can find the dictionary
 %! s=dicominfo(testfile);
 %! assert(s.PatientName,"PHANTOM^IsodoseComparison^^^");
 
 %!test
-%! addpath('../inst'); % so it can find the dictionary
 %! s=dicominfo(testfile);
 %! assert(s.ROIContourSequence.Item_1.ContourSequence.Item_1.ContourGeometricType,"POINT ");
 

@@ -428,7 +428,6 @@ void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file){
 }
 /*
 %!shared testfile1, testfile2
-%! addpath ('../inst'); % so it can find the dictionary
 %! testfile1 = tempname ();
 %! testfile2 = tempname ();
 
