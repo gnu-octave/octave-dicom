@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2019 John Donoghue
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without any warranty.
+-->
+<component type="addon">
+  <id>octave-dicom</id>
+  <extends>www.octave.org-octave.desktop</extends>
+  <name>Octave DICOM Toolkit</name>
+  <summary>DICOM file I/O for medical images and other data</summary>
+  <description>
+    <p>Digital communications in medicine (DICOM) file I/O.</p>
+  </description>
+  <keywords>
+    <keyword>DICOM</keyword>
+    <keyword>imaging</keyword>
+    <keyword>medical</keyword>
+  </keywords>
+  <url type="homepage">http://octave.sourceforge.net/dicom</url>
+  <url type="bugtracker">https://savannah.gnu.org/bugs/?func=additem&amp;group=octave</url>
+  <project_license>GPL-3.0+</project_license>
+  <developer_name>Octave-Forge Community</developer_name>
+  <update_contact>octave-maintainers@gnu.org</update_contact>
+  <metadata_license>FSFAP</metadata_license>
+</component>
