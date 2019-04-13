@@ -65,7 +65,8 @@ Write a DICOM format file to @var{filename}.\n\
 \n\
 @seealso{dicomread, dicominfo}\n\
 @end deftypefn \n\
-") {
+")
+{
 	octave_value_list retval;  // create object to store return values
 	if(2>args.length()) {
 		error(QUOTED(OCT_FN_NAME)": should have at least 2 arguments");

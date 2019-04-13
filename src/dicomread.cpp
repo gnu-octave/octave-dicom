@@ -52,7 +52,8 @@ DEFUN_DLD (dicomread, args, nargout,
 \n\
  @seealso{dicominfo} \n\
  @end deftypefn \n\
-		") {
+ ")
+{
 	octave_value_list retval;  // create object to store return values
 	if ( 0 == args.length()) {
 		error(QUOTED(OCT_FN_NAME)": one arg required: dicom filename");

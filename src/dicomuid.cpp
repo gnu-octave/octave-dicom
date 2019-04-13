@@ -42,7 +42,8 @@ Generate a DICOM unique id . \n\
 @var{uuid} is a unique id string.\n\
 \n\
 @end deftypefn \n\
-		") {
+")
+{
 	octave_value_list retval;  // create object to store return values
 
 	// no args required

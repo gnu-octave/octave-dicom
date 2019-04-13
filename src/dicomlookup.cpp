@@ -55,7 +55,8 @@ for keyword.\n\
 \n\
 @seealso{dicomdict}\n\
 @end deftypefn \n\
-") {
+")
+{
 	octave_value_list retval;  // create object to store return values
 	if (args.length()==1) { // keyword to tag
 		charMatrix arg0mat = args(0).char_matrix_value ();

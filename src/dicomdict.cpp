@@ -76,7 +76,8 @@ Using @code{set} allows setting the dictionary for future operations.\n\
 In this case, the dictionary file @var{dictionary_name} can be anywhere in the path.\n\
 \n\
 @seealso{dicomread, dicomwrite}\n\
-@end deftypefn \n") {
+@end deftypefn \n")
+{
 	octave_value_list retval;  // create object to store return values
 	if (args.length()>2 || args.length()<1) {
 		error(QUOTED(OCT_FN_NAME)": takes 1 or 2 arguments, got %i.", (int)args.length ());

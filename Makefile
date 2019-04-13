@@ -16,6 +16,7 @@ TAR       ?= tar
 GZIP      ?= gzip
 CUT       ?= cut
 TR        ?= tr
+TEXI2PDF  ?= texi2pdf -q
 
 PACKAGE := $(shell $(GREP) "^Name: " DESCRIPTION | $(CUT) -f2 -d" " | \
 $(TR) '[:upper:]' '[:lower:]')
@@ -64,6 +65,24 @@ help:
 	$(TAR) -cf - $(TAR_OPTIONS) -C "$(TARGET_DIR)/" "$(notdir $<)" | gzip -9n > $@
 	-rm -rf $<
 
+.PHONY: docs
+docs: doc/$(PACKAGE).pdf
+
+.PHONY: clean-docs
+clean-docs:
+	$(RM) -f doc/$(PACKAGE).info
+	$(RM) -f doc/$(PACKAGE).pdf
+	$(RM) -f doc/functions.texi
+
+doc/$(PACKAGE).pdf: doc/$(PACKAGE).texi doc/functions.texi
+	cd doc && SOURCE_DATE_EPOCH=$(HG_TIMESTAMP) $(TEXI2PDF) $(PACKAGE).texi
+	# remove temp files
+	cd doc && $(RM) -f $(PACKAGE).aux $(PACKAGE).cp $(PACKAGE).cps $(PACKAGE).fn  $(PACKAGE).fns $(PACKAGE).log $(PACKAGE).toc
+
+doc/functions.texi:
+	cd doc && ./mkfuncdocs.py --src-dir=../inst/ --src-dir=../src/ ../INDEX > functions.texi
+
+
 $(RELEASE_DIR): .hg/dirstate
 	@echo "Creating package version $(VERSION) release ..."
 	$(RM) -r "$@"
@@ -71,15 +90,20 @@ $(RELEASE_DIR): .hg/dirstate
 	cd "$@/src" && ./bootstrap && $(RM) -r "autom4te.cache"
 	# need to build any tests
 	cd "$@" && $(MAKE) test_files
+	# build docs
+	$(MAKE) -C "$@" docs
 	chmod -R a+rX,u+w,go-w "$@"
 
+html_options = --eval 'options = get_html_options ("octave-forge");' \
+               --eval 'options.package_doc = "$(PACKAGE).texi";'
 $(HTML_DIR): install
 	@echo "Generating HTML documentation. This may take a while ..."
 	$(RM) -r "$@"
 	$(OCTAVE) --no-window-system --silent \
-	  --eval "pkg load generate_html; " \
-	  --eval "pkg load $(PACKAGE);" \
-	  --eval 'generate_package_html ("${PACKAGE}", "$@", "octave-forge");'
+	  --eval "pkg load generate_html; "   \
+	  --eval "pkg load $(PACKAGE);"       \
+	  $(html_options)                     \
+	  --eval 'generate_package_html ("${PACKAGE}", "$@", options);'
 	chmod -R a+rX,u+w,go-w $@
 	-rm -rf $<
 
@@ -120,7 +144,7 @@ run: all
 	$(OCTAVE) --persist --path "inst/" --path "src/" \
 	  --eval '${PKG_ADD}'
 
-clean:
+clean: clean-docs
 	$(RM) -r $(TARGET_DIR) fntests.log
 	test ! -e src/Makefile || $(MAKE) -C src clean
 
