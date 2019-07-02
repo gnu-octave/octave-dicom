@@ -156,12 +156,14 @@ GDCM_LIBS=$(echo "$GDCM_LIBS" | $SED "s,-rdynamic,,")
 
 GDCM_LIBS="$GDCM_LIBS -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmMSFF"
 
-# Mac needs core framework
-case $host_os in
-  darwin*)
-    GDCM_LIBS="$GDCM_LIBS -framework CoreFoundation"
-    ;;
-esac
+## TODO not needed anymore as cmake settings for gdcm should handle it ?
+## or only not needed for clang ?
+#case $host_os in
+#  darwin*)
+#    # Mac needs core framework
+#    GDCM_LIBS="$GDCM_LIBS -framework CoreFoundation"
+#    ;;
+#esac
 
 ## set temporarily to search for the headers only
 OLD_CPPFLAGS=$CPPFLAGS
