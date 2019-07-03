@@ -1,3 +1,8 @@
+ Summary of important user-visible changes for dicom 0.2.2+ (XXXX/XX/XX):
+-------------------------------------------------------------------------
+
+ ** update fallback gdcm detection for gdcm 3.0
+
  Summary of important user-visible changes for dicom 0.2.2 (2019/01/03):
 -------------------------------------------------------------------------
 

@@ -112,7 +112,7 @@ if test "$GDCM_CXXFLAGS$GDCM_LIBS" == "" ; then
   AC_MSG_CHECKING([for gdcm headers path])
   found_gdcm_header=
   for p in [ /usr/include /usr/local/include /opt/include /mingw32/include /mingw64/include ]; do
-    for v in [  gdcm gdcm-2.0 gdcm-2.2 gdcm-2.4 gdcm-2.6 gdcm-2.8]; do
+    for v in [  gdcm gdcm-2.0 gdcm-2.2 gdcm-2.4 gdcm-2.6 gdcm-2.8 gdcm-3.0]; do
 
     CPPFLAGS="-I$p/$v $save_CPPFLAGS"
     AC_COMPILE_IFELSE(
