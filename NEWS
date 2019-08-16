@@ -3,6 +3,8 @@
 
  ** update fallback gdcm detection for gdcm 3.0
 
+ ** dicomwrite updated to set image properties from the input info structure.
+
  Summary of important user-visible changes for dicom 0.2.2 (2019/01/03):
 -------------------------------------------------------------------------
 
