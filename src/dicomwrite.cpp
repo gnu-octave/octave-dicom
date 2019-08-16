@@ -30,6 +30,8 @@
 #include "gdcmImageWriter.h"
 #include "gdcmFileDerivation.h"
 #include "gdcmUIDGenerator.h"
+
+#include "gdcmAttribute.h"
               
 #include "dicomdict.h"
               
@@ -327,6 +329,9 @@ void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) {
 		error(QUOTED(OCT_FN_NAME)": image has %i dimensions. not implemented. ", (int)pixval->ndims());
 		throw std::exception();
 	}
+
+        // get current properties we may have gotten from the input 
+	gdcm::DataSet ds = w->GetFile().GetDataSet();
 	
 	// make image
 	gdcm::SmartPointer<gdcm::Image> im = new gdcm::Image;
@@ -334,8 +339,21 @@ void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) {
 	im->SetNumberOfDimensions( 2 );
 	im->SetDimension(0, pixval->dims()(0) );
 	im->SetDimension(1, pixval->dims()(1) );
-	im->SetPhotometricInterpretation( gdcm::PhotometricInterpretation::MONOCHROME1 );
-	
+
+	gdcm::Attribute<0x0028,0x0004> pi_at;
+	if (ds.FindDataElement(pi_at.GetTag())) {
+	  pi_at.SetFromDataElement( ds.GetDataElement(pi_at.GetTag()) );
+	   
+	  gdcm::PhotometricInterpretation::PIType type = gdcm::PhotometricInterpretation::GetPIType(pi_at.GetValue());
+	  if (type != gdcm::PhotometricInterpretation::PIType::UNKNOWN)
+	    im->SetPhotometricInterpretation( type );
+	  else
+	    im->SetPhotometricInterpretation( gdcm::PhotometricInterpretation::MONOCHROME1 );
+        }
+	else {
+	  im->SetPhotometricInterpretation( gdcm::PhotometricInterpretation::MONOCHROME1 );
+        }
+
 	// prepare to make data from mat available
 	char * matbuf = 0; // to be set to point to octave matrix 
 	
@@ -394,6 +412,42 @@ void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) {
 	delete [] matbuf;
 	
 	w->SetImage( *im );
+
+	// set any image values we already have in our data attributes
+	gdcm::Attribute<0x0028,0x0030> sp_at;
+	if (ds.FindDataElement(sp_at.GetTag())) {
+	  sp_at.SetFromDataElement( ds.GetDataElement(sp_at.GetTag()) );
+	  im->SetSpacing(0, sp_at.GetValue(0));
+	  im->SetSpacing(1, sp_at.GetValue(1));
+        }
+	gdcm::Attribute<0x0020,0x0037> dir_at;
+	if (ds.FindDataElement(dir_at.GetTag())) {
+	  dir_at.SetFromDataElement( ds.GetDataElement(dir_at.GetTag()) );
+	  im->SetDirectionCosines(0, (double)dir_at.GetValue(0));
+	  im->SetDirectionCosines(1, (double)dir_at.GetValue(1));
+	  im->SetDirectionCosines(2, (double)dir_at.GetValue(2));
+	  im->SetDirectionCosines(3, (double)dir_at.GetValue(3));
+	  im->SetDirectionCosines(4, (double)dir_at.GetValue(4));
+	  im->SetDirectionCosines(5, (double)dir_at.GetValue(5));
+        }
+	gdcm::Attribute<0x0020,0x0032> or_at;
+	if (ds.FindDataElement(or_at.GetTag())) {
+	  or_at.SetFromDataElement( ds.GetDataElement(or_at.GetTag()) );
+	  im->SetOrigin(0, or_at.GetValue(0));
+	  im->SetOrigin(1, or_at.GetValue(1));
+	  im->SetOrigin(2, or_at.GetValue(2));
+        }
+	gdcm::Attribute<0x0028,0x1053> sl_at;
+	if (ds.FindDataElement(sl_at.GetTag())) {
+	  sl_at.SetFromDataElement( ds.GetDataElement(sl_at.GetTag()) );
+	  im->SetSlope(sl_at.GetValue());
+        }
+	gdcm::Attribute<0x0028,0x1052> int_at;
+	if (ds.FindDataElement(int_at.GetTag())) {
+	  int_at.SetFromDataElement( ds.GetDataElement(int_at.GetTag()) );
+	  im->SetIntercept(int_at.GetValue());
+        }
+
 	return ;
 }
 
