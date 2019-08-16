@@ -277,16 +277,16 @@ void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag *
 			octave_stdout  << ']' << std::endl ;
 		}
 		de->SetByteValue((const char *)obv.fortran_vec(), gdcm::VL((uint32_t)obv.byte_size()));
-	} else if ( entry.GetVR() & gdcm::VR::DS) { // double string. sep by /
+	} else if ( entry.GetVR() & gdcm::VR::DS) { // double string. sep by '\\'
 		if (!ov->is_double_type()) { 
 			warning(QUOTED(OCT_FN_NAME)": dicomdict gives VR of DS for %s, expecting double, octave value is %s", keyword.c_str(), ov->class_name().c_str());
 		}
 		std::stringstream ss;
 		Matrix mat=ov->matrix_value() ; //to matrix of doubles
 		double * mat_p=mat.fortran_vec();
-		for(int i=0; i<mat.numel() ;i++) ss << mat_p[i] << '/' ;
+		for(int i=0; i<mat.numel() ;i++) ss << mat_p[i] << '\\' ;
 		std::string s=ss.str();
-		s=s.substr(0,s.length()-1); // strip last /
+		s=s.substr(0,s.length()-1); // strip last '\\'
 		if (s.length()%2==1) s=s+" "; // ensure even number of chars
 		if (trial) octave_stdout << '[' << s << ']' << std::endl ;
 		de->SetByteValue( (const char *)s.c_str(), gdcm::VL((uint32_t)s.length()) );
