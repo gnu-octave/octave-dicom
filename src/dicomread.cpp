@@ -68,11 +68,11 @@ DEFUN_DLD (dicomread, args, nargout,
 	  filename = args(0).string_value();
 	}
 	else {
-	  octave_scalar_map arg0 = args(0).scalar_map_value ();
-          if (error_state) {
+          if (! args(0).OV_ISMAP ()) {
 	        error(QUOTED(OCT_FN_NAME)": arg should be a filename, 1 row of chars, or a struct returned by dicominfo");
 		return retval; 
 	  }
+	  octave_scalar_map arg0 = args(0).scalar_map_value ();
 	  if (!arg0.contains("Filename")) {
 	        error(QUOTED(OCT_FN_NAME)": if arg is a struct, it should have the Filename field");
 		return retval; 
@@ -171,7 +171,12 @@ DEFUN_DLD (dicomread, args, nargout,
 %!test
 %! rd=dicomread(testfile);
 %! assert(rd(100,101,30),uint16(2021));
-%! % todo
+
+%!test
+%! data={};
+%! data.Filename = testfile;
+%! rd=dicomread(data);
+%! assert(rd(100,101,30),uint16(2021));
 
 %! if exist (testfile, 'file')
 %!   delete (testfile);
