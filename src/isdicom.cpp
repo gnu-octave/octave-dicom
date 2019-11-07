@@ -34,8 +34,12 @@ using namespace gdcm;
 static bool
 isdicom (const std::string& filename)
 {
+  if (!filename.length ())
+    return false;
+
   gdcm::Reader reader;
   reader.SetFileName (filename.c_str ());
+
   // gdcm::Reader.Read() will return false if the file does not exists but
   // also prints to stderr so we check it first.
   return OCTAVE__FILE_STAT (filename).exists () && reader.Read ();
@@ -55,7 +59,11 @@ Return true if @var{filename} is a valid DICOM file.\n\
       print_usage ();
       return octave_value_list ();
     }
-
+  if (! args(0).is_string ())
+    {
+      error ("isdicom: FILENAME must be a string");
+      return octave_value_list ();
+    }
   // Do NOT have this function accept a cell array of strings.
   //
   // This function should return true or false if its input is valid input
@@ -65,14 +73,8 @@ Return true if @var{filename} is a valid DICOM file.\n\
   // function that uses it to first check if it's a cell array.  It will also
   // prevent it from being used by imformats and any other image IO function
   // in Octave core
-
   const std::string filename = args(0).string_value ();
-  if (error_state)
-    {
-      error ("isdicom: FILENAME must be a string");
-      return octave_value_list ();
-    }
-
+  
   return octave_value (isdicom (filename));
 }
 
@@ -84,6 +86,9 @@ Return true if @var{filename} is a valid DICOM file.\n\
 
 %!test
 %! assert (isdicom (which ("gray")), false);
+%! assert (isdicom (""), false);
 
 %!fail ("isdicom")
+
+%!fail ("isdicom(1)")
 */
