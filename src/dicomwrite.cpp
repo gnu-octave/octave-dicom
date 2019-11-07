@@ -508,19 +508,19 @@ void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file){
 %! s.PatientID = "1";
 %! dicomwrite (wdata, testfile2, s);
 %! p = dicominfo (testfile2);
-%! assert (p.PatientName, "fred")
-%! assert (p.PatientID, "1")
+%! assert (p.PatientName, "fred");
+%! assert (p.PatientID, "1");
 
 %!test
 %! # test we have control of image property information
 %! wdata = uint8 (10*rand (10,10));
 %! dicomwrite (wdata, testfile2);
 %! p = dicominfo (testfile2);
-%! assert (p.PhotometricInterpretation, "MONOCHROME1 ")
-%! s.PhotometricInterpretation = "MONOCHROME2"
+%! assert (p.PhotometricInterpretation, "MONOCHROME1 ");
+%! s.PhotometricInterpretation = "MONOCHROME2";
 %! dicomwrite (wdata, testfile2, s);
 %! p = dicominfo (testfile2);
-%! assert (p.PhotometricInterpretation, "MONOCHROME2 ")
+%! assert (p.PhotometricInterpretation, "MONOCHROME2 ");
 
 %!test
 %! if exist (testfile1, 'file')
