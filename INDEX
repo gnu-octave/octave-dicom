@@ -1,6 +1,7 @@
 dicom >> Dicom file I/O for medical images and other data
 Dicom Functions
   dicomdict
+  dicomdisp
   dicominfo
   dicomlookup
   dicomread

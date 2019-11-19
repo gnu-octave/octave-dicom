@@ -3,9 +3,9 @@ MKOCTFILE ?= mkoctfile -Wall
 GDCM_CPPFLAGS = @GDCM_CXXFLAGS@ @DEFS@
 GDCM_LIBS = @GDCM_LIBS@
 
-need_dict = dicominfo.oct dicomwrite.oct dicomlookup.oct
+need_dict = dicominfo.oct dicomwrite.oct dicomlookup.oct dicomdisp.oct
 
-test_files = dicominfo.cpp dicomdict.cpp dicomread.cpp dicomlookup.cpp isdicom.cpp dicomuid.oct
+test_files = dicominfo.cpp dicomdict.cpp dicomread.cpp dicomlookup.cpp isdicom.cpp dicomuid.cpp dicomdisp.cc
 
 all: $(need_dict) dicomdict.oct dicomread.oct _gendicomdict.oct isdicom.oct dicomuid.oct
 

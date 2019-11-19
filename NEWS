@@ -5,6 +5,8 @@
 
  ** dicomwrite updated to set image properties from the input info structure.
 
+ ** added dicomdisp
+
  Summary of important user-visible changes for dicom 0.2.2 (2019/01/03):
 -------------------------------------------------------------------------
 
