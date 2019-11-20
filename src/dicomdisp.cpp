@@ -211,7 +211,7 @@ void dumpElement(const gdcm::DataElement * elem, int sequenceDepth, uint64_t &of
           vr = dictvr;
         }
       // File is explicit, but still prefer vr from dict when UN
-      else if ( vr == gdcm::VR::UN && vr != gdcm::VR::INVALID )
+      else if ( vr == gdcm::VR::UN && dictvr != gdcm::VR::INVALID )
         {
           vr = dictvr;
         }
@@ -221,11 +221,23 @@ void dumpElement(const gdcm::DataElement * elem, int sequenceDepth, uint64_t &of
         }
     }
 
+  if (vr.Compatible(gdcm::VR::OW) && vr.Compatible(gdcm::VR::OB))
+    {
+      vr = gdcm::VR::OW;
+    }
+
   octave_stdout << std::right << std::setfill('0') << std::setw(8)
                 << std::dec << offset << std::setw(0) << std::setfill(' ');
   octave_stdout << std::setw(6) << sequenceDepth << std::setw(0) ;
   octave_stdout << " " << tag << " " << vr << " ";
-  octave_stdout << std::setw(6) << elem->GetVL() << std::setw(0) ; // size
+  if(elem->GetVL().IsUndefined())
+    {
+      octave_stdout << "      ";
+    }
+  else
+    {
+      octave_stdout << std::setw(6) << elem->GetVL() << std::setw(0) ; // size
+    }
   octave_stdout << " - " << std::setw(30) << std::left << varname << std::setw(0) << " " ;
 
   if (!elem->GetVL().IsUndefined())
