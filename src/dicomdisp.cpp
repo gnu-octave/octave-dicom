@@ -65,11 +65,13 @@ int main( int argc, const char* argv[] )
 DEFUN_DLD (dicomdisp, args, nargout,
 "-*- texinfo -*- \n\
  @deftypefn {Loadable Function} {} dicomdisp (@var{filename}) \n\
- @deftypefnx {Loadable Function} {} dicomdisp (@var{filename}, [@var{propertyname}, @i{propertvalue} ...]) \n\
+ @deftypefnx {Loadable Function} {} dicomdisp (@var{filename}, [@var{propertyname}, @var{propertvalue} ...]) \n\
  Read and display the metadata from a DICOM file.\n\
  \n\
  @var{filename} - dicomfilename to display.@*\n \
- @var{propertyname}, @{propertvalue} - property pairs for oprions to the display function.\n \
+ @var{propertyname}, @var{propertvalue} - property pairs for options to the display function.\n \
+ \n \
+ Currently the only known property is 'dictionary' to specify a non default dict to use.\n \
  @seealso{dicomread, dicominfo} \n\
  @end deftypefn\n\
  ")
