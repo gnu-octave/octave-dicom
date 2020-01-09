@@ -1,13 +1,17 @@
 MKOCTFILE ?= mkoctfile -Wall
+OCTAVE_CONFIG := @OCTAVE_CONFIG@
+GREP      ?= @GREP@
+
+ARCHDIR   := "$(shell $(OCTAVE_CONFIG) -p CANONICAL_HOST_TYPE)-$(shell $(OCTAVE_CONFIG) -p API_VERSION)"
 
 GDCM_CPPFLAGS = @GDCM_CXXFLAGS@ @DEFS@
 GDCM_LIBS = @GDCM_LIBS@
 
 need_dict = dicominfo.oct dicomwrite.oct dicomlookup.oct dicomdisp.oct
 
-test_files = dicominfo.cpp dicomdict.cpp dicomread.cpp dicomlookup.cpp isdicom.cpp dicomuid.cpp dicomdisp.cc
+test_files = dicominfo.cpp dicomdict.cpp dicomread.cpp dicomlookup.cpp isdicom.cpp dicomuid.cpp dicomdisp.cpp
 
-all: $(need_dict) dicomdict.oct dicomread.oct _gendicomdict.oct isdicom.oct dicomuid.oct
+all: $(need_dict) dicomdict.oct dicomread.oct _gendicomdict.oct isdicom.oct dicomuid.oct archtests
 
 %.o: %.cpp
 	$(MKOCTFILE) $(GDCM_CPPFLAGS) -c $<
@@ -18,8 +22,25 @@ $(need_dict): %.oct: %.cpp dicomdict.o
 %.oct: %.cpp
 	$(MKOCTFILE) $(OCTAVE_DEFS) $(GDCM_CPPFLAGS) $(GDCM_LIBS) $<
 
+CPP_TST_SOURCES := $(shell $(GREP) --files-with-matches '^%!' $(test_files))
+TST_SOURCES := $(patsubst %.cpp,../inst/$(ARCHDIR)/%.cpp-tst,$(CPP_TST_SOURCES))
+
+.PHONY: archtests
+archtests: $(TST_SOURCES)
+
+../inst/$(ARCHDIR):
+	@mkdir -p "$@"
+
+../inst/$(ARCHDIR)/%.cpp-tst: %.cpp | ../inst/$(ARCHDIR)
+	@echo "Extracting tests from $< ..."
+	@$(RM) -f "$@" "$@-t"
+	@(      echo "## Generated from $<"; \
+	        $(GREP) '^%!' "$<") > "$@"
+
 clean:
 	$(RM) *.o *.oct *~
+	test -e ../inst/$(ARCHDIR) && rm -f $(TST_SOURCES) || true
+	test -e ../inst/$(ARCHDIR) && rmdir ../inst/$(ARCHDIR) || true
 
 distclean: clean
 	$(RM) Makefile config.log

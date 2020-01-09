@@ -9,6 +9,7 @@ AC_CANONICAL_TARGET
 target_arch="${target_cpu}-${target_os}"
 
 AC_PROG_SED
+AC_PROG_GREP
 AC_CHECK_PROG([UNIQ],[uniq],[uniq],[cat])
 AC_CHECK_PROG([SORT],[sort],[sort],[cat])
 
@@ -16,6 +17,8 @@ AC_PATH_PROG([MKOCTFILE], [mkoctfile])
 if test -z "$MKOCTFILE"; then
   AC_MSG_ERROR([*** 'mkoctfile' not found.])
 fi
+AC_CHECK_PROG(OCTAVE_CONFIG,octave-config,octave-config)
+test -z "$OCTAVE_CONFIG" && OCTAVE_CONFIG=$MKOCTFILE
 
 AC_PROG_CXX
 AC_LANG(C++)

@@ -36,11 +36,6 @@ RELEASE_TARBALL := $(TARGET_DIR)/$(PACKAGE)-$(VERSION).tar.gz
 HTML_DIR        := $(TARGET_DIR)/$(PACKAGE)-html
 HTML_TARBALL    := $(TARGET_DIR)/$(PACKAGE)-html.tar.gz
 
-M_SOURCES   := $(wildcard inst/*.m)
-CC_SOURCES  := $(wildcard src/*.cpp)
-CC_TST_SOURCES := $(shell $(GREP) --files-with-matches '^%!' $(CC_SOURCES))
-TST_SOURCES := $(patsubst src/%.cpp,inst/test/%.cpp-tst,$(CC_TST_SOURCES))
-OCT_FILES   := $(patsubst %.cpp,%.oct,$(CC_SOURCES))
 PKG_ADD     := 
 
 OCTAVE ?= octave --no-window-system --silent
@@ -88,8 +83,6 @@ $(RELEASE_DIR): .hg/dirstate
 	$(RM) -r "$@"
 	$(call HG_CMD,archive) --exclude ".hg*" --type files --rev $(HG_ID) "$@"
 	cd "$@/src" && ./bootstrap && $(RM) -r "autom4te.cache"
-	# need to build any tests
-	cd "$@" && $(MAKE) test_files
 	# build docs
 	$(MAKE) -C "$@" docs
 	chmod -R a+rX,u+w,go-w "$@"
@@ -107,18 +100,6 @@ $(HTML_DIR): install
 	chmod -R a+rX,u+w,go-w $@
 	-rm -rf $<
 
-# test file recipes
-$(TST_SOURCES): inst/test/%.cpp-tst: src/%.cpp | inst/test
-	@echo "Extracting tests from $< ..."
-	@$(RM) -f "$@" "$@-t"
-	@(	echo "## Generated from $<"; \
-                $(GREP) '^%!' "$<") > "$@"
-
-inst/test:
-	@mkdir -p "$@"
-
-test_files: $(TST_SOURCES)
-
 dist: $(RELEASE_TARBALL)
 html: $(HTML_TARBALL)
 
@@ -135,7 +116,7 @@ all: $(CC_SOURCES)
 	cd src/ && ./bootstrap && ./configure
 	$(MAKE) -C src/
 
-check: all test_files
+check: all
 	$(OCTAVE) --path "$(TOPDIR)/inst/" --path "$(TOPDIR)/src/" \
 	  --eval '${PKG_ADD}' \
 	  --eval '__run_test_suite__ ({"$(TOPDIR)/inst"}, {})'
