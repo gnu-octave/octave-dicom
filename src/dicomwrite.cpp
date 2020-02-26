@@ -30,6 +30,7 @@
 #include "gdcmImageWriter.h"
 #include "gdcmFileDerivation.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmPhotometricInterpretation.h"
 
 #include "gdcmAttribute.h"
               
@@ -345,7 +346,7 @@ void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval) {
 	  pi_at.SetFromDataElement( ds.GetDataElement(pi_at.GetTag()) );
 	   
 	  gdcm::PhotometricInterpretation::PIType type = gdcm::PhotometricInterpretation::GetPIType(pi_at.GetValue());
-	  if (type != gdcm::PhotometricInterpretation::PIType::UNKNOWN)
+	  if (type != gdcm::PhotometricInterpretation().GetType())
 	    im->SetPhotometricInterpretation( type );
 	  else
 	    im->SetPhotometricInterpretation( gdcm::PhotometricInterpretation::MONOCHROME1 );
