@@ -8,6 +8,7 @@ Description: Digital communications in medicine (DICOM) file io.
   Depends on Grassroots DICOM (GDCM). This package is not available
   in repos for all distros. Contributors: Judd Storrs, Kris Thielemans,
   John Donoghue
+Depends: octave (>= 3.8.0)
 SystemRequirements: libgdcm2.0 (>= 2.0.16)
 Categories: imaging, medical
 Url: http://octave.org/wiki/index.php?title=Dicom
