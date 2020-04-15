@@ -301,7 +301,8 @@ void dumpElement(const gdcm::DataElement * elem, int sequenceDepth, uint64_t &of
   if (vr & gdcm::VR::SQ)
     {
       gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = elem->GetValueAsSQ();
-      dumpSequence(sqi, sequenceDepth+1, offset);
+      if (sqi)
+        dumpSequence(sqi, sequenceDepth+1, offset);
     }
 }
 

@@ -1,3 +1,8 @@
+ Summary of important user-visible changes for dicom 0.3.0+ (TBD):
+-------------------------------------------------------------------------
+
+ ** bugfix dicomdisp, dicominfo for empty SQ sequences
+
  Summary of important user-visible changes for dicom 0.3.0 (2020/02/27):
 -------------------------------------------------------------------------
 

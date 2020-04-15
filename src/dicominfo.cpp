@@ -394,7 +394,10 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
 	} else if (vr & gdcm::VR::SQ) {
 		if(chatty) octave_stdout << " reading sequence. "; // \n provided in dumpSequence fn
 		gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = elem->GetValueAsSQ();
-		dumpSequence(ov, sqi, chatty, sequenceDepth+1);
+		if(sqi)
+			dumpSequence(ov, sqi, chatty, sequenceDepth+1);
+		else
+			*ov = octave_map();
 	} else if (vr & gdcm::VR::AT) { // attribute tag
 		intNDArray<octave_uint16> uint16pair(dim_vector(1,2));
 		uint16_t *p=(uint16_t *)elem->GetByteValue()->GetPointer();
