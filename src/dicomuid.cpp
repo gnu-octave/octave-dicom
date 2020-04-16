@@ -1,5 +1,5 @@
 /*
- * Copyright John Donoghue, 2017:
+ * Copyright John Donoghue, 2017-2020
  *
  * The GNU Octave dicom package is free software: you can redistribute 
  * it and/or modify it under the terms of the GNU General Public 
@@ -34,7 +34,7 @@ using namespace gdcm;
 #define QUOTED(x) QUOTED_(x)
 
 DEFUN_DLD (dicomuid, args, nargout,
-		"-*- texinfo -*- \n\
+    "-*- texinfo -*- \n\
 @deftypefn {Loadable Function} @var{uuid} = dicomuuid () \n\
 \n\
 Generate a DICOM unique id . \n\
@@ -44,19 +44,20 @@ Generate a DICOM unique id . \n\
 @end deftypefn \n\
 ")
 {
-	octave_value_list retval;  // create object to store return values
+  octave_value_list retval;  // create object to store return values
 
-	// no args required
-	if ( 0 != args.length ()) {
-      		print_usage ();
-		return retval; 
-	}
+  // no args required
+  if (0 != args.length ())
+    {
+      print_usage ();
+      return retval; 
+    }
 
-	gdcm::UIDGenerator generator;
+  gdcm::UIDGenerator generator;
 
-	retval = octave_value (generator.Generate ());
+  retval = octave_value (generator.Generate ());
 
-	return retval;
+  return retval;
 }
 
 /*

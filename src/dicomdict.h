@@ -30,6 +30,6 @@ bool dicom_is_present(const gdcm::Tag & tag);
   * contrast with some VRASCII types that hold numbers.
   * may take some dates and times out of this and handle differently */
 #define VRSTRING (gdcm::VR::AE|gdcm::VR::AS|gdcm::VR::CS|gdcm::VR::DA\
-	|gdcm::VR::DT|gdcm::VR::LO|gdcm::VR::LT|gdcm::VR::PN|gdcm::VR::SH\
-	|gdcm::VR::ST|gdcm::VR::TM|gdcm::VR::UI|gdcm::VR::UT)
+  |gdcm::VR::DT|gdcm::VR::LO|gdcm::VR::LT|gdcm::VR::PN|gdcm::VR::SH\
+  |gdcm::VR::ST|gdcm::VR::TM|gdcm::VR::UI|gdcm::VR::UT)
 
