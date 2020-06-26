@@ -89,6 +89,15 @@ OF_OCTAVE_LIST_ALT_SYMS([
 ],
 
 [dnl
+  [is_cell],
+  [iscell],
+  [[octave_value ().iscell ();]],
+  [OV_ISCELL],
+  [],
+  []
+],
+
+[dnl
   [valid_identifier],
   [octave::valid_identifier],
   [[octave::valid_identifier("");]],

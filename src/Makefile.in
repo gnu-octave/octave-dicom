@@ -7,9 +7,9 @@ ARCHDIR   := "$(shell $(OCTAVE_CONFIG) -p CANONICAL_HOST_TYPE)-$(shell $(OCTAVE_
 GDCM_CPPFLAGS = @GDCM_CXXFLAGS@ @DEFS@
 GDCM_LIBS = @GDCM_LIBS@
 
-need_dict = dicominfo.oct dicomwrite.oct dicomlookup.oct dicomdisp.oct
+need_dict = dicominfo.oct dicomwrite.oct dicomlookup.oct dicomdisp.oct dicomanon.oct
 
-test_files = dicominfo.cpp dicomdict.cpp dicomread.cpp dicomlookup.cpp isdicom.cpp dicomuid.cpp dicomdisp.cpp
+test_files = dicominfo.cpp dicomdict.cpp dicomread.cpp dicomlookup.cpp isdicom.cpp dicomuid.cpp dicomdisp.cpp dicomanon.cpp
 
 all: $(need_dict) dicomdict.oct dicomread.oct _gendicomdict.oct isdicom.oct dicomuid.oct archtests
 

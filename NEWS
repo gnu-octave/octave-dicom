@@ -3,6 +3,8 @@
 
  ** bugfix dicomdisp, dicominfo for empty SQ sequences
 
+ ** added dicomanon function
+
  Summary of important user-visible changes for dicom 0.3.0 (2020/02/27):
 -------------------------------------------------------------------------
 
