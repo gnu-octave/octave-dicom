@@ -75,7 +75,7 @@ doc/$(PACKAGE).pdf: doc/$(PACKAGE).texi doc/functions.texi
 	cd doc && $(RM) -f $(PACKAGE).aux $(PACKAGE).cp $(PACKAGE).cps $(PACKAGE).fn  $(PACKAGE).fns $(PACKAGE).log $(PACKAGE).toc
 
 doc/functions.texi:
-	cd doc && ./mkfuncdocs.py --src-dir=../inst/ --src-dir=../src/ ../INDEX > functions.texi
+	cd doc && ./mkfuncdocs.py --src-dir=../inst/ --src-dir=../src/ ../INDEX | $(SED) 's/@seealso/@xseealso/g' > functions.texi
 
 
 $(RELEASE_DIR): .hg/dirstate
