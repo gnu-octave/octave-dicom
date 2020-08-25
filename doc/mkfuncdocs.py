@@ -16,7 +16,7 @@
 ## along with this program.  If not, see
 ## <https://www.gnu.org/licenses/>.
 
-## mkfuncdocs v1.0.0
+## mkfuncdocs v1.0.1
 ## mkfuncdocs.py will attempt to extract the help texts from functions in src
 ## dirs, extracting only those that are in the specifed INDEX file and output them
 ## to stdout in texi format
@@ -82,6 +82,7 @@ def read_m_file(filename, skip=0):
   havehelp = False;
   with open(filename, 'rt') as f:
     for line in f:
+      line = line.lstrip()
       if skip > 0:
         skip = skip - 1
       elif not havehelp:
@@ -103,6 +104,7 @@ def read_cc_file(filename, skip=0):
   havehelp = False;
   with open(filename, 'rt') as f:
     for line in f:
+      line = line.lstrip()
       if skip > 0:
         skip = skip - 1
       elif not havehelp:
@@ -211,7 +213,7 @@ def find_func_file(fname, paths, prefix, scanfiles=False):
         if line >= 0:
           #sys.stderr.write("Warning: Found function for {} in {} at {}\n".format(fname, fn, line))
           return fn, line
- 
+  
   return None, -1
 
 def display_func(name, ref, help):
