@@ -54,7 +54,7 @@ DEFUN_DLD (dicomanon, args, nargout,
 @deftypefn {Loadable Function} {} dicomanon(@var{file_in}, @var{file_out})\n\
 @deftypefnx {Loadable Function} {} dicomanon(___, @var{name}, @var{value})\n\
 \n\
-Anonomize a DICOM format file by removing or replacing specific fields.\n\
+Anonymize a DICOM format file by removing or replacing specific fields.\n\
 \n\
 @var{file_in} is filename to read from.@*\n\
 @var{file_out} is the filename to write to.@*\n\
