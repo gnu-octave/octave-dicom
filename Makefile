@@ -122,8 +122,15 @@ check: all
 	  --eval '__run_test_suite__ ({"$(TOPDIR)/inst"}, {})'
 
 run: all
-	$(OCTAVE) --persist --path "inst/" --path "src/" \
+	$(OCTAVE) --persist --path "$(TOPDIR)/inst/" --path "$(TOPDIR)/src/" \
 	  --eval '${PKG_ADD}'
+
+doctest: all
+	$(OCTAVE) --path "$(TOPDIR)/inst" --path "$(TOPDIR)/src" \
+	  --eval '${PKG_ADD}' \
+	  --eval 'pkg load doctest;' \
+	  --eval "targets = {'$(TOPDIR)/inst', '$(TOPDIR)/src'};" \
+	  --eval "doctest (targets);"
 
 clean: clean-docs
 	$(RM) -r $(TARGET_DIR) fntests.log
