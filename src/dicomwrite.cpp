@@ -400,7 +400,8 @@ void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag *
         { 
           warning (QUOTED(OCT_FN_NAME)": dicomdict gives VR of SQ for %s, octave value is %s", keyword.c_str(), ov->class_name().c_str());
         }
-      octave_stdout << std::endl;
+      if (trial)
+        octave_stdout << std::endl;
       //int nObj = ov->numel();
       octave_map subom = ov->map_value();
       gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
@@ -412,6 +413,10 @@ void value2element (gdcm::DataElement * de, const octave_value * ov, gdcm::Tag *
         {
           return;
         }
+
+      de->SetValue(*sq);
+      //de->SetVLToUndefined();
+
       sequenceDepth--;
     }
   else
@@ -617,9 +622,8 @@ void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file)
 %! rdata = dicomread (testfile1);
 %! assert(wdata, rdata);
 
-%!fail ("dicominfo", "dicominfo: one arg required: dicom filename");
-%!fail ("dicominfo ([])");
-%!fail ("dicominfo ([],1)");
+%!fail ("dicomwrite", "dicomwrite: should have at least 2 arguments");
+%!fail ("dicomwrite ([],1)");
 
 %!test
 %! wdata = uint8 (10*rand (10,10));
