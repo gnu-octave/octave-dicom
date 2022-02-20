@@ -339,7 +339,7 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
   gdcm::VR vr = elem->GetVR (); // value representation
 
   // skip "Group Length" tags. note: these are deprecated in DICOM 2008
-  if(tag.GetElement() == (uint16_t)0 || (elem->GetByteValue() == NULL && vr != gdcm::VR::SQ)) 
+  if(tag.GetElement() == (uint16_t)0) 
     return DICOM_NOTHING_ASSIGNED;
   //const gdcm::DictEntry dictEntry = dicts.GetDictEntry(tag,(const char*)0);
 
