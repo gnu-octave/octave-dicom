@@ -228,6 +228,11 @@ void dumpElement(const gdcm::DataElement * elem, int sequenceDepth, uint64_t &of
       vr = gdcm::VR::OW;
     }
 
+  if (vr.Compatible(gdcm::VR::US) && vr.Compatible(gdcm::VR::SS))
+    {
+      vr = gdcm::VR::US;
+    }
+
   octave_stdout << std::right << std::setfill('0') << std::setw(8)
                 << std::dec << offset << std::setw(0) << std::setfill(' ');
   octave_stdout << std::setw(6) << sequenceDepth << std::setw(0) ;
@@ -254,6 +259,10 @@ void dumpElement(const gdcm::DataElement * elem, int sequenceDepth, uint64_t &of
   else if(vr & gdcm::VR::PN)
     {
       octave_stdout  << "[Anonymized]";
+    }
+  else if(vr & gdcm::VR::SQ)
+    {
+      octave_stdout  << "*Sequence*";
     }
   else if( gdcm::VR::IsASCII(vr))
     {
