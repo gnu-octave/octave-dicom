@@ -57,9 +57,13 @@ std::map<std::string, gdcm::DictEntry> dict ;
 
 void insert(const char *k, const gdcm::Tag t, const gdcm::DictEntry e)
 {
-  keymap[k] = t ;
-  tagmap[t] = k ;
-  dict[k] = e ;
+  // if tag already has an entry dont overwrite it
+  if (tagmap.count(t) == 0)
+    {
+      keymap[k] = t ;
+      tagmap[t] = k ;
+      dict[k] = e ;
+    }
 }
 
 DEFUN_DLD (dicomdict, args, nargout,
