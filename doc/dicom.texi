@@ -1,5 +1,5 @@
 \input texinfo @c -*-texinfo-*-
-@c Copyright (c) 2019-2020, John Donoghue <john.donoghue@ieee.org>
+@c Copyright (c) 2019-2022, John Donoghue <john.donoghue@ieee.org>
 @c Octave Dicom -Dicom File I/O for GNU octave.
 
 @c For manually generating the documentation use
@@ -11,8 +11,8 @@
 @afourpaper
 @paragraphindent 0
 @finalout
-@set VERSION 0.4.0
-@set COPYRIGHT_DATE 2019-2020
+@set VERSION 0.4.1
+@set COPYRIGHT_DATE 2019-2022
 @c @afourwide
 @c %*** End of the HEADER
 

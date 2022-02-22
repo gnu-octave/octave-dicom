@@ -1,3 +1,16 @@
+ Summary of important user-visible changes for dicom 0.4.1 (2022/02/21):
+-------------------------------------------------------------------------
+
+ ** bugfix dicominfo for unknown size SQ sequences
+
+ ** bugfix dicomwrite for inserting SQ sequences
+
+ ** display *sequence* for SQ types in dicomdisp
+
+ ** update octavedicom.dic from gdcm-3
+
+ ** minor doc updates
+
  Summary of important user-visible changes for dicom 0.4.0 (2020/09/04):
 -------------------------------------------------------------------------
 
