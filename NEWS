@@ -1,4 +1,4 @@
- Summary of important user-visible changes for dicom 0.4.1 (2022/02/21):
+ Summary of important user-visible changes for dicom 0.4.1 (2022/02/22):
 -------------------------------------------------------------------------
 
  ** bugfix dicominfo for unknown size SQ sequences
