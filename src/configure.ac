@@ -40,7 +40,11 @@ AC_CHECK_PROG(OCTAVE_CONFIG,octave-config,octave-config)
 test -z "$OCTAVE_CONFIG" && OCTAVE_CONFIG=$MKOCTFILE
 
 AC_PROG_CXX
+AC_PROG_CXXCPP
 AC_LANG(C++)
+
+# check can access std c files
+AC_CHECK_HEADERS([string.h])
 
 ## octave API tests
 save_CXX="$CXX"
@@ -131,9 +135,22 @@ dnl dependent directories.
 dnl
 CMAKE_FIND_PACKAGE([GDCM], [CXX], , , , [target_arch])
 
+if test "$GDCM_CXXFLAGS$GDCM_LIBS" != "" ; then
+   # if have cmake detection, see if can find include files
+
+   save_CPPFLAGS=$CPPFLAGS
+   CPPFLAGS="$CPPFLAGS $GDCM_CXXFLAGS"
+
+   AC_CHECK_HEADERS([gdcmVersion.h], ,
+     [GDCM_CXXFLAGS=""; GDCM_LIBS=""],
+   )
+
+   CPPFLAGS=$save_CPPFLAGS
+fi
+
 # newer cmake seems to have issues so if found nothing, and dont have anything set, then try hard way
 if test "$GDCM_CXXFLAGS$GDCM_LIBS" == "" ; then
-  AC_MSG_WARN([No GDCM detected using cmake - trying fallback detection])
+  AC_MSG_NOTICE([Trying fallback GDCM detection])
   #AC_LANG(C++)
 
   save_LDFLAGS=$LDFLAGS
@@ -177,7 +194,7 @@ if test "$GDCM_CXXFLAGS$GDCM_LIBS" == "" ; then
     [AC_MSG_RESULT([yes])], 
     [AC_MSG_RESULT([no])])
 
-  LDFLAGS=$saved_LDFLAGS
+  LDFLAGS=$save_LDFLAGS
   CPPFLAGS=$save_CPPFLAGS
 
 fi
