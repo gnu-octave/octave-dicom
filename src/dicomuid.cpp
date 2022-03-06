@@ -39,8 +39,13 @@ DEFUN_DLD (dicomuid, args, nargout,
 \n\
 Generate a DICOM unique id . \n\
 \n \
+@subsubheading Inputs\n\
+None\n\
+@subsubheading Outputs\n\
 @var{uuid} is a unique id string.\n\
 \n\
+@subsubheading Examples\n\
+Get a new uid:\n\
 \n\
 @example\n\
 > uid = dicomuid ()\n\

@@ -78,13 +78,25 @@ The first usage returns the filename of the dictionary that is currently being u
 Using @code{factory} resets the dictionary to the default.\n\
 Using @code{set} allows setting the dictionary for future operations.\n\
 In this case, the dictionary file @var{dictionary_name} can be anywhere in the path.\n\
+@subsubheading Inputs\n\
+@var{code} -  string value of 'get', 'set' or 'factory'.\n\
+\n\
+@var{dictionary_name'} - name of dictionary file to use\n \
+\n\
+@subsubheading Outputs\n\
+@var{dictionary_name'} - name of dictionary file currently set for dictionaty\n \
+\n\
+@subsubheading Examples\n\
+Get current dicom dict path:\n\
 \n\
 @example\n\
-# get current dicom dict path\n\
 > f = dicomdict('get')\n\
 f = octavedicom.dic\n\
+@end example\n\
 \n\
-# set a new dict\n\
+Set a new dictionary:\n\
+\n\
+@example\n\
 > dicomdict('set', 'anewdictfile.txt')\n\
 @end example\n\
 \n\

@@ -45,10 +45,18 @@ DEFUN_DLD (dicomread, args, nargout,
 @deftypefnx {Loadable Function} @var{image} = dicomread (@var{structure}) \n\
 \n\
 Load the image from a DICOM file. \n\
-@var{filename} is a string (giving the filename).\n\
-@var{structure} is a structure with a field @code{Filename} (such as returned by @code{dicominfo}).\n\
-@var{image} may be two or three dimensional, depending on the content of the file. \n\
-An integer or float matrix will be returned, the number of bits will depend on the file. \n\
+@subsubheading Inputs\n\
+@var{filename} - a string giving the filename.*\n\
+\n\
+@var{structure} - a structure with a field @code{Filename} (such as returned by @code{dicominfo}).\n\
+\n\
+@var{image} - may be two or three dimensional, depending on the content of the file. \n\
+\n\
+@subsubheading Outputs\n\
+@var{image} - An integer or float matrix will be returned, the number of bits will depend on the file. \n\
+\n\
+@subsubheading Examples\n\
+Load the image data of a dcm file:\n\
 \n\
 @example\n\
 > image = dicomread(file_in_load_path('imdata/simple-test.dcm'))\n\

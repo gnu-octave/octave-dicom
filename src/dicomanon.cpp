@@ -56,6 +56,7 @@ DEFUN_DLD (dicomanon, args, nargout,
 \n\
 Anonymize a DICOM format file by removing or replacing specific fields.\n\
 \n\
+@subsubheading Inputs\n\
 @var{file_in} is filename to read from.@*\n\
 @var{file_out} is the filename to write to.@*\n\
 @var{name}, @var{value} optional name/value properties.@*\n\
@@ -67,6 +68,8 @@ The value is a cell array of names to not remove during the anonymize procedure.
 @item update\n\
 A structure of name/values to update rather than remove.\n\
 @end table\n\
+@subsubheading Outputs\n\
+None\n\
 \n\
 @seealso{dicomread, dicomwrite, dicominfo}\n\
 @end deftypefn \n\

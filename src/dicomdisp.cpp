@@ -1,5 +1,5 @@
 /*
- * Copyright John Donoghue, 2019:
+ * Copyright John Donoghue, 2019-2022:
  *
  * The GNU Octave dicom package is free software: you can redistribute 
  * it and/or modify it under the terms of the GNU General Public 
@@ -68,10 +68,14 @@ DEFUN_DLD (dicomdisp, args, nargout,
  @deftypefnx {Loadable Function} {} dicomdisp (@var{filename}, [@var{propertyname}, @var{propertvalue} ...]) \n\
  Read and display the metadata from a DICOM file.\n\
  \n\
+ @subsubheading Inputs\n\
  @var{filename} - dicomfilename to display.@*\n \
  @var{propertyname}, @var{propertvalue} - property pairs for options to the display function.\n \
  \n \
  Currently the only known property is 'dictionary' to specify a non default dict to use.\n \
+ @subsubheading Outputs\n\
+ None\n\
+ \n\
  @seealso{dicomread, dicominfo} \n\
  @end deftypefn\n\
  ")

@@ -53,12 +53,27 @@ of the attribute.\n\
 dictionary for a specified @var{keyword} string and returns the @var{group} and @var{element}\n \
 for keyword.\n\
 \n\
+@subsubheading Inputs\n\
+@var{keyword} - string keyword name to look up a group, element value.@*\n\
+@var{group} - group value to look up (string or integer).@*\n\
+@var{element} - element value to look up (string or integer).@*\n\
+\n\
+@subsubheading Outputs\n\
+@var{keyword} - string keyword name to looked up from a group, element value.@*\n\
+@var{group}, @var{element} - group and element value looked up from keyword.@*\n\
+\n\
+@subsubheading Outputs\n\
+Look up tag name for 0x10 0x10:\n\
+\n\
 @example\n\
-# look up tag name for 0x10 0x10\n\
 > name = dicomlookup(0x10,0x10)\n\
 name = PatientName\n\
 \n\
-# look up tag group and element value\n\
+@end example\n\
+\n\
+Look up tag group and element value:\n\
+\n\
+@example\n\
 > [grp, elm] = dicomlookup('TransferSyntaxUID')\n\
 grp = 2\n\
 elm = 16\n\

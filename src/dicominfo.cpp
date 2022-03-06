@@ -103,10 +103,22 @@ a DICOM dump. \n\
 If the @code{dictionary} argument is used, the given @var{dictionary-name} is used for this operation, \n\
 otherwise, the dictionary set by @code{dicomdict} is used.\n\
 \n\
+@subsubheading Inputs\n\
+@var{filename} - name of file to read.\n\
+\n\
+@var{'dictionary'} - string constant of 'dictionary'.\n\
+\n\
+@var{dictionary-name} - filename of dictionary to use.\n\
+\n\
 @var{options}:\n\
 @code{truncate=n}\n\
 where n is the number of characters to limit the dump output display to @code{n}\
 for each value. \n\
+@subsubheading Outputs\n\
+@var{info} - struct of fields read frome the dicom file.\n\
+\n\
+@subsubheading Examples\n\
+Read the metadata of a dicomfile:\n\
 \n\
 @example\n \
 > info = dicominfo(file_in_loadpath('imdata/simple-test.dcm')\n \

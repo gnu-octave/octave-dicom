@@ -62,16 +62,23 @@ DEFUN_DLD (dicomwrite, args, nargout,
 \n\
 Write a DICOM format file to @var{filename}.\n\
 \n\
-@var{im} is image data or empty matrix, [], if only metadata save is required\n\
-@var{filename} is filename to write dicom to. if [], then function runs in verbose trial mode.\n\
-@var{info} struct, like that produced by dicominfo\n\
+@subsubheading Inputs\n\
+@var{im} - image data or empty matrix, [], if only metadata save is required\n\
 \n\
+@var{filename} - filename to write dicom to. if [], then function runs in verbose trial mode.\n\
+\n\
+@var{info} - struct, like that produced by dicominfo\n\
+\n\
+@subsubheading Examples\n\
+Create a dicom file using default info, and the supplied data:\n\
 @example\n\
-# create a dicom file using default info, and the supplied data\n\
 > wdata = uint8 (10*rand (10,10));\n\
 > dicomwrite (wdata, 'test.dcm');\n\
+@end example\n\
 \n\
-# create a dicom file using data and meta info\n\
+Create a dicom file using data and meta info:\n\
+\n\
+@example\n\
 > wdata = dicomread(file_in_loadpath('imdata/CT-MONO2-16-ankle.dcm');\n\
 > info = dicominfo(file_in_loadpath('imdata/CT-MONO2-16-ankle.dcm');\n\
 > dicomwrite(wdata, info);\n\
