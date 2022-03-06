@@ -190,9 +190,7 @@ An integer or float matrix will be returned, the number of bits will depend on t
 
 /*
 %!shared testfile
-%! testfile = urlwrite ( ...
-%!   'http://sourceforge.net/p/octave/code/11601/tree/trunk/octave-forge/extra/dicom/dcm_examples/RD.15MV.DCM?format=raw', ...
-%!   tempname() );
+%! testfile = file_in_loadpath("imdata/CT-MONO2-16-ankle.dcm");
 
 %!fail ("dicomread");
 %!fail ("dicomread (1)");
@@ -200,15 +198,11 @@ An integer or float matrix will be returned, the number of bits will depend on t
 
 %!test
 %! rd=dicomread(testfile);
-%! assert(rd(100,101,30),uint16(2021));
+%! assert(rd(100,101),int16(128));
 
 %!test
 %! data={};
 %! data.Filename = testfile;
 %! rd=dicomread(data);
-%! assert(rd(100,101,30),uint16(2021));
-
-%! if exist (testfile, 'file')
-%!   delete (testfile);
-%! endif
+%! assert(rd(100,101),int16(128));
 */

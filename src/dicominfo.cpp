@@ -685,9 +685,7 @@ char* name2Keyword (char *d, int *d_len_p, const char* s)
 
 /*
 %!shared testfile
-%! testfile = urlwrite ( ...
-%!   'http://sourceforge.net/p/octave/code/11601/tree/trunk/octave-forge/extra/dicom/dcm_examples/RD.15MV.DCM?format=raw', ...
-%!   tempname() );
+%! testfile = file_in_loadpath("imdata/simpleImageWithIcon.dcm");
 
 %!fail("dicominfo")
 
@@ -695,14 +693,9 @@ char* name2Keyword (char *d, int *d_len_p, const char* s)
 
 %!test
 %! s=dicominfo(testfile);
-%! assert(s.PatientName,"PHANTOM^IsodoseComparison^^^");
+%! assert(s.PatientName,"GDCM^Patient");
 
 %!test
 %! s=dicominfo(testfile);
-%! assert(s.ROIContourSequence.Item_1.ContourSequence.Item_1.ContourGeometricType,"POINT ");
-
-%!test
-%! if exist (testfile, 'file')
-%!   delete (testfile);
-%! endif
+%! assert(s.IconImageSequence.Item_1.PhotometricInterpretation,"MONOCHROME2 ");
 */
