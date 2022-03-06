@@ -66,6 +66,17 @@ Write a DICOM format file to @var{filename}.\n\
 @var{filename} is filename to write dicom to. if [], then function runs in verbose trial mode.\n\
 @var{info} struct, like that produced by dicominfo\n\
 \n\
+@example\n\
+# create a dicom file using default info, and the supplied data\n\
+> wdata = uint8 (10*rand (10,10));\n\
+> dicomwrite (wdata, 'test.dcm');\n\
+\n\
+# create a dicom file using data and meta info\n\
+> wdata = dicomread(file_in_loadpath('imdata/CT-MONO2-16-ankle.dcm');\n\
+> info = dicominfo(file_in_loadpath('imdata/CT-MONO2-16-ankle.dcm');\n\
+> dicomwrite(wdata, info);\n\
+@end example\n\
+\n\
 @seealso{dicomread, dicominfo}\n\
 @end deftypefn \n\
 ")

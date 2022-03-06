@@ -136,7 +136,7 @@ read and write dicom data.
 @example
 
 %% read the meta information from a dicom file
-> info = dicominfo ('test.dcm');
+> info = dicominfo (file_in_loadpath('imdata/simple-test.dcm');
 info =
   scalar structure containing the fields:
     Filename = a.dcm
@@ -176,8 +176,7 @@ info =
 
 
 %% read the image data
-> image = dicomread('test.dcm')
-image = dicomread ('a.dcm')
+> image = dicomread(file_in_loadpath('imdata/simple-test.dcm'))
 image =
   0  0  0  0  0
   0  0  0  0  0

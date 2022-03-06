@@ -50,6 +50,21 @@ Load the image from a DICOM file. \n\
 @var{image} may be two or three dimensional, depending on the content of the file. \n\
 An integer or float matrix will be returned, the number of bits will depend on the file. \n\
 \n\
+@example\n\
+> image = dicomread(file_in_load_path('imdata/simple-test.dcm'))\n\
+image =\n\
+  0  0  0  0  0\n\
+  0  0  0  0  0\n\
+  0  0  0  0  0\n\
+  0  0  0  0  0\n\
+  0  0  0  0  0\n\
+  0  0  0  0  0\n\
+  0  0  0  0  0\n\
+  0  0  0  0  0\n\
+  0  0  0  0  0\n\
+  0  0  0  0  0\n\
+@end example\n\
+\n\
 @seealso{dicominfo} \n\
 @end deftypefn \n\
 ")

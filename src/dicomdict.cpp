@@ -79,6 +79,15 @@ Using @code{factory} resets the dictionary to the default.\n\
 Using @code{set} allows setting the dictionary for future operations.\n\
 In this case, the dictionary file @var{dictionary_name} can be anywhere in the path.\n\
 \n\
+@example\n\
+# get current dicom dict path\n\
+> f = dicomdict('get')\n\
+f = octavedicom.dic\n\
+\n\
+# set a new dict\n\
+> dicomdict('set', 'anewdictfile.txt')\n\
+@end example\n\
+\n\
 @seealso{dicomread, dicomwrite}\n\
 @end deftypefn \n")
 {

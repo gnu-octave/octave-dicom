@@ -41,6 +41,12 @@ Generate a DICOM unique id . \n\
 \n \
 @var{uuid} is a unique id string.\n\
 \n\
+\n\
+@example\n\
+> uid = dicomuid ()\n\
+uid = 1.2.826.0.1.3680043.2.1143.3114589836670200378351641061429967573\n\
+@end example\n\
+\n\
 @end deftypefn \n\
 ")
 {

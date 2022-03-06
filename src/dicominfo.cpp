@@ -1,5 +1,5 @@
 /*
- * The GNU Octave dicom package is Copyright Andy Buckle 2010-2020
+ * The GNU Octave dicom package is Copyright Andy Buckle 2010-2022
  * Contact: blondandy using the sf.net system, 
  * <https://sourceforge.net/sendmessage.php?touser=1760416>
  * 
@@ -107,6 +107,46 @@ otherwise, the dictionary set by @code{dicomdict} is used.\n\
 @code{truncate=n}\n\
 where n is the number of characters to limit the dump output display to @code{n}\
 for each value. \n\
+\n\
+@example\n \
+> info = dicominfo(file_in_loadpath('imdata/simple-test.dcm')\n \
+info = \n \
+  scalar structure containing the fields:\n \
+    Filename = a.dcm\n \
+    FileModDate = 04-Feb-2017 02:08:31\n \
+    FileMetaInformationVersion =\n \
+      0  1\n \
+    MediaStorageSOPClassUID = 1.2.840.10008.5.1.4.1.1.7\n \
+    MediaStorageSOPInstanceUID = 1.2.826.0.1.3680043.2.1143.4379544382488839209812957878553810312\n \
+    TransferSyntaxUID = 1.2.840.10008.1.2\n \
+    ImplementationClassUID = 1.2.826.0.1.3680043.2.1143.107.104.103.115.2.6.3\n \
+    ImplementationVersionName = GDCM 2.6.3\n \
+    SourceApplicationEntityTitle = GDCM\n \
+    ImageType = DERIVED \\SECONDARY  \n \
+    SOPClassUID = 1.2.840.10008.5.1.4.1.1.7\n \
+    SOPInstanceUID = 1.2.826.0.1.3680043.2.1143.4379544382488839209812957878553810312\n \
+    StudyDate = 20170203\n \
+    StudyTime = 210831.360586 \n \
+    Modality = OT\n \
+    ConversionType = WSD \n \
+    NominalScannedPixelSpacing =\n \
+       1\n \
+       1\n \
+    StudyInstanceUID = 1.2.826.0.1.3680043.2.1143.1282184104726305239898701219563360204\n \
+    SeriesInstanceUID = 1.2.826.0.1.3680043.2.1143.9385265081744858155080799316976198629\n \
+    SamplesPerPixel = 1\n \
+    PhotometricInterpretation = MONOCHROME1 \n \
+    Rows = 10\n \
+    Columns = 5\n \
+    BitsAllocated = 8\n \
+    BitsStored = 8\n \
+    HighBit = 7\n \
+    PixelRepresentation = 0\n \
+    RescaleIntercept = 0\n \
+    RescaleSlope =  1\n \
+    RescaleType = US\n \
+    PixelData = not assigned\n \
+@end example\n \
 \n\
 @seealso{dicomread, dicomdict} \n\
 @end deftypefn\n\

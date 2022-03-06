@@ -53,6 +53,16 @@ of the attribute.\n\
 dictionary for a specified @var{keyword} string and returns the @var{group} and @var{element}\n \
 for keyword.\n\
 \n\
+@example\n\
+# look up tag name for 0x10 0x10\n\
+> name = dicomlookup(0x10,0x10)\n\
+name = PatientName\n\
+\n\
+# look up tag group and element value\n\
+> [grp, elm] = dicomlookup('TransferSyntaxUID')\n\
+grp = 2\n\
+elm = 16\n\
+@end example\n\
 @seealso{dicomdict}\n\
 @end deftypefn \n\
 ")
