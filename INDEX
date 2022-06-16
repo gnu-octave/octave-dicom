@@ -8,5 +8,6 @@ Dicom Functions
   dicomlookup
   dicomread
   dicomuid
+  dicomupdate
   dicomwrite
   isdicom
