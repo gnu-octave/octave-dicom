@@ -1,3 +1,12 @@
+ Summary of important user-visible changes for dicom 0.4.1+ (TBD):
+-------------------------------------------------------------------------
+
+ ** added dicomfind and dicomupdate function
+
+ ** minor doc updates
+
+ ** added sample data files example usuage
+
  Summary of important user-visible changes for dicom 0.4.1 (2022/02/22):
 -------------------------------------------------------------------------
 
