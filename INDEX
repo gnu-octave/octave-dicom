@@ -3,6 +3,7 @@ Dicom Functions
   dicomanon
   dicomdict
   dicomdisp
+  dicomfind
   dicominfo
   dicomlookup
   dicomread
