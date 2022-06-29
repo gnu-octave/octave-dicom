@@ -14,14 +14,16 @@
 ## this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {} {@var{info}} = dicomupdate(@var{fileinfo}, @var{attribute}, value)
-## @deftypefnx {} {@var{info}} = dicomupdate(@var{info}, @var{attrinfo})
+## @deftypefn {} {@var{info} =} dicomupdate(@var{fileinfo}, @var{attribute}, @var{value})
+## @deftypefnx {} {@var{info} =} dicomupdate(@var{info}, @var{attrinfo})
 ## Update a dicom struct with new values
 ##
 ## @subsubheading Inputs
 ## @var{info} - dicominfo struct.
 ##
 ## @var{attribute} - attribute name to find and change value of.
+##
+## @var{value} - attribute value to set.
 ##
 ## @var{attrinfo} - a table with fields Location and Value for each matched attribute to change.
 ##
@@ -35,7 +37,7 @@
 ##
 ## % update specific values
 ## finfo = dicomfind(info, "ROINumber");
-## finfo.Value{1} = 10;
+## finfo.Value@{1@} = 10;
 ## info = dicomupdate(info, finfo);
 ## 
 ## % update all matching
