@@ -37,12 +37,14 @@ isdicom (const std::string& filename)
   if (!filename.length ())
     return false;
 
-  gdcm::Reader reader;
-  reader.SetFileName (filename.c_str ());
+  // we seem to crash for some reason is use a const filename
+  char namebuff[filename.length () + 1];
+  strcpy(namebuff, filename.c_str());
 
-  // gdcm::Reader.Read() will return false if the file does not exists but
-  // also prints to stderr so we check it first.
-  return OCTAVE__FILE_STAT (filename).exists () && reader.Read ();
+  gdcm::Reader reader;
+  reader.SetFileName (namebuff);
+
+  return OCTAVE__FILE_STAT (namebuff).exists () && reader.Read ();
 }
 
 DEFUN_DLD (isdicom, args, ,
