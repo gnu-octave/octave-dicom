@@ -16,6 +16,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {} {@var{attrinfo}} = dicomfind(@var{filename}, @var{attribute})
 ## @deftypefnx {} {@var{attrinfo}} = dicomfind(@var{info}, @var{attribute})
+## Find the location and value of an attribute in a dicom file or info structure.
 ##
 ## @subsubheading Inputs
 ## @var{filename} - filename to open.
