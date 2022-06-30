@@ -68,16 +68,26 @@ function data = recurse_dicom_struct(info, base, name)
     endif
  
     if strcmp(fieldtype, "struct")
-     ndata = recurse_dicom_struct(fieldval, nbase, name);
-     if !isempty(ndata) && !isempty(ndata.Location)
-       #ndata
-       data.Location = [ data.Location; ndata.Location ];
-       data.Value = [ data.Value; ndata.Value];
-     endif
+      ndata = recurse_dicom_struct(fieldval, nbase, name);
+      if !isempty(ndata) && !isempty(ndata.Location)
+        #ndata
+        if isempty(data.Location)
+          data.Location = [ ndata.Location ];
+          data.Value = [ ndata.Value ];
+        else
+          data.Location = [ data.Location; ndata.Location ];
+          data.Value = [ data.Value; ndata.Value ];
+        endif
+      endif
     else
       if strcmp(fieldname, name)
-        data.Location = [ data.Location; {nbase}];
-        data.Value = [ data.Value; {fieldval}];
+        if isempty(data.Location)
+          data.Location = [{nbase}];
+          data.Value = [{fieldval}];
+        else
+          data.Location = [ data.Location; {nbase} ];
+          data.Value = [ data.Value; {fieldval} ];
+        endif
       endif
     endif
   endfor
