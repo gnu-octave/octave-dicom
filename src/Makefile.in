@@ -43,6 +43,8 @@ clean:
 	test -e ../inst/$(ARCHDIR) && rmdir ../inst/$(ARCHDIR) || true
 
 distclean: clean
-	$(RM) Makefile config.log
-	$(RM) -r autom4te.cache
+	$(RM) config.log config.status config.h
+	$(RM) -rf autom4te.cache
 	$(RM) -r CMakeFiles
+	$(RM) -f oct-alt-includes.h
+	$(RM) Makefile

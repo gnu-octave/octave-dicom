@@ -17,6 +17,23 @@ GZIP      ?= gzip
 CUT       ?= cut
 TR        ?= tr
 TEXI2PDF  ?= texi2pdf -q
+MAKEINFO  ?= makeinfo
+
+# work out a possible help generator
+ifeq ($(strip $(QHELPGENERATOR)),)
+  ifneq ($(shell qhelpgenerator-qt5 -v 2>/dev/null),)
+    QHELPGENERATOR = qhelpgenerator-qt5
+  #else ifneq ($(shell qhelpgenerator -qt5 -v 2>/dev/null),)
+  #  v4 wont process collection files, but returns ok status on version
+  #  QHELPGENERATOR = qhelpgenerator -qt5
+  else ifneq ($(shell qcollectiongenerator -qt5 -v 2>/dev/null),)
+    QHELPGENERATOR = qcollectiongenerator -qt5
+  else ifneq ($(shell qcollectiongenerator-qt5 -v 2>/dev/null),)
+    QHELPGENERATOR = qcollectiongenerator-qt5
+  else
+    QHELPGENERATOR = true
+  endif
+endif
 
 PACKAGE := $(shell $(GREP) "^Name: " DESCRIPTION | $(CUT) -f2 -d" " | \
 $(TR) '[:upper:]' '[:lower:]')
@@ -61,18 +78,28 @@ help:
 	-rm -rf $<
 
 .PHONY: docs
-docs: doc/$(PACKAGE).pdf
+docs: doc/$(PACKAGE).pdf doc/$(PACKAGE).qhc doc/$(PACKAGE).html
 
 .PHONY: clean-docs
 clean-docs:
-	$(RM) -f doc/$(PACKAGE).info
-	$(RM) -f doc/$(PACKAGE).pdf
-	$(RM) -f doc/functions.texi
+	-$(RM) -f doc/$(PACKAGE).info
+	-$(RM) -f doc/$(PACKAGE).pdf
+	-$(RM) -f doc/$(PACKAGE).html
+	-$(RM) -f doc/functions.texi
+	-$(RM) -f doc/$(PACKAGE).qhc doc/$(PACKAGE).qch
 
 doc/$(PACKAGE).pdf: doc/$(PACKAGE).texi doc/functions.texi
 	cd doc && SOURCE_DATE_EPOCH=$(HG_TIMESTAMP) $(TEXI2PDF) $(PACKAGE).texi
 	# remove temp files
 	cd doc && $(RM) -f $(PACKAGE).aux $(PACKAGE).cp $(PACKAGE).cps $(PACKAGE).fn  $(PACKAGE).fns $(PACKAGE).log $(PACKAGE).toc
+
+doc/$(PACKAGE).html: doc/$(PACKAGE).texi doc/functions.texi
+	cd doc && SOURCE_DATE_EPOCH=$(HG_TIMESTAMP) $(MAKEINFO) --html --css-ref=$(PACKAGE).css  --no-split --output=${PACKAGE}.html $(PACKAGE).texi
+
+doc/$(PACKAGE).qhc: doc/$(PACKAGE).html
+	# try also create qch file if can
+	cd doc && ./mkqhcp.py $(PACKAGE) && $(QHELPGENERATOR) $(PACKAGE).qhcp -o $(PACKAGE).qhc
+	cd doc && $(RM) -f $(PACKAGE).qhcp $(PACKAGE).qhp
 
 doc/functions.texi:
 	cd doc && ./mkfuncdocs.py --src-dir=../inst/ --src-dir=../src/ ../INDEX | $(SED) 's/@seealso/@xseealso/g' > functions.texi
@@ -88,7 +115,8 @@ $(RELEASE_DIR): .hg/dirstate
 	chmod -R a+rX,u+w,go-w "$@"
 
 html_options = --eval 'options = get_html_options ("octave-forge");' \
-               --eval 'options.package_doc = "$(PACKAGE).texi";'
+               --eval 'options.package_doc = "$(PACKAGE).texi";' \
+	       --eval 'options.package_doc_options = [options.package_doc_options " --css-include=$(PACKAGE).css"];'
 $(HTML_DIR): install
 	@echo "Generating HTML documentation. This may take a while ..."
 	$(RM) -r "$@"
