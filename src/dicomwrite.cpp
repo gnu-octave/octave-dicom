@@ -461,8 +461,8 @@ void octaveVal2dicomImage(gdcm::ImageWriter *w, octave_value *pixval)
   gdcm::SmartPointer<gdcm::Image> im = new gdcm::Image;
 
   im->SetNumberOfDimensions (2);
-  im->SetDimension (0, pixval->dims()(0));
-  im->SetDimension (1, pixval->dims()(1));
+  im->SetDimension (1, pixval->dims()(0));
+  im->SetDimension (0, pixval->dims()(1));
 
   gdcm::Attribute<0x0028,0x0004> pi_at;
   if (ds.FindDataElement (pi_at.GetTag()))
@@ -635,7 +635,7 @@ void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file)
 %! testfile2 = tempname ();
 
 %!test
-%! wdata = uint8 (10*rand (10,10));
+%! wdata = uint8 (10*rand (5,10));
 %! dicomwrite (wdata, testfile1);
 %! rdata = dicomread (testfile1);
 %! assert(wdata, rdata);
@@ -644,13 +644,15 @@ void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file)
 %!fail ("dicomwrite ([],1)");
 
 %!test
-%! wdata = uint8 (10*rand (10,10));
+%! wdata = uint8 (10*rand (5,10));
 %! dicomwrite (wdata, testfile1);
 %! info = dicominfo (testfile1);
+$! assert(info.Rows, 5);
+$! assert(info.Columns, 10);
 %! dicomwrite (wdata, testfile2, info);
 
 %!test
-%! wdata = uint8 (10*rand (10,10));
+%! wdata = uint8 (10*rand (5,10));
 %! s.PatientName = "fred";
 %! s.PatientID = "1";
 %! dicomwrite (wdata, testfile2, s);
@@ -660,7 +662,7 @@ void genMinimalMetaData(gdcm::ImageWriter *w, gdcm::File *file)
 
 %!test
 %! # test we have control of image property information
-%! wdata = uint8 (10*rand (10,10));
+%! wdata = uint8 (10*rand (5,10));
 %! dicomwrite (wdata, testfile2);
 %! p = dicominfo (testfile2);
 %! assert (p.PhotometricInterpretation, "MONOCHROME1 ");
