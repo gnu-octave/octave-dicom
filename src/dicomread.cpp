@@ -59,7 +59,7 @@ Load the image from a DICOM file. \n\
 Load the image data of a dcm file:\n\
 \n\
 @example\n\
-> image = dicomread(file_in_load_path('imdata/simple-test.dcm'))\n\
+> image = dicomread(file_in_loadpath('imdata/simple-test.dcm'))\n\
 image =\n\
   0  0  0  0  0\n\
   0  0  0  0  0\n\
