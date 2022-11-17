@@ -32,12 +32,11 @@ AC_PROG_GREP
 AC_CHECK_PROG([UNIQ],[uniq],[uniq],[cat])
 AC_CHECK_PROG([SORT],[sort],[sort],[cat])
 
-AC_PATH_PROG([MKOCTFILE], [mkoctfile])
-if test -z "$MKOCTFILE"; then
+AC_CHECK_TOOL([MKOCTFILE], [mkoctfile], [none])
+if [ test "x$MKOCTFILE" = "xnone" ]; then
   AC_MSG_ERROR([*** 'mkoctfile' not found.])
 fi
-AC_CHECK_PROG(OCTAVE_CONFIG,octave-config,octave-config)
-test -z "$OCTAVE_CONFIG" && OCTAVE_CONFIG=$MKOCTFILE
+AC_CHECK_TOOL([OCTAVE_CONFIG], [octave-config] ,[$MKOCTFILE])
 
 AC_PROG_CXX
 AC_PROG_CXXCPP
@@ -106,8 +105,8 @@ OF_OCTAVE_LIST_ALT_SYMS([
   [octave::valid_identifier],
   [[octave::valid_identifier("");]],
   [OCTAVE__VALID_IDENTIFIER],
-  [],
-  []
+  [#include <octave/utils.h>],
+  [#include <octave/utils.h>]
 ],
 
 [dnl
