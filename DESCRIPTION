@@ -1,6 +1,6 @@
 Name: dicom
-Version: 0.5.0
-Date: 2022-06-30
+Version: 0.5.1
+Date: 2022-11-21
 Author: Andy Buckle
 Maintainer: John Donoghue
 Title: dicom: file io for medical images and other data
