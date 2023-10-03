@@ -38,6 +38,19 @@ if [ test "x$MKOCTFILE" = "xnone" ]; then
 fi
 AC_CHECK_TOOL([OCTAVE_CONFIG], [octave-config] ,[$MKOCTFILE])
 
+# try get around possible spaces in the path
+if test "X${IGNORE_MINGW_PATH_MODIFICATION}" == "X"; then
+case $host_os in
+  mingw*)
+    # try demangle spaces in escaped input strings
+    MKOCTFILE=`echo $MKOCTFILE | $SED "s,\\\\\ ,?,g"`
+    OCTAVE_CONFIG=`echo $OCTAVE_CONFIG | $SED "s,\\\\\ ,?,g"`
+    ;;
+  *)
+    ;;
+esac
+fi
+
 AC_PROG_CXX
 AC_PROG_CXXCPP
 AC_LANG(C++)
@@ -52,9 +65,33 @@ save_LIBS="$LIBS"
 save_LDFLAGS="$LDFLAGS"
 
 CXX=`${MKOCTFILE} -p CXX`
-OCTINCLUDEDIR=${OCTINCLUDEDIR:-`$MKOCTFILE -p INCFLAGS`}
+OCTINCLUDEDIR="${OCTINCLUDEDIR:-`$MKOCTFILE -p OCTINCLUDEDIR`}/.."
 OCTLIBDIR=${OCTLIBDIR:-`$MKOCTFILE -p OCTLIBDIR`}
-CXXFLAGS="$OCTINCLUDEDIR $CXXFLAGS"
+
+if test "X${IGNORE_MINGW_PATH_MODIFICATION}" == "X"; then
+  MSYSTEM="${MSYSTEM}"
+else
+  MSYSTEM="none"
+fi
+
+case X$MSYSTEM in
+  XMINGW64*)
+    OCTAVE_HOME=`${MKOCTFILE} -p OCTAVE_HOME | $SED 's,\\\\,/,g'`
+    # change \ to / and replace octave home part with mingw part
+    OCTINCLUDEDIR=`echo $OCTINCLUDEDIR | $SED -e 's,\\\\,/,g' -e "s,${OCTAVE_HOME},/mingw64,g"`
+    OCTLIBDIR=`echo $OCTLIBDIR | $SED -e 's,\\\\,/,g' -e "s,${OCTAVE_HOME},/mingw64,g"`
+    ;;
+  XMINGW32*)
+    OCTAVE_HOME=`${MKOCTFILE} -p OCTAVE_HOME | $SED 's,\\\\,/,g'`
+    # change \ to / and replace octave home part with mingw part
+    OCTINCLUDEDIR=`echo $OCTINCLUDEDIR | $SED -e 's,\\\\,/,g' -e "s,${OCTAVE_HOME},/mingw32,g"`
+    OCTLIBDIR=`echo $OCTLIBDIR | $SED -e 's,\\\\,/,g -e "s,${OCTAVE_HOME},/mingw32,g"'`
+    ;;
+  *)
+    ;;
+esac
+
+CXXFLAGS="-I$OCTINCLUDEDIR $CXXFLAGS"
 LDFLAGS="-L$OCTLIBDIR $LDFLAGS"
 LIBS="-loctinterp $LIBS"
 
@@ -120,7 +157,7 @@ OF_OCTAVE_LIST_ALT_SYMS([
 
 ],[oct-alt-includes.h])
 
-CC=$save_CXX
+CXX=$save_CXX
 CXXFLAGS=$save_CXXFLAGS
 LIBS="$save_LIBS"
 LDFLAGS="$save_LDFLAGS"
