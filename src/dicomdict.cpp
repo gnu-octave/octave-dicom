@@ -68,15 +68,15 @@ void insert(const char *k, const gdcm::Tag t, const gdcm::DictEntry e)
 
 DEFUN_DLD (dicomdict, args, nargout,
     "-*- texinfo -*- \n\
-@deftypefn {Loadable Function} {@var{dictionary_name} =} dicomdict (@code{get}) \n\
-@deftypefnx {Loadable Function} {} dicomdict (@code{factory}) \n\
-@deftypefnx {Loadable Function} {} dicomdict (@code{set}, @var{dictionary_name}) \n\
+@deftypefn {} {@var{dictionary_name} =} dicomdict (@code{\"get\"}) \n\
+@deftypefnx {} {} dicomdict (@code{\"factory\"}) \n\
+@deftypefnx {} {} dicomdict (@code{\"set\"}, @var{dictionary_name}) \n\
 \n\
 Get or set the active dicom data dictionary.\n\
 \n\
 The first usage returns the filename of the dictionary that is currently being used.\n\
-Using @code{factory} resets the dictionary to the default.\n\
-Using @code{set} allows setting the dictionary for future operations.\n\
+Using @code{\"factory\"} resets the dictionary to the default.\n\
+Using @code{\"set\"} allows setting the dictionary for future operations.\n\
 In this case, the dictionary file @var{dictionary_name} can be anywhere in the path.\n\
 @subsubheading Inputs\n\
 @var{code} -  string value of 'get', 'set' or 'factory'.\n\

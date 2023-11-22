@@ -57,8 +57,8 @@ void genMinimalMetaData (gdcm::ImageWriter *w, gdcm::File *file);
 
 DEFUN_DLD (dicomwrite, args, nargout,
     "-*- texinfo -*- \n\
-@deftypefn {Loadable Function} {} dicomwrite(@var{im}, @var{filename})\n\
-@deftypefnx {Loadable Function} {} dicomwrite(@var{im}, @var{filename}, @var{info})\n\
+@deftypefn {} {} dicomwrite(@var{im}, @var{filename})\n\
+@deftypefnx {} {} dicomwrite(@var{im}, @var{filename}, @var{info})\n\
 \n\
 Write a DICOM format file to @var{filename}.\n\
 \n\

@@ -51,8 +51,8 @@ bool lookup_tag (const std::string & keyword, gdcm::Tag &tag)
 
 DEFUN_DLD (dicomanon, args, nargout,
     "-*- texinfo -*- \n\
-@deftypefn {Loadable Function} {} dicomanon(@var{file_in}, @var{file_out})\n\
-@deftypefnx {Loadable Function} {} dicomanon(___, @var{name}, @var{value})\n\
+@deftypefn {} {} dicomanon(@var{file_in}, @var{file_out})\n\
+@deftypefnx {} {} dicomanon(___, @var{name}, @var{value})\n\
 \n\
 Anonymize a DICOM format file by removing or replacing specific fields.\n\
 \n\

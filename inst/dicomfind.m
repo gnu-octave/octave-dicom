@@ -26,7 +26,10 @@
 ## @var{attribute} - attribute name to find.
 ##
 ## @subsubheading Outputs
-## @var{attrinfo} - a table with fields Location and Value fior each matched attribute.
+## @var{attrinfo} - a table with fields Location and Value for each matched attribute.
+##
+## The Location value will be the attribute position in dot notation to show its position
+## in dicom info structure.
 ##
 ## @subsubheading Examples
 ## @example

@@ -49,7 +49,7 @@ isdicom (const std::string& filename)
 
 DEFUN_DLD (isdicom, args, ,
 "-*- texinfo -*- \n\
-@deftypefn {Loadable Function} {@var{yesno} =} isdicom (@var{filename}) \n\
+@deftypefn {} {@var{yesno} =} isdicom (@var{filename}) \n\
 Return true if @var{filename} is a valid DICOM file.\n\
 \n\
 @subsubheading Inputs\n\

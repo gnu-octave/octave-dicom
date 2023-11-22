@@ -35,7 +35,7 @@ using namespace gdcm;
 
 DEFUN_DLD (dicomuid, args, nargout,
     "-*- texinfo -*- \n\
-@deftypefn {Loadable Function} @var{uuid} = dicomuid () \n\
+@deftypefn {} @var{uuid} = dicomuid () \n\
 \n\
 Generate a DICOM unique id . \n\
 \n \

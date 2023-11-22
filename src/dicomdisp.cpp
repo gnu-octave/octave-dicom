@@ -64,8 +64,8 @@ int main( int argc, const char* argv[] )
 #else
 DEFUN_DLD (dicomdisp, args, nargout,
 "-*- texinfo -*- \n\
- @deftypefn {Loadable Function} {} dicomdisp (@var{filename}) \n\
- @deftypefnx {Loadable Function} {} dicomdisp (@var{filename}, [@var{propertyname}, @var{propertvalue} ...]) \n\
+ @deftypefn {} {} dicomdisp (@var{filename}) \n\
+ @deftypefnx {} {} dicomdisp (@var{filename}, [@var{propertyname}, @var{propertvalue} ...]) \n\
  Read and display the metadata from a DICOM file.\n\
  \n\
  @subsubheading Inputs\n\

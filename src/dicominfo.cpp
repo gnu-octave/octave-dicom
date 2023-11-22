@@ -89,16 +89,11 @@ int main(int argc, const char* argv[])
 #else
 DEFUN_DLD (dicominfo, args, nargout,
     "-*- texinfo -*- \n\
-@deftypefn {Loadable Function} {@var{info}} = dicominfo (@var{filename}) \n\
-@deftypefnx {Loadable Function} {@var{info}} = dicominfo (@var{filename}, @code{dictionary}, @var{dictionary-name}) \n\
-@deftypefnx  {Loadable Function} {} dicominfo (@var{filename}, @var{options}) \n\
-@deftypefnx {Command} {} dicominfo @var{filename} \n\
-@deftypefnx {Command} {} dicominfo @var{filename} @var{options} \n\
-Get all data from a DICOM file, excluding any actual image. \n\
+@deftypefn {} {@var{info}} = dicominfo (@var{filename}) \n\
+@deftypefnx {} {@var{info}} = dicominfo (@var{filename}, @code{\"dictionary\"}, @var{dictionary-name}) \n\
+@deftypefnx  {} {} dicominfo (___, @var{options}) \n\
+Get all metadata from a DICOM file, excluding any actual image. \n\
 @var{info} is a nested struct containing the data. \n\
-\n\
-If no return argument is given, then there will be output similar to \n\
-a DICOM dump. \n\
 \n\
 If the @code{dictionary} argument is used, the given @var{dictionary-name} is used for this operation, \n\
 otherwise, the dictionary set by @code{dicomdict} is used.\n\
@@ -110,7 +105,7 @@ otherwise, the dictionary set by @code{dicomdict} is used.\n\
 \n\
 @var{dictionary-name} - filename of dictionary to use.\n\
 \n\
-@var{options}:\n\
+@var{options} - a string in format of 'optionname=value', or property/value pair 'optionname', value:\n\
 @code{truncate=n}\n\
 where n is the number of characters to limit the dump output display to @code{n}\
 for each value. \n\
@@ -170,7 +165,7 @@ info = \n \
       error(QUOTED(OCT_FN_NAME)": one arg required: dicom filename");
       return retval; 
     }
-  int chatty = !nargout; // dump output to stdout if not assigning to var
+  int chatty = 0; //!nargout; // dump output to stdout if not assigning to var
   charMatrix ch = args(0).char_matrix_value ();
   if (ch.rows () != 1)
     {
@@ -190,7 +185,7 @@ info = \n \
         {
           error (QUOTED(OCT_FN_NAME)": arg should be a string, 1 row of chars");
           load_dicom_dict (current_dict.c_str ()); // reset dictionary to initial value
-         return retval; 
+          return retval; 
         }
       std::string argex = chex.row_as_string (0);
       if (!argex.compare ("dictionary") || !argex.compare ("Dictionary"))
@@ -209,6 +204,24 @@ info = \n \
             }
           std::string dictionary = args (i+1).string_value ();
           load_dicom_dict (dictionary.c_str());
+          // ignore dictionary argument for further arg processing
+          ++i;
+        }
+      else if (!argex.compare ("truncate") || !argex.compare ("Truncate"))
+        {
+          if (i+1 == args.length())
+            {
+              error (QUOTED(OCT_FN_NAME)": Truncate needs another argument");
+              load_dicom_dict (current_dict.c_str ()); // reset dictionary to initial value
+              return retval;
+            }
+          if (!args (i+1).OV_ISNUMERIC ())
+            {
+              error (QUOTED(OCT_FN_NAME)": Truncate needs a string argument");
+              load_dicom_dict (current_dict.c_str()); // reset dictionary to initial value
+              return retval;
+            }
+          dicom_truncate_numchar = atoi (argex.substr (9).c_str ());
           // ignore dictionary argument for further arg processing
           ++i;
         }

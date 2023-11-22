@@ -138,6 +138,15 @@ OF_OCTAVE_LIST_ALT_SYMS([
 ],
 
 [dnl
+  [is_numeric_type],
+  [isnumeric],
+  [[octave_value ().isnumeric ();]],
+  [OV_ISNUMERIC],
+  [],
+  []
+],
+
+[dnl
   [valid_identifier],
   [octave::valid_identifier],
   [[octave::valid_identifier("");]],

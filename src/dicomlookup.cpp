@@ -40,8 +40,8 @@
 
 DEFUN_DLD (OCT_FN_NAME_LU, args, nargout,
     "-*- texinfo -*- \n\
-@deftypefn {Loadable Function} @var{keyword} = dicomlookup (@var{group}, @var{element}) \n\
-@deftypefnx {Loadable Function} [@var{group}, @var{element}] = dicomlookup (@var{keyword}) \n\
+@deftypefn {} @var{keyword} = dicomlookup (@var{group}, @var{element}) \n\
+@deftypefnx {} [@var{group}, @var{element}] = dicomlookup (@var{keyword}) \n\
 \n\
 Lookup an attribute in the DICOM data dictionary.\n\
 \n\
