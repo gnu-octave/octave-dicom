@@ -9,9 +9,9 @@ GDCM_LIBS = @GDCM_LIBS@
 
 need_dict = dicominfo.oct dicomwrite.oct dicomlookup.oct dicomdisp.oct dicomanon.oct
 
-test_files = dicominfo.cpp dicomdict.cpp dicomread.cpp dicomlookup.cpp isdicom.cpp dicomuid.cpp dicomdisp.cpp dicomanon.cpp dicomwrite.cpp
+test_files = dicominfo.cpp dicomdict.cpp dicomread.cpp dicomlookup.cpp isdicom.cpp dicomuid.cpp dicomdisp.cpp dicomanon.cpp dicomwrite.cpp __dicom_decodeuid__.cpp
 
-all: $(need_dict) dicomdict.oct dicomread.oct _gendicomdict.oct isdicom.oct dicomuid.oct archtests
+all: $(need_dict) dicomdict.oct dicomread.oct _gendicomdict.oct isdicom.oct dicomuid.oct __dicom_decodeuid__.oct archtests
 
 %.o: %.cpp
 	$(MKOCTFILE) $(GDCM_CPPFLAGS) -c $<

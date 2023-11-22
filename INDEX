@@ -11,3 +11,4 @@ Dicom Functions
   dicomupdate
   dicomwrite
   isdicom
+  images.dicom.decodeUID
