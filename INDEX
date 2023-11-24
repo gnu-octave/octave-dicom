@@ -12,3 +12,4 @@ Dicom Functions
   dicomwrite
   isdicom
   images.dicom.decodeUID
+  images.dicom.parseDICOMDIR
