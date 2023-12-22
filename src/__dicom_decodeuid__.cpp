@@ -72,7 +72,8 @@ Internal undocumented function\n\
   om.assign("Name", octave_value(uid.GetName()));
 
   gdcm::TransferSyntax::TSType tt = gdcm::TransferSyntax::GetTSType(args(0).string_value().c_str());
-  if (tt != gdcm::TransferSyntax::TSType::TS_END)
+  //if (tt != gdcm::TransferSyntax::TSType::TS_END)
+  if (tt != gdcm::TransferSyntax::TS_END)
   {
     gdcm::TransferSyntax t(tt);
 
