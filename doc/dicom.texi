@@ -59,6 +59,11 @@ To download a copy of the @acronym{GNU} Octave Dicom package, please visit
 @end titlepage
 @c %*** End of TITLEPAGE
 
+@dircategory Math
+@direntry
+* Octave DICOM: (dicom).          DICOM Toolkit for Octave
+@end direntry
+
 @c %*** Start of BODY
 @contents
 @ifnottex
