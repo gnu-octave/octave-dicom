@@ -48,14 +48,14 @@
 #define QUOTED_(x) #x
 #define QUOTED(x) QUOTED_(x)
 
-const char * factory_dicom_dict_filename="octavedicom.dic";
+static const char * factory_dicom_dict_filename="octavedicom.dic";
 static std::string dic_filename(factory_dicom_dict_filename);
 
-std::map<gdcm::Tag, std::string> tagmap ;
-std::map<std::string, gdcm::Tag> keymap ;
-std::map<std::string, gdcm::DictEntry> dict ;
+static std::map<gdcm::Tag, std::string> tagmap ;
+static std::map<std::string, gdcm::Tag> keymap ;
+static std::map<std::string, gdcm::DictEntry> dict ;
 
-void insert(const char *k, const gdcm::Tag t, const gdcm::DictEntry e)
+static void insert(const char *k, const gdcm::Tag t, const gdcm::DictEntry e)
 {
   // if tag already has an entry dont overwrite it
   if (tagmap.count(t) == 0)
@@ -168,7 +168,7 @@ Set a new dictionary:\n\
 
 // Map from VR strings to gdcm Value Representations.
 typedef std::map<std::string, gdcm::VR> vr_map ;
-const vr_map::value_type vrData[] =
+static const vr_map::value_type vrData[] =
 {
   vr_map::value_type ("AE", gdcm::VR::AE),
   vr_map::value_type ("AS", gdcm::VR::AS),
@@ -214,7 +214,7 @@ static vr_map vrMap(vrData, vrData+vrDataLength) ;
 
 // Map from VM strings to gdcm Value Multipicities.
 typedef std::map<std::string, gdcm::VM> vm_map ;
-const vm_map::value_type vmData[] =
+static const vm_map::value_type vmData[] =
 {
   vm_map::value_type ("0", gdcm::VM::VM0),
   vm_map::value_type ("1", gdcm::VM::VM1),
