@@ -1,6 +1,12 @@
- Summary of important user-visible changes for dicom 0.6.0 (2023/12/22):
+ Summary of important user-visible changes for dicom 0.6.1 (2024/07/24):
 -------------------------------------------------------------------------
 
+ * minor doc updates
+
+ * miscellaneous build, test and load changes
+
+ Summary of important user-visible changes for dicom 0.6.0 (2023/12/22):
+-------------------------------------------------------------------------
  * added images.dicom.decodeUID, images.dicom.parseDICOMDIR
 
  * minor doc updates
