@@ -40,23 +40,28 @@ $(TR) '[:upper:]' '[:lower:]')
 VERSION := $(shell $(GREP) "^Version: " DESCRIPTION | $(CUT) -f2 -d" ")
 DATE := $(shell $(SED) -n -e 's/^Date: *\(\w\+\)/\1/p' DESCRIPTION)
 
-HG           := hg
-HG_CMD        = $(HG) --config alias.$(1)=$(1) --config defaults.$(1)= $(1)
-HG_ID        := $(shell $(call HG_CMD,identify) --id | sed -e 's/+//' )
-HG_TIMESTAMP := $(firstword $(shell $(call HG_CMD,log) --rev $(HG_ID) --template '{date|hgdate}'))
-
-TAR_REPRODUCIBLE_OPTIONS := --sort=name --mtime="@$(HG_TIMESTAMP)" --owner=0 --group=0 --numeric-owner
-TAR_OPTIONS  := --format=ustar $(TAR_REPRODUCIBLE_OPTIONS)
-
 TARGET_DIR      := target
 RELEASE_DIR     := $(TARGET_DIR)/$(PACKAGE)-$(VERSION)
 RELEASE_TARBALL := $(TARGET_DIR)/$(PACKAGE)-$(VERSION).tar.gz
 HTML_DIR        := $(TARGET_DIR)/$(PACKAGE)-html
 HTML_TARBALL    := $(TARGET_DIR)/$(PACKAGE)-html.tar.gz
 
-ifeq ($(if $(wildcard .hg),hg,no),hg)
+vcs := $(if $(wildcard .hg),hg,$(if $(wildcard .git),git,unknown))
+ifeq ($(vcs),hg)
 RELEASE_DIR_DEP := .hg/dirstate
+HG           := hg
+HG_CMD        = $(HG) --config alias.$(1)=$(1) --config defaults.$(1)= $(1)
+HG_ID        := $(shell $(call HG_CMD,identify) --id | sed -e 's/+//' )
+REPO_TIMESTAMP := $(firstword $(shell $(call HG_CMD,log) --rev $(HG_ID) --template '{date|hgdate}'))
 endif
+ifeq ($(vcs),git)
+RELEASE_DIR_DEP := .git/index
+GIT          := git
+REPO_TIMESTAMP := $(firstword $(shell $(GIT) log -n1 --date=unix --format="%ad"))
+endif
+
+TAR_REPRODUCIBLE_OPTIONS := --sort=name --mtime="@$(REPO_TIMESTAMP)" --owner=0 --group=0 --numeric-owner
+TAR_OPTIONS  := --format=ustar $(TAR_REPRODUCIBLE_OPTIONS)
 
 PKG_ADD     := 
 
@@ -102,12 +107,12 @@ doc/version.texi: $(RELEASE_DIR_DEP)
 	@echo "@set DATE $(DATE)" >> $@
 
 doc/$(PACKAGE).pdf: doc/$(PACKAGE).texi doc/functions.texi doc/version.texi
-	cd doc && SOURCE_DATE_EPOCH=$(HG_TIMESTAMP) $(TEXI2PDF) $(PACKAGE).texi
+	cd doc && SOURCE_DATE_EPOCH=$(REPO_TIMESTAMP) $(TEXI2PDF) $(PACKAGE).texi
 	# remove temp files
 	cd doc && $(RM) -f $(PACKAGE).aux $(PACKAGE).cp $(PACKAGE).cps $(PACKAGE).fn  $(PACKAGE).fns $(PACKAGE).log $(PACKAGE).toc
 
 doc/$(PACKAGE).html: doc/$(PACKAGE).texi doc/functions.texi doc/version.texi
-	cd doc && SOURCE_DATE_EPOCH=$(HG_TIMESTAMP) $(MAKEINFO) --html --css-ref=$(PACKAGE).css  --no-split --output=${PACKAGE}.html $(PACKAGE).texi
+	cd doc && SOURCE_DATE_EPOCH=$(REPO_TIMESTAMP) $(MAKEINFO) --html --css-ref=$(PACKAGE).css  --no-split --output=${PACKAGE}.html $(PACKAGE).texi
 
 doc/$(PACKAGE).qhc: doc/$(PACKAGE).html
 	# try also create qch file if can
@@ -121,7 +126,13 @@ doc/functions.texi: $(RELEASE_DIR_DEP)
 $(RELEASE_DIR): $(RELEASE_DIR_DEP)
 	@echo "Creating package version $(VERSION) release ..."
 	$(RM) -r "$@"
+ifeq (${vcs},hg)
 	$(call HG_CMD,archive) --exclude ".hg*" --type files --rev $(HG_ID) "$@"
+endif
+ifeq (${vcs},git)
+	$(GIT) archive --format=tar --prefix="$@/" HEAD | $(TAR) -x
+	$(RM) "$@/.gitignore"
+endif
 	cd "$@/src" && ./bootstrap && $(RM) -r "autom4te.cache"
 	# build docs
 	$(MAKE) -C "$@" docs
