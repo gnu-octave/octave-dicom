@@ -1,0 +1,130 @@
+---
+layout: "default"
+permalink: "/news/"
+title: "Dicom Toolkit - News"
+pkg_name: "dicom"
+version: "0.6.1"
+description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
+navigation:
+- id: "overview"
+  name: "Overview"
+  url: "/index"
+- id: "Functions"
+  name: "Function Reference"
+  url: "/functions"
+- id: "news"
+  name: "News"
+- id: "manual"
+  name: "Manual"
+  url: "/manual"
+---
+<pre>
+ Summary of important user-visible changes for dicom 0.6.1 (2024/07/24):
+-------------------------------------------------------------------------
+
+ * minor doc updates
+
+ * miscellaneous build, test and load changes
+
+ Summary of important user-visible changes for dicom 0.6.0 (2023/12/22):
+-------------------------------------------------------------------------
+ * added images.dicom.decodeUID, images.dicom.parseDICOMDIR
+
+ * minor doc updates
+
+ * miscellaneous build and load changes
+
+ Summary of important user-visible changes for dicom 0.5.1 (2022/11/21):
+-------------------------------------------------------------------------
+
+ * bugfix dicomwrite for axis ordering (Bug #63338)
+
+ * minor doc updates
+
+ * add qt5 docs
+
+ Summary of important user-visible changes for dicom 0.5.0 (2022/06/30):
+-------------------------------------------------------------------------
+
+ ** added dicomfind and dicomupdate function
+
+ ** minor doc updates
+
+ ** added sample data files for example usage
+
+ Summary of important user-visible changes for dicom 0.4.1 (2022/02/22):
+-------------------------------------------------------------------------
+
+ ** bugfix dicominfo for unknown size SQ sequences
+
+ ** bugfix dicomwrite for inserting SQ sequences
+
+ ** display *sequence* for SQ types in dicomdisp
+
+ ** update octavedicom.dic from gdcm-3
+
+ ** minor doc updates
+
+ Summary of important user-visible changes for dicom 0.4.0 (2020/09/04):
+-------------------------------------------------------------------------
+
+ ** bugfix dicomdisp, dicominfo for empty SQ sequences
+
+ ** added dicomanon function
+
+ ** minor document updates
+
+ Summary of important user-visible changes for dicom 0.3.0 (2020/02/27):
+-------------------------------------------------------------------------
+
+ ** update fallback gdcm detection for gdcm 3.0
+
+ ** dicomwrite updated to set image properties from the input info structure.
+
+ ** added dicomdisp
+
+ ** added user manual
+
+ Summary of important user-visible changes for dicom 0.2.2 (2019/01/03):
+-------------------------------------------------------------------------
+
+ ** added checks for 5.0 depreciated functions, using config.h 
+
+ ** updated sources to remove compiler warnings
+
+ Summary of important user-visible changes for dicom 0.2.1 (2018/04/02):
+-------------------------------------------------------------------------
+
+ ** added checks for depreciated functions, using config.h 
+
+ ** added fallback gdcm detection in cmake fails
+
+ Summary of important user-visible changes for dicom 0.2.0 (2017/02/20):
+-------------------------------------------------------------------------
+
+ ** Updated install to detect gdcm library using cmake
+
+ ** install source tests as part of package
+
+ ** dicominfo updated to support sequences of unknown length
+
+ ** moved isdicom to own .oct file
+
+ ** updated function documentation 
+
+ ** added dicomuid function 
+
+ Summary of important user-visible changes for dicom 0.1.1 (2011/11):
+-------------------------------------------------------------------------
+
+ ** The function isdicom has been completely rewritten and will perform
+    much faster for invalid dicom files.  It also no longer accepts a cell
+    array of strings since it reduces its usefulness by other functions.
+    Such use can be replaced with:
+
+      cellfun (@isdicom, cell_array_filenames)
+
+ ** The dicom package no longer autoloads by default.  Please load the
+    package manually with `pkg load dicom' or add it to the `.octaverc'
+    file to load it automatically at the start of each Octave session.
+</pre>
