@@ -54,7 +54,7 @@ Octave that you have.  The precise conditions can be found in the
 Octave Dicom package and that also appears in @ref{Copying}.
 
 To download a copy of the @acronym{GNU} Octave Dicom package, please visit
-@url{http://octave.sourceforge.net/dicom/}.
+@url{https://gnu-octave.github.io/octave-dicom/}.
 
 @end titlepage
 @c %*** End of TITLEPAGE
@@ -90,7 +90,7 @@ The Dicom toolkit must be installed and then loaded to be used.
 It can be installed in @acronym{GNU} Octave directly from octave-forge,
 or can be installed in an off-line mode via a downloaded tarball.
 
-The toolkit has a dependency on the GDCM library (@url{https://http://gdcm.sourceforge.net/}), so it must be installed in order
+The toolkit has a dependency on the GDCM library (@url{https://gdcm.sourceforge.net/}), so it must be installed in order
 to successfully install the Dicom toolkit.
 
 For fedora: @code{yum install gdcm-devel} 

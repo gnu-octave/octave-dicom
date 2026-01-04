@@ -11,5 +11,7 @@ Contributors: Judd Storrs, Kris Thielemans, John Donoghue
 Depends: octave (>= 3.8.0)
 SystemRequirements: libgdcm2.0 (>= 2.0.16)
 Categories: imaging, medical
-Url: http://octave.org/wiki/index.php?title=Dicom
+Url: https://gnu-octave.github.io/octave-dicom/index
+Repository: https://github.com/gnu-octave/octave-dicom/
+Tracker: https://github.com/gnu-octave/octave-dicom/issues
 License: GPL version 3 or later

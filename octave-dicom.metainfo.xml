@@ -20,8 +20,8 @@ without any warranty.
     <keyword>imaging</keyword>
     <keyword>medical</keyword>
   </keywords>
-  <url type="homepage">http://octave.sourceforge.net/dicom</url>
-  <url type="bugtracker">https://savannah.gnu.org/bugs/?func=additem&amp;group=octave</url>
+  <url type="homepage">https://gnu-octave.github.io/octave-dicom/</url>
+  <url type="bugtracker">https://github.com/gnu-octave/octave-dicom/issues</url>
   <project_license>GPL-3.0+</project_license>
   <developer_name>Octave-Forge Community</developer_name>
   <update_contact>octave-maintainers@gnu.org</update_contact>

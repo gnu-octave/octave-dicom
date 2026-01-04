@@ -1,17 +1,16 @@
-Introduction
-============
+# GNU Octave DICOM Toolkit
+
+## Introduction
 
 The DICOM package provides Digital communications in medicine (DICOM) 
 file io by using the Grassroots DICOM (GDCM) libraries for GNU Octave.
 
-Requirements
-============
+## Requirements
 
 * libgdcm 2.0.16 or greater
 
 
-Installing
-==========
+## Installing
 
 To install, run the octave package manager:
 
@@ -25,8 +24,7 @@ To install, run the octave package manager:
    pkg install dicom-XXXXXXX.tar.gz
    Where XXXXXXX is the version of the the downloaded tarball.
 
-Usage:
-======
+## Usage:
 
 1. Load the package.
    pkg load dicom
@@ -34,12 +32,11 @@ Usage:
 
 2. Use the function calls dicominfo, dicomread and dicomwrite to read and write DICOM files.
 
-Documentation
-==============
+## Documentation
 
-See the function list for dicom on [octave forge](https://octave.sourceforge.io/dicom/overview.html) for function documentation.
+See the function list for dicom online [octave forge](https://gnu-octave.github.io/octave-dicom/functions/) 
+or within the Octave help system for function documentation.
 
-Known limitations and bugs
-==========================
+## Known limitations and bugs
 
-None provided
+Found a bug? Report it [here](https://github.com/gnu-octave/octave-dicom/issues)
