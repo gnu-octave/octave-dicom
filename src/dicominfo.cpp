@@ -522,6 +522,13 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
   else if (vr & gdcm::VR::AT)
     {
       // attribute tag
+      if (!elem->GetByteValue())
+        {
+          if(chatty)
+            octave_stdout  << "NULL\n";
+          return DICOM_NOTHING_ASSIGNED;
+	}
+
       intNDArray<octave_uint16> uint16pair(dim_vector(1,2));
       uint16_t *p = (uint16_t *)elem->GetByteValue()->GetPointer();
       uint16pair(0) = p[0];
@@ -573,6 +580,12 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
             octave_stdout  << "skipping, leave for dicomread\n";
           return DICOM_NOTHING_ASSIGNED;
         }
+      if (!elem->GetByteValue())
+        {
+          if(chatty)
+            octave_stdout  << "NULL\n";
+          return DICOM_NOTHING_ASSIGNED;
+	}
       const uint32_t len = elem->GetByteValue()->GetLength();
       intNDArray<octave_uint8> bytearr(dim_vector(1,len));
       const uint8_t *p = (uint8_t *)elem->GetByteValue()->GetPointer();

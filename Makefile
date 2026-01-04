@@ -164,8 +164,10 @@ install: $(RELEASE_TARBALL)
 	@echo "Installing package locally ..."
 	$(OCTAVE) --eval 'pkg ("install", "-verbose", "${RELEASE_TARBALL}")'
 
-all: $(CC_SOURCES)
+src/configure: src/configure.ac 
 	cd src/ && ./bootstrap && ./configure
+
+all: src/configure
 	$(MAKE) -C src/
 
 check: all
