@@ -11,5 +11,6 @@ Dicom Functions
   dicomupdate
   dicomwrite
   isdicom
+  dicomCollection
   images.dicom.decodeUID
   images.dicom.parseDICOMDIR
