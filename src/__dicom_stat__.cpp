@@ -50,9 +50,7 @@
 #define QUOTED(x) QUOTED_(x)
 
 static char* byteval2string (char * d, int d_len_p, const gdcm::ByteValue *bv);
-static char* name2Keyword (char *d, int *d_len_p, const char* s);
 static Matrix str2DoubleVec (const char*);
-static void getFileModTime (char *timeStr, const char *filename);
 static int element2value (std::string & varname, octave_value *ov, const gdcm::DataElement * elem, int chatty, int sequenceDepth) ;
 
 static octave_map dicom_stat (const char filename[]);
@@ -95,13 +93,8 @@ octave_map dicom_stat(const char filename[])
     }
   gdcm::File &file = reader.GetFile ();
   gdcm::DataSet &ds = file.GetDataSet ();
-  gdcm::FileMetaInformation &hds = file.GetHeader ();
   
   om.assign ("Filenames", octave_value (filename));
-  //char dateStr[TIME_STR_LEN+1];
-  //getFileModTime (dateStr, filename);
-  //om.assign ("FileModDate", octave_value (dateStr));
-
   om.assign ("StudyDateTime", octave_value(double(0)));
   om.assign ("SeriesDateTime", octave_value(double(0)));
   om.assign ("PatientName", octave_value(""));
@@ -458,37 +451,6 @@ int element2value(std::string & varname, octave_value *ov, const gdcm::DataEleme
   return DICOM_OK;
 }
 
-void getFileModTime (char *timeStr, const char *filename)
-{
-  struct tm* clock;       // create a time structure
-  struct stat attrib;     // create a file attribute structure
-  stat (filename, &attrib);    // get the attributes of afile.txt
-  clock = gmtime (&(attrib.st_mtime)); // Get the last modified time and put it into the time structure
-  char monthStr[4];
-  switch(clock->tm_mon)
-    {
-      case  0: strcpy(monthStr,"Jan"); break;
-      case  1: strcpy(monthStr,"Feb"); break;
-      case  2: strcpy(monthStr,"Mar"); break;
-      case  3: strcpy(monthStr,"Apr"); break;
-      case  4: strcpy(monthStr,"May"); break;
-      case  5: strcpy(monthStr,"Jun"); break;
-      case  6: strcpy(monthStr,"Jul"); break;
-      case  7: strcpy(monthStr,"Aug"); break;
-      case  8: strcpy(monthStr,"Sep"); break;
-      case  9: strcpy(monthStr,"Oct"); break;
-      case 10: strcpy(monthStr,"Nov"); break;
-      case 11: strcpy(monthStr,"Dec"); break;
-    }
-  snprintf (timeStr, TIME_STR_LEN, "%02i-%s-%i %02i:%02i:%02i",
-    clock->tm_mday,monthStr,1900+clock->tm_year, 
-    clock->tm_hour, clock->tm_min, clock->tm_sec);
-  //clock->tm_year returns the year (since 1900)
-  // clock->tm_mon returns the month (January = 0)
-  // clock->tm_mday returns the day of the month
-  // 18-Dec-2000 11:06:43
-}
-
 Matrix str2DoubleVec (const char* s)
 {
   // count separators, hence elements
@@ -532,53 +494,15 @@ char* byteval2string (char * d, int d_len, const gdcm::ByteValue *bv)
   return d;
 }
 
-// remove non-alphabet characters from a string.
-// remove s following quote
-// the destination string, d, must be malloc'd space.
-// this fn will realloc if it is not big enough. so use
-// returned pointer, as the supplied one may be invalid.
-// d_len_p: pointer to length of d. is updated if required.
-char* name2Keyword (char *d, int *d_len_p, const char* s)
-{
-  char *f=(char*)s; //from (loop through source)
-  int len=strlen(s);
-  if (len > *d_len_p)
-    {
-      d = (char *)realloc (d,(len+1)*sizeof(char));
-    }
-  char *tl=(char*)d; // pointer to loop through the destination
-  for (; *f != '\0' ; f++ )
-    {
-      if ( (*f >= 'A' && *f <= 'Z') || (*f >= 'a' && *f <= 'z') )
-        {
-          *tl++ = *f;
-        }
-      else if (*f == '\'' && *(f+1)=='s')
-        {
-          f++; // if quote followed by s, skip both chars
-        }
-      else if (*f == ' ' && *(f+1) >= 'a' && *(f+1) <= 'z')
-        {
-          *tl++ = *++f - ('a'-'A') ; // space folowed by lower case char, cap char
-        }
-     }
-  *tl = '\0';
-  return d;
-}
-
 /*
 %!shared testfile
 %! testfile = file_in_loadpath("imdata/simpleImageWithIcon.dcm");
 
-%!fail("dicominfo")
+%!fail("__dicom_stat__")
 
-%!fail("dicominfo(1)")
-
-%!test
-%! s=dicominfo(testfile);
-%! assert(s.PatientName,"GDCM^Patient");
+%!fail("__dicom_stat__(1)")
 
 %!test
-%! s=dicominfo(testfile);
-%! assert(s.IconImageSequence.Item_1.PhotometricInterpretation,"MONOCHROME2 ");
+%! s=__dicom_stat__(testfile);
+%! assert(s.Filenames,testfile);
 */
