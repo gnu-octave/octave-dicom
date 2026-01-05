@@ -1,3 +1,12 @@
+ Summary of important user-visible changes for dicom 0.7.0 (2026/01/06):
+-------------------------------------------------------------------------
+
+ * added dicomCollection function
+
+ * bugfix for crash in dicominfo null data
+
+ * minor doc updates
+
  Summary of important user-visible changes for dicom 0.6.1 (2024/07/24):
 -------------------------------------------------------------------------
 
