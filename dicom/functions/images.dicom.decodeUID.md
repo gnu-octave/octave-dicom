@@ -2,7 +2,7 @@
 layout: "default"
 permalink: "/functions/22_imagesdicomdecodeUID/"
 pkg_name: "dicom"
-pkg_version: "0.6.1"
+pkg_version: "0.7.0"
 pkg_description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 title: "Dicom Toolkit - images.dicom.decodeUID"
 category: "Dicom Functions"
@@ -17,6 +17,7 @@ navigation:
 - id: "15_DicomFunctions"
   name: "&nbsp;&nbsp;Dicom Functions"
   url: "/functions/#15_DicomFunctions"
+  subitems:
 - id: "news"
   name: "News"
   url: "/news"
@@ -24,8 +25,8 @@ navigation:
   name: "Manual"
   url: "/manual"
 ---
-<dl class="first-deftypefn">
-<dt class="deftypefn" id="index-_003d"><span class="category-def">: </span><span><code class="def-type"><var class="var">uidinfo</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">images.dicom.decodeUID(<var class="var">uid</var>)</code><a class="copiable-link" href="#index-_003d"></a></span></dt>
+<dl class="first-deftypefn def-block">
+<dt class="deftypefn def-line" id="index-_003d"><span class="category-def">: </span><span><code class="def-type"><var class="var">uidinfo</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">images.dicom.decodeUID(<var class="var">uid</var>)</code><a class="copiable-link" href="#index-_003d"></a></span></dt>
 <dd><p>Look up information about a uid string
 </p>
 <h4 class="subsubheading" id="Inputs"><span>Inputs<a class="copiable-link" href="#Inputs"></a></span></h4>

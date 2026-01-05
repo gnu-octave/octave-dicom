@@ -2,7 +2,7 @@
 layout: "default"
 permalink: "/functions/9_dicomdict/"
 pkg_name: "dicom"
-pkg_version: "0.6.1"
+pkg_version: "0.7.0"
 pkg_description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 title: "Dicom Toolkit - dicomdict"
 category: "Dicom Functions"
@@ -17,6 +17,7 @@ navigation:
 - id: "15_DicomFunctions"
   name: "&nbsp;&nbsp;Dicom Functions"
   url: "/functions/#15_DicomFunctions"
+  subitems:
 - id: "news"
   name: "News"
   url: "/news"
@@ -24,10 +25,10 @@ navigation:
   name: "Manual"
   url: "/manual"
 ---
-<dl class="first-deftypefn">
-<dt class="deftypefn" id="index-dicomdict"><span class="category-def">: </span><span><code class="def-type"><var class="var">dictionary_name</var> =</code> <strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;get&quot;</code>)</code><a class="copiable-link" href="#index-dicomdict"></a></span></dt>
-<dt class="deftypefnx def-cmd-deftypefn" id="index-dicomdict-1"><span class="category-def">: </span><span><strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;factory&quot;</code>)</code><a class="copiable-link" href="#index-dicomdict-1"></a></span></dt>
-<dt class="deftypefnx def-cmd-deftypefn" id="index-dicomdict-2"><span class="category-def">: </span><span><strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;set&quot;</code>, <var class="var">dictionary_name</var>)</code><a class="copiable-link" href="#index-dicomdict-2"></a></span></dt>
+<dl class="first-deftypefn def-block">
+<dt class="deftypefn def-line" id="index-dicomdict"><span class="category-def">: </span><span><code class="def-type"><var class="var">dictionary_name</var> =</code> <strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;get&quot;</code>)</code><a class="copiable-link" href="#index-dicomdict"></a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomdict-1"><span class="category-def">: </span><span><strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;factory&quot;</code>)</code><a class="copiable-link" href="#index-dicomdict-1"></a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomdict-2"><span class="category-def">: </span><span><strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;set&quot;</code>, <var class="var">dictionary_name</var>)</code><a class="copiable-link" href="#index-dicomdict-2"></a></span></dt>
 <dd>
 <p>Get or set the active dicom data dictionary.
 </p>

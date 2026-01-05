@@ -22,6 +22,7 @@ title: Octave DICOM Toolkit
 email: "John Donoghue <john.donoghue@ieee.org>"
 author: "John Donoghue <john.donoghue@ieee.org>"
 logo: "/assets/pkg.png"
+pkg: dicom
 description: >- # this means to ignore newlines until "baseurl:"
   DICOM Toolkit for GNU Octave
 baseurl: "" # the subpath of your site, e.g. /blog

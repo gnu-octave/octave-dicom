@@ -2,7 +2,7 @@
 layout: "default"
 permalink: "/functions/11_dicomlookup/"
 pkg_name: "dicom"
-pkg_version: "0.6.1"
+pkg_version: "0.7.0"
 pkg_description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 title: "Dicom Toolkit - dicomlookup"
 category: "Dicom Functions"
@@ -17,6 +17,7 @@ navigation:
 - id: "15_DicomFunctions"
   name: "&nbsp;&nbsp;Dicom Functions"
   url: "/functions/#15_DicomFunctions"
+  subitems:
 - id: "news"
   name: "News"
   url: "/news"
@@ -24,9 +25,9 @@ navigation:
   name: "Manual"
   url: "/manual"
 ---
-<dl class="first-deftypefn">
-<dt class="deftypefn" id="index-_003d"><span class="category-def">: </span><span><code class="def-type"><var class="var">keyword</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomlookup (<var class="var">group</var>, <var class="var">element</var>)</code><a class="copiable-link" href="#index-_003d"></a></span></dt>
-<dt class="deftypefnx def-cmd-deftypefn" id="index-element_005d"><span class="category-def">: </span><span><code class="def-type">[<var class="var">group</var>,</code> <strong class="def-name"><var class="var">element</var>]</strong> <code class="def-code-arguments">= dicomlookup (<var class="var">keyword</var>)</code><a class="copiable-link" href="#index-element_005d"></a></span></dt>
+<dl class="first-deftypefn def-block">
+<dt class="deftypefn def-line" id="index-_003d"><span class="category-def">: </span><span><code class="def-type"><var class="var">keyword</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomlookup (<var class="var">group</var>, <var class="var">element</var>)</code><a class="copiable-link" href="#index-_003d"></a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-element_005d"><span class="category-def">: </span><span><code class="def-type">[<var class="var">group</var>,</code> <strong class="def-name"><var class="var">element</var>]</strong> <code class="def-code-arguments">= dicomlookup (<var class="var">keyword</var>)</code><a class="copiable-link" href="#index-element_005d"></a></span></dt>
 <dd>
 <p>Lookup an attribute in the DICOM data dictionary.
 </p>

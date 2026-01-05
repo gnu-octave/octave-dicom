@@ -3,7 +3,7 @@ layout: "function_list"
 permalink: "/functions/"
 title: "Dicom Toolkit - Functions"
 pkg_name: "dicom"
-version: "0.6.1"
+version: "0.7.0"
 description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 categories:
 - id: "15_DicomFunctions"
@@ -53,6 +53,10 @@ categories:
     name: "isdicom"
     description: "Return true if FILENAME is a valid DICOM file."
     url: "/functions/7_isdicom/"
+  - id: "15_dicomCollection"
+    name: "dicomCollection"
+    description: "Read a directory or DICOMFILE and return a table or struct of the referenced ..."
+    url: "/functions/15_dicomCollection/"
   - id: "22_imagesdicomdecodeUID"
     name: "images.dicom.decodeUID"
     description: "Look up information about a uid string"
@@ -61,6 +65,7 @@ categories:
     name: "images.dicom.parseDICOMDIR"
     description: "Parse a DICOMDIR file and return the information as a struct."
     url: "/functions/26_imagesdicomparseDICOMDIR/"
+  groups:
 navigation:
 - id: "overview"
   name: "Overview"
@@ -70,6 +75,7 @@ navigation:
 - id: "15_DicomFunctions"
   name: "&nbsp;&nbsp;Dicom Functions"
   url: "/functions/#15_DicomFunctions"
+  subitems:
 - id: "news"
   name: "News"
   url: "/news"

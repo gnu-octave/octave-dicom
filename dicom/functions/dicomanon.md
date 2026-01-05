@@ -2,7 +2,7 @@
 layout: "default"
 permalink: "/functions/9_dicomanon/"
 pkg_name: "dicom"
-pkg_version: "0.6.1"
+pkg_version: "0.7.0"
 pkg_description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 title: "Dicom Toolkit - dicomanon"
 category: "Dicom Functions"
@@ -17,6 +17,7 @@ navigation:
 - id: "15_DicomFunctions"
   name: "&nbsp;&nbsp;Dicom Functions"
   url: "/functions/#15_DicomFunctions"
+  subitems:
 - id: "news"
   name: "News"
   url: "/news"
@@ -24,9 +25,9 @@ navigation:
   name: "Manual"
   url: "/manual"
 ---
-<dl class="first-deftypefn">
-<dt class="deftypefn" id="index-dicomanon_0028file_005fin_002c"><span class="category-def">: </span><span><strong class="def-name">dicomanon(<var class="var">file_in</var>,</strong> <code class="def-code-arguments"><var class="var">file_out</var>)</code><a class="copiable-link" href="#index-dicomanon_0028file_005fin_002c"></a></span></dt>
-<dt class="deftypefnx def-cmd-deftypefn" id="index-dicomanon_0028_005f_005f_005f_002c"><span class="category-def">: </span><span><strong class="def-name">dicomanon(___,</strong> <code class="def-code-arguments"><var class="var">name</var>, <var class="var">value</var>)</code><a class="copiable-link" href="#index-dicomanon_0028_005f_005f_005f_002c"></a></span></dt>
+<dl class="first-deftypefn def-block">
+<dt class="deftypefn def-line" id="index-dicomanon_0028file_005fin_002c"><span class="category-def">: </span><span><strong class="def-name">dicomanon(<var class="var">file_in</var>,</strong> <code class="def-code-arguments"><var class="var">file_out</var>)</code><a class="copiable-link" href="#index-dicomanon_0028file_005fin_002c"></a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomanon_0028_005f_005f_005f_002c"><span class="category-def">: </span><span><strong class="def-name">dicomanon(___,</strong> <code class="def-code-arguments"><var class="var">name</var>, <var class="var">value</var>)</code><a class="copiable-link" href="#index-dicomanon_0028_005f_005f_005f_002c"></a></span></dt>
 <dd>
 <p>Anonymize a DICOM format file by removing or replacing specific fields.
 </p>

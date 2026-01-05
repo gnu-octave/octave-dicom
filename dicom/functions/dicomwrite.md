@@ -2,7 +2,7 @@
 layout: "default"
 permalink: "/functions/10_dicomwrite/"
 pkg_name: "dicom"
-pkg_version: "0.6.1"
+pkg_version: "0.7.0"
 pkg_description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 title: "Dicom Toolkit - dicomwrite"
 category: "Dicom Functions"
@@ -17,6 +17,7 @@ navigation:
 - id: "15_DicomFunctions"
   name: "&nbsp;&nbsp;Dicom Functions"
   url: "/functions/#15_DicomFunctions"
+  subitems:
 - id: "news"
   name: "News"
   url: "/news"
@@ -24,9 +25,9 @@ navigation:
   name: "Manual"
   url: "/manual"
 ---
-<dl class="first-deftypefn">
-<dt class="deftypefn" id="index-dicomwrite_0028im_002c"><span class="category-def">: </span><span><strong class="def-name">dicomwrite(<var class="var">im</var>,</strong> <code class="def-code-arguments"><var class="var">filename</var>)</code><a class="copiable-link" href="#index-dicomwrite_0028im_002c"></a></span></dt>
-<dt class="deftypefnx def-cmd-deftypefn" id="index-dicomwrite_0028im_002c-1"><span class="category-def">: </span><span><strong class="def-name">dicomwrite(<var class="var">im</var>,</strong> <code class="def-code-arguments"><var class="var">filename</var>, <var class="var">info</var>)</code><a class="copiable-link" href="#index-dicomwrite_0028im_002c-1"></a></span></dt>
+<dl class="first-deftypefn def-block">
+<dt class="deftypefn def-line" id="index-dicomwrite_0028im_002c"><span class="category-def">: </span><span><strong class="def-name">dicomwrite(<var class="var">im</var>,</strong> <code class="def-code-arguments"><var class="var">filename</var>)</code><a class="copiable-link" href="#index-dicomwrite_0028im_002c"></a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomwrite_0028im_002c-1"><span class="category-def">: </span><span><strong class="def-name">dicomwrite(<var class="var">im</var>,</strong> <code class="def-code-arguments"><var class="var">filename</var>, <var class="var">info</var>)</code><a class="copiable-link" href="#index-dicomwrite_0028im_002c-1"></a></span></dt>
 <dd>
 <p>Write a DICOM format file to <var class="var">filename</var>.
 </p>
