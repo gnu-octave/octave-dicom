@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @deftypefn {} {@var{collection}} = dicomCollection(@var{directory})
-## @deftypefnx {} {@var{collection}} = dicomCOLLECTION(@var{DICOMDIR}, @var{attribute})
-## @deftypefnx {} {@var{collection}} = dicomCOLLECTION(_, @var{propertyname}, @var{propertyvalue} @dots{})
+## @deftypefnx {} {@var{collection}} = dicomCollection(@var{DICOMDIR})
+## @deftypefnx {} {@var{collection}} = dicomCollection(_, @var{propertyname}, @var{propertyvalue} @dots{})
 ## Read a directory or DICOMDIR file and return a table or struct of the referenced files.
 ##
 ## @subsubheading Inputs
