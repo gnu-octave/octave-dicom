@@ -15,14 +15,14 @@
 
 ## -*- texinfo -*-
 ## @deftypefn {} {@var{collection}} = dicomCollection(@var{directory})
-## @deftypefnx {} {@var{collection}} = dicomCOLLECTION(@var{DICOMFILE}, @var{attribute})
+## @deftypefnx {} {@var{collection}} = dicomCOLLECTION(@var{DICOMDIR}, @var{attribute})
 ## @deftypefnx {} {@var{collection}} = dicomCOLLECTION(_, @var{propertyname}, @var{propertyvalue} @dots{})
-## Read a directory or DICOMFILE and return a table or struct of the referenced files.:w
+## Read a directory or DICOMDIR file and return a table or struct of the referenced files.
 ##
 ## @subsubheading Inputs
 ## @var{directory} - directory to read.
 ##
-## @var{DICOMFILE} - dicom file rto read.
+## @var{DICOMDIR} - dicom DICOMDIR file to read.
 ##
 ## @var{propertyname}, @var{propertyvalue} - Optional property name/value pairs.
 ##
@@ -30,7 +30,7 @@
 ##
 ## @table @asis
 ## @item IncludeSubFolders
-## Boolean if set to true will also look in sub folders when looking for dicom files
+## Boolean if set to true will also look in sub-folders when looking for dicom files
 ## @item DisplayWaitbar
 ## Boolean currently ignored in Octave
 ## @end table
@@ -68,7 +68,7 @@
 
 function collection = dicomCollection(dirname, varargin)
   if nargin < 1 || !ischar(dirname)
-    error("dicomCollection: Expected first argument as DICOMFILE or directory name string")
+    error("dicomCollection: Expected first argument as DICOMDIR or directory name string")
   endif
 
   collection = [];
@@ -135,6 +135,8 @@ function collection = dicomCollection(dirname, varargin)
 endfunction 
 
 function date_str = format_dicom_date_time(dt, tm)
+  # convert a dt and tm string into a more standard format 
+  # YYYY-MM-DD hh:mm:ss.sss
   date_str = "";
   if !isempty(dt)
     dt = strrep(dt, ".", "");
@@ -161,7 +163,7 @@ function collection = process_dicom_dir(dirname, includesubdirs)
     f = lst(idx);
     if ! f.isdir
       name = fullfile(dirname, f.name);
-      if strcmp(f.name, "DICOMDIR") ==0 && isdicom(name)
+      if strcmp(f.name, "DICOMDIR") == 0 && isdicom(name)
         info = __dicom_stat__(name);
         collection = [collection info];
       endif
