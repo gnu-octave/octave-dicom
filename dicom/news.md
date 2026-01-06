@@ -3,7 +3,7 @@ layout: "default"
 permalink: "/news/"
 title: "Dicom Toolkit - News"
 pkg_name: "dicom"
-version: "0.7.0"
+version: "0.7.1"
 description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 navigation:
 - id: "overview"
@@ -19,6 +19,11 @@ navigation:
   url: "/manual"
 ---
 <pre>
+ Summary of important user-visible changes for dicom 0.7.1 (2026/01/06):
+-------------------------------------------------------------------------
+
+ * Manual doc updates
+
  Summary of important user-visible changes for dicom 0.7.0 (2026/01/06):
 -------------------------------------------------------------------------
 

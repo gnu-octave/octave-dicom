@@ -2,7 +2,7 @@
 layout: "default"
 permalink: "/functions/26_imagesdicomparseDICOMDIR/"
 pkg_name: "dicom"
-pkg_version: "0.7.0"
+pkg_version: "0.7.1"
 pkg_description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 title: "Dicom Toolkit - images.dicom.parseDICOMDIR"
 category: "Dicom Functions"
