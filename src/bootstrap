@@ -7,7 +7,7 @@ set -e      # halt if unhandled error
 force=""
 if [ "x$1" == "x--force" ]; then
   force="--force";
-  rm -f config,guess config.sub install-sh;
+  rm -f config.guess config.sub install-sh;
 fi
 
 # install these if we need to ?
