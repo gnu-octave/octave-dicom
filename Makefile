@@ -166,9 +166,12 @@ install: $(RELEASE_TARBALL)
 	$(OCTAVE) --eval 'pkg ("install", "-verbose", "${RELEASE_TARBALL}")'
 
 src/configure: src/configure.ac 
-	cd src/ && ./bootstrap && ./configure
+	cd src/ && ./bootstrap
 
-all: src/configure
+src/Makefile: src/Makefile.in src/configure
+	cd src && ./configure
+
+all: src/Makefile
 	$(MAKE) -C src/
 
 check: all
