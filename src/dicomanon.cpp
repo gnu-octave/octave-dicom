@@ -92,7 +92,7 @@ None\n\
     gdcm::Anonymizer::GetBasicApplicationLevelConfidentialityProfileAttributes ();
 
   // remove (0x0008, 0x0018) as we MUST have it to create the file
-  remove(remove_tags.begin(), remove_tags.end(), gdcm::Tag(0x0008, 0x0018));
+  remove_tags.erase(remove(remove_tags.begin(), remove_tags.end(), gdcm::Tag(0x0008, 0x0018)), remove_tags.end());
 
   std::vector< std::pair<gdcm::Tag, std::string> > replace_tags;
   gdcm::UIDGenerator uid;
@@ -128,7 +128,7 @@ None\n\
               name = values(idx).string_value();
               if (lookup_tag(name, tag))
                 {
-                  remove(remove_tags.begin(), remove_tags.end(), tag);
+                  remove_tags.erase(remove(remove_tags.begin(), remove_tags.end(), tag), remove_tags.end());
                 }
             }
         }
@@ -149,7 +149,7 @@ None\n\
 	      octave_value value = values.contents(it);
               if (lookup_tag(name, tag))
                 {
-                  remove(remove_tags.begin(), remove_tags.end(), tag);
+                  remove_tags.erase(remove(remove_tags.begin(), remove_tags.end(), tag), remove_tags.end());
                   // add to update
                   replace_tags.push_back(std::pair<gdcm::Tag, std::string>(tag, value.string_value()));
                 }
