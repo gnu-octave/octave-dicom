@@ -115,7 +115,7 @@ doc/$(PACKAGE).pdf: doc/$(PACKAGE).texi doc/functions.texi doc/version.texi
 	cd doc && $(RM) -f $(PACKAGE).aux $(PACKAGE).cp $(PACKAGE).cps $(PACKAGE).fn  $(PACKAGE).fns $(PACKAGE).log $(PACKAGE).toc
 
 doc/$(PACKAGE).html: doc/$(PACKAGE).texi doc/functions.texi doc/version.texi
-	cd doc && SOURCE_DATE_EPOCH=$(REPO_TIMESTAMP) $(MAKEINFO) --html --css-ref=$(PACKAGE).css  $(MAKEINFO_HTML_OPTIONS) --output=${PACKAGE}.html $(PACKAGE).texi
+	cd doc && SOURCE_DATE_EPOCH=$(REPO_TIMESTAMP) $(MAKEINFO) --html --css-ref=octave.css  $(MAKEINFO_HTML_OPTIONS) --output=${PACKAGE}.html $(PACKAGE).texi
 
 doc/$(PACKAGE).qhc: doc/$(PACKAGE).html
 	# try also create qch file if can
