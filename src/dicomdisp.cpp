@@ -343,7 +343,8 @@ void dumpSequence(gdcm::SequenceOfItems *seq, int sequenceDepth, uint64_t &offse
 %!test
 %! wdata = uint8 (10*rand (10,10));
 %! dicomwrite (wdata, testfile);
-%! dicomdisp(testfile);
+%! s = evalc("dicomdisp(testfile)");
+%! assert(!isempty(strfind(s, "FileMetaInformationGroupLength")))
 
 %!test
 %! if exist (testfile, 'file')
