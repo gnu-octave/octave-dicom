@@ -38,3 +38,6 @@ function __unload_dicom__ ()
     # do nothing
   end_try_catch
 endfunction
+
+%!test
+%! # private load function - no test
