@@ -17,7 +17,7 @@ To install, run the octave package manager:
 1. If running Windows, the package may already be installed:
    type pkg list, to view the installed packages.
 
-2. To install from source forge:
+2. To install online:
    pkg install -forge dicom
 
 3. To install from a local tarball.
