@@ -2,7 +2,7 @@
 layout: "default"
 permalink: "/functions/15_dicomCollection/"
 pkg_name: "dicom"
-pkg_version: "0.7.1"
+pkg_version: "0.7.2"
 pkg_description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 title: "Dicom Toolkit - dicomCollection"
 category: "Dicom Functions"
@@ -27,8 +27,8 @@ navigation:
 ---
 <dl class="first-deftypefn def-block">
 <dt class="deftypefn def-line" id="index-_003d"><span class="category-def">: </span><span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCollection(<var class="var">directory</var>)</code><a class="copiable-link" href="#index-_003d"></a></span></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-1"><span class="category-def">: </span><span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCOLLECTION(<var class="var">DICOMDIR</var>, <var class="var">attribute</var>)</code><a class="copiable-link" href="#index-_003d-1"></a></span></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-2"><span class="category-def">: </span><span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCOLLECTION(_, <var class="var">propertyname</var>, <var class="var">propertyvalue</var> &hellip;)</code><a class="copiable-link" href="#index-_003d-2"></a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-1"><span class="category-def">: </span><span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCollection(<var class="var">DICOMDIR</var>)</code><a class="copiable-link" href="#index-_003d-1"></a></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-2"><span class="category-def">: </span><span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCollection(_, <var class="var">propertyname</var>, <var class="var">propertyvalue</var> &hellip;)</code><a class="copiable-link" href="#index-_003d-2"></a></span></dt>
 <dd><p>Read a directory or DICOMDIR file and return a table or struct of the referenced files.
 </p>
 <h4 class="subsubheading" id="Inputs"><span>Inputs<a class="copiable-link" href="#Inputs"></a></span></h4>

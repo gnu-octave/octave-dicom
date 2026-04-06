@@ -3,7 +3,7 @@ layout: "default"
 permalink: "/manual/"
 title: "Dicom Toolkit - Manual"
 pkg_name: "dicom"
-version: "0.7.1"
+version: "0.7.2"
 description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 navigation:
 - id: "overview"
@@ -104,7 +104,7 @@ octave-forge using the following command within <abbr class="acronym">GNU</abbr>
 <abbr class="acronym">GNU</abbr> Octave, the package can be installed using the following command within <abbr class="acronym">GNU</abbr> Octave:
 </p>
 <div class="example">
-<pre class="example-preformatted">pkg install dicom-0.7.1.tar.gz
+<pre class="example-preformatted">pkg install dicom-0.7.2.tar.gz
 </pre></div>
 </div>
 <div class="section-level-extent" id="Loading">
@@ -202,9 +202,9 @@ image =
 <h4 class="subsection">3.1.1 dicomCollection</h4>
 <a class="index-entry-id" id="index-dicomCollection"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d"><span class="category-def">: </span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCollection(<var class="var">directory</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-1"><span class="category-def">: </span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCOLLECTION(<var class="var">DICOMDIR</var>, <var class="var">attribute</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-2"><span class="category-def">: </span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCOLLECTION(_, <var class="var">propertyname</var>, <var class="var">propertyvalue</var> &hellip;)</code></dt>
+<dt class="deftypefn def-line" id="index-_003d"><span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCollection(<var class="var">directory</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-1"><span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCollection(<var class="var">DICOMDIR</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-2"><span><code class="def-type"><var class="var">collection</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomCollection(_, <var class="var">propertyname</var>, <var class="var">propertyvalue</var> &hellip;)</code></span></dt>
 <dd><p>Read a directory or DICOMDIR file and return a table or struct of the referenced files.
 </p>
 <h4 class="subsubheading" id="Inputs">Inputs</h4>
@@ -256,8 +256,8 @@ image =
 <h4 class="subsection">3.1.2 dicomanon</h4>
 <a class="index-entry-id" id="index-dicomanon"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-dicomanon_0028file_005fin_002c"><span class="category-def">: </span><strong class="def-name">dicomanon(<var class="var">file_in</var>,</strong> <code class="def-code-arguments"><var class="var">file_out</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomanon_0028_005f_005f_005f_002c"><span class="category-def">: </span><strong class="def-name">dicomanon(___,</strong> <code class="def-code-arguments"><var class="var">name</var>, <var class="var">value</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-dicomanon_0028file_005fin_002c"><span><strong class="def-name">dicomanon(<var class="var">file_in</var>,</strong> <code class="def-code-arguments"><var class="var">file_out</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomanon_0028_005f_005f_005f_002c"><span><strong class="def-name">dicomanon(___,</strong> <code class="def-code-arguments"><var class="var">name</var>, <var class="var">value</var>)</code></span></dt>
 <dd>
 <p>Anonymize a DICOM format file by removing or replacing specific fields.
 </p>
@@ -285,9 +285,9 @@ image =
 <h4 class="subsection">3.1.3 dicomdict</h4>
 <a class="index-entry-id" id="index-dicomdict"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-dicomdict-1"><span class="category-def">: </span><code class="def-type"><var class="var">dictionary_name</var> =</code> <strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;get&quot;</code>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomdict-2"><span class="category-def">: </span><strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;factory&quot;</code>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomdict-3"><span class="category-def">: </span><strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;set&quot;</code>, <var class="var">dictionary_name</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-dicomdict-1"><span><code class="def-type"><var class="var">dictionary_name</var> =</code> <strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;get&quot;</code>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomdict-2"><span><strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;factory&quot;</code>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomdict-3"><span><strong class="def-name">dicomdict</strong> <code class="def-code-arguments">(<code class="code">&quot;set&quot;</code>, <var class="var">dictionary_name</var>)</code></span></dt>
 <dd>
 <p>Get or set the active dicom data dictionary.
 </p>
@@ -322,8 +322,8 @@ f = octavedicom.dic
 <h4 class="subsection">3.1.4 dicomdisp</h4>
 <a class="index-entry-id" id="index-dicomdisp"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-dicomdisp-1"><span class="category-def">: </span><strong class="def-name">dicomdisp</strong> <code class="def-code-arguments">(<var class="var">filename</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomdisp-2"><span class="category-def">: </span><strong class="def-name">dicomdisp</strong> <code class="def-code-arguments">(<var class="var">filename</var>, [<var class="var">propertyname</var>, <var class="var">propertvalue</var> ...])</code></dt>
+<dt class="deftypefn def-line" id="index-dicomdisp-1"><span><strong class="def-name">dicomdisp</strong> <code class="def-code-arguments">(<var class="var">filename</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomdisp-2"><span><strong class="def-name">dicomdisp</strong> <code class="def-code-arguments">(<var class="var">filename</var>, [<var class="var">propertyname</var>, <var class="var">propertvalue</var> ...])</code></span></dt>
 <dd><p>Read and display the metadata from a DICOM file.
 </p>
 <h4 class="subsubheading" id="Inputs-3">Inputs</h4>
@@ -341,8 +341,8 @@ f = octavedicom.dic
 <h4 class="subsection">3.1.5 dicomfind</h4>
 <a class="index-entry-id" id="index-dicomfind"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d-3"><span class="category-def">: </span><code class="def-type"><var class="var">attrinfo</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomfind(<var class="var">filename</var>, <var class="var">attribute</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-4"><span class="category-def">: </span><code class="def-type"><var class="var">attrinfo</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomfind(<var class="var">info</var>, <var class="var">attribute</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-_003d-3"><span><code class="def-type"><var class="var">attrinfo</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomfind(<var class="var">filename</var>, <var class="var">attribute</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-4"><span><code class="def-type"><var class="var">attrinfo</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomfind(<var class="var">info</var>, <var class="var">attribute</var>)</code></span></dt>
 <dd><p>Find the location and value of an attribute in a dicom file or info structure.
 </p>
 <h4 class="subsubheading" id="Inputs-4">Inputs</h4>
@@ -369,9 +369,9 @@ f = octavedicom.dic
 <h4 class="subsection">3.1.6 dicominfo</h4>
 <a class="index-entry-id" id="index-dicominfo"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d-5"><span class="category-def">: </span><code class="def-type"><var class="var">info</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicominfo (<var class="var">filename</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-6"><span class="category-def">: </span><code class="def-type"><var class="var">info</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicominfo (<var class="var">filename</var>, <code class="code">&quot;dictionary&quot;</code>, <var class="var">dictionary-name</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicominfo-1"><span class="category-def">: </span><strong class="def-name">dicominfo</strong> <code class="def-code-arguments">(___, <var class="var">options</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-_003d-5"><span><code class="def-type"><var class="var">info</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicominfo (<var class="var">filename</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-6"><span><code class="def-type"><var class="var">info</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicominfo (<var class="var">filename</var>, <code class="code">&quot;dictionary&quot;</code>, <var class="var">dictionary-name</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicominfo-1"><span><strong class="def-name">dicominfo</strong> <code class="def-code-arguments">(___, <var class="var">options</var>)</code></span></dt>
 <dd><p>Get all metadata from a DICOM file, excluding any actual image. 
 <var class="var">info</var> is a nested struct containing the data. 
 </p>
@@ -441,8 +441,8 @@ PixelData = not assigned
 <h4 class="subsection">3.1.7 dicomlookup</h4>
 <a class="index-entry-id" id="index-dicomlookup"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d-7"><span class="category-def">: </span><code class="def-type"><var class="var">keyword</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomlookup (<var class="var">group</var>, <var class="var">element</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-element_005d"><span class="category-def">: </span><code class="def-type">[<var class="var">group</var>,</code> <strong class="def-name"><var class="var">element</var>]</strong> <code class="def-code-arguments">= dicomlookup (<var class="var">keyword</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-_003d-7"><span><code class="def-type"><var class="var">keyword</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomlookup (<var class="var">group</var>, <var class="var">element</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-element_005d"><span><code class="def-type">[<var class="var">group</var>,</code> <strong class="def-name"><var class="var">element</var>]</strong> <code class="def-code-arguments">= dicomlookup (<var class="var">keyword</var>)</code></span></dt>
 <dd>
 <p>Lookup an attribute in the DICOM data dictionary.
 </p>
@@ -484,8 +484,8 @@ elm = 16
 <h4 class="subsection">3.1.8 dicomread</h4>
 <a class="index-entry-id" id="index-dicomread"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d-8"><span class="category-def">: </span><code class="def-type"><var class="var">image</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomread (<var class="var">filename</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-9"><span class="category-def">: </span><code class="def-type"><var class="var">image</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomread (<var class="var">structure</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-_003d-8"><span><code class="def-type"><var class="var">image</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomread (<var class="var">filename</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-9"><span><code class="def-type"><var class="var">image</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomread (<var class="var">structure</var>)</code></span></dt>
 <dd>
 <p>Load the image from a DICOM file. 
 </p><h4 class="subsubheading" id="Inputs-7">Inputs</h4>
@@ -522,7 +522,7 @@ image =
 <h4 class="subsection">3.1.9 dicomuid</h4>
 <a class="index-entry-id" id="index-dicomuid"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d-10"><span class="category-def">: </span><code class="def-type"><var class="var">uuid</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomuid ()</code></dt>
+<dt class="deftypefn def-line" id="index-_003d-10"><span><code class="def-type"><var class="var">uuid</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomuid ()</code></span></dt>
 <dd>
 <p>Generate a DICOM unique id . 
 </p>
@@ -544,8 +544,8 @@ uid = 1.2.826.0.1.3680043.2.1143.3114589836670200378351641061429967573
 <h4 class="subsection">3.1.10 dicomupdate</h4>
 <a class="index-entry-id" id="index-dicomupdate"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-dicomupdate_0028fileinfo_002c"><span class="category-def">: </span><code class="def-type"><var class="var">info</var> =</code> <strong class="def-name">dicomupdate(<var class="var">fileinfo</var>,</strong> <code class="def-code-arguments"><var class="var">attribute</var>, <var class="var">value</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomupdate_0028info_002c"><span class="category-def">: </span><code class="def-type"><var class="var">info</var> =</code> <strong class="def-name">dicomupdate(<var class="var">info</var>,</strong> <code class="def-code-arguments"><var class="var">attrinfo</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-dicomupdate_0028fileinfo_002c"><span><code class="def-type"><var class="var">info</var> =</code> <strong class="def-name">dicomupdate(<var class="var">fileinfo</var>,</strong> <code class="def-code-arguments"><var class="var">attribute</var>, <var class="var">value</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomupdate_0028info_002c"><span><code class="def-type"><var class="var">info</var> =</code> <strong class="def-name">dicomupdate(<var class="var">info</var>,</strong> <code class="def-code-arguments"><var class="var">attrinfo</var>)</code></span></dt>
 <dd><p>Update a dicom struct with new values
 </p>
 <h4 class="subsubheading" id="Inputs-9">Inputs</h4>
@@ -577,8 +577,8 @@ uid = 1.2.826.0.1.3680043.2.1143.3114589836670200378351641061429967573
 <h4 class="subsection">3.1.11 dicomwrite</h4>
 <a class="index-entry-id" id="index-dicomwrite"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-dicomwrite_0028im_002c"><span class="category-def">: </span><strong class="def-name">dicomwrite(<var class="var">im</var>,</strong> <code class="def-code-arguments"><var class="var">filename</var>)</code></dt>
-<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomwrite_0028im_002c-1"><span class="category-def">: </span><strong class="def-name">dicomwrite(<var class="var">im</var>,</strong> <code class="def-code-arguments"><var class="var">filename</var>, <var class="var">info</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-dicomwrite_0028im_002c"><span><strong class="def-name">dicomwrite(<var class="var">im</var>,</strong> <code class="def-code-arguments"><var class="var">filename</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-dicomwrite_0028im_002c-1"><span><strong class="def-name">dicomwrite(<var class="var">im</var>,</strong> <code class="def-code-arguments"><var class="var">filename</var>, <var class="var">info</var>)</code></span></dt>
 <dd>
 <p>Write a DICOM format file to <var class="var">filename</var>.
 </p>
@@ -609,7 +609,7 @@ uid = 1.2.826.0.1.3680043.2.1143.3114589836670200378351641061429967573
 <h4 class="subsection">3.1.12 images.dicom.decodeUID</h4>
 <a class="index-entry-id" id="index-decodeUID"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d-11"><span class="category-def">: </span><code class="def-type"><var class="var">uidinfo</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">images.dicom.decodeUID(<var class="var">uid</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-_003d-11"><span><code class="def-type"><var class="var">uidinfo</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">images.dicom.decodeUID(<var class="var">uid</var>)</code></span></dt>
 <dd><p>Look up information about a uid string
 </p>
 <h4 class="subsubheading" id="Inputs-11">Inputs</h4>
@@ -635,7 +635,7 @@ uid = 1.2.826.0.1.3680043.2.1143.3114589836670200378351641061429967573
 <h4 class="subsection">3.1.13 images.dicom.parseDICOMDIR</h4>
 <a class="index-entry-id" id="index-parseDICOMDIR"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d-12"><span class="category-def">: </span><code class="def-type"><var class="var">info</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">images.dicom.parseDICOMDIR(<var class="var">filename</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-_003d-12"><span><code class="def-type"><var class="var">info</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">images.dicom.parseDICOMDIR(<var class="var">filename</var>)</code></span></dt>
 <dd><p>Parse a DICOMDIR file and return the information as a struct.
 </p>
 <h4 class="subsubheading" id="Inputs-12">Inputs</h4>
@@ -660,7 +660,7 @@ uid = 1.2.826.0.1.3680043.2.1143.3114589836670200378351641061429967573
 <h4 class="subsection">3.1.14 isdicom</h4>
 <a class="index-entry-id" id="index-isdicom"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-isdicom-1"><span class="category-def">: </span><code class="def-type"><var class="var">yesno</var> =</code> <strong class="def-name">isdicom</strong> <code class="def-code-arguments">(<var class="var">filename</var>)</code></dt>
+<dt class="deftypefn def-line" id="index-isdicom-1"><span><code class="def-type"><var class="var">yesno</var> =</code> <strong class="def-name">isdicom</strong> <code class="def-code-arguments">(<var class="var">filename</var>)</code></span></dt>
 <dd><p>Return true if <var class="var">filename</var> is a valid DICOM file.
 </p>
 <h4 class="subsubheading" id="Inputs-13">Inputs</h4>
