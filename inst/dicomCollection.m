@@ -247,7 +247,11 @@ endfunction
 %!test
 %! [dirname, ~] = fileparts(file_in_loadpath("imdata/rtstruct.dcm"));
 %! collection = dicomCollection(dirname);
-%! assert(length(collection),5)
+%! if exist("struct2table") > 1
+%!   assert(size(collection, 1),5)
+%! else
+%!   assert(length(collection),5)
+%! endif
 
 # TODO: package and add a DICOMDIR test
 
