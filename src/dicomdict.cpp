@@ -344,12 +344,10 @@ void load_dicom_dict (const char * filename)
     }
 
   // Process each line
-  size_t linenumber = 0;
   while (!fin.eof())
     {
       std::string line ;
       getline(fin,line) ;
-      linenumber++ ;
 
       // Skip any line that start with "#" without complaining
       if (line[0] == '#') continue;
