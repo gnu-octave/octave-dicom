@@ -58,6 +58,7 @@ DEFUN_DLD (dicomread, args, nargout,
   "-*- texinfo -*- \n\
 @deftypefn {} @var{image} = dicomread (@var{filename}) \n\
 @deftypefnx {} @var{image} = dicomread (@var{structure}) \n\
+@deftypefnx {} @var{image} = dicomread (___, @var{propertyname}, @var{propertyvalue}) \n\
 @deftypefnx {} [@var{image}, @var{cmap}] = dicomread (___) \n\
 \n\
 Load the image from a DICOM file. \n\
@@ -65,6 +66,16 @@ Load the image from a DICOM file. \n\
 @var{filename} - a string giving the filename.*\n\
 \n\
 @var{structure} - a structure with a field @code{Filename} (such as returned by @code{dicominfo}).\n\
+\n\
+@var{propertyname}, @var{propertyvalue} - property name (string), property value for additional properties to function.\n\
+\n\
+Known properties are:\n\
+@table @asis\n\
+@item frames\n \
+Either 'all' (default), a scalar frame value or vector of frame values.\n \
+@item UseRVHeuristic\n\
+Value is currently silently ignored.\n \
+@end table\n\
 \n\
 @subsubheading Outputs\n\
 @var{image} - An integer or float matrix will be returned, the number of bits will depend on the file. \
@@ -91,6 +102,13 @@ image =\n\
   0  0  0  0  0\n\
 @end example\n\
 \n\
+Load the 1st and 10th frame of image data from a dcm file:\n\
+\n\
+@example\n\
+> file = file_in_loadpath('imdata/US-PAL-8-10x-echo.dcm');\n\
+> X = dicomread (file, 'frames;, [1, 10]);\n\
+@end example\n\
+\n\
 @seealso{dicominfo} \n\
 @end deftypefn \n\
 ")
@@ -103,6 +121,7 @@ image =\n\
     }
 
   std::string filename;
+  octave_value frames = octave_value("all");
   // argument processing
   // check if 1st argument is a string or a struct with field Filename
   // If so, assign to filename variable, otherwise exit.
@@ -125,6 +144,58 @@ image =\n\
         }
       octave_value tmp = arg0.getfield ("Filename");
       filename = tmp.string_value();
+    }
+
+  // properties
+  if (args.length() > 1)
+    {
+      for(int i=1;i<args.length();i+=2)
+        {
+          // first pair should be a property name
+          if (! args (i).is_string ())
+            {
+              error ("Expected property name string");
+              return octave_value ();
+            }
+
+          std::string name = args (i).string_value ();
+          octave_value val = args (i+1);
+
+          std::transform (name.begin (), name.end (), name.begin (), ::tolower);
+
+          if (name == "frames")
+            {
+              // currently ignored
+              if (val.is_string () && val.string_value() == "all")
+                {
+                  frames = val;
+                }
+	      else if (val.OV_ISINTEGER()  || val.is_real_scalar())
+                {
+	          Array<double> tdv = val.vector_value ();
+	          frames = octave_value(tdv);
+                }
+	      else if(val.is_matrix_type())
+	        {
+	          Array<double> tdv = val.vector_value ();
+	          frames = octave_value(tdv);
+	        }
+              else
+                {
+                  error (QUOTED(OCT_FN_NAME)": Expected frames as 'all', a scalar or vector of frames values");
+	          return octave_value();
+                }
+            }
+          else if (name == "usevrheuristic")
+            {
+              // currently ignored
+            }
+          else
+            {
+              error (QUOTED(OCT_FN_NAME)": unkown property name '%s'", args (i).string_value ().c_str());
+	      return octave_value();
+            }
+        }
     }
     
 #if 0 /* TODO support 'frames' stuff, see Matlab docs for dicomread */
@@ -241,6 +312,29 @@ image =\n\
       return retval;
     }
 
+  // Extract frames we want
+  if (frames.is_string())
+    {
+      // all -> nothing to do
+    }
+  else
+    {
+      // need 0 indexing
+      Array<octave_idx_type> frame_array = frames.octave_idx_type_vector_value();
+      for (int i=0; i<frame_array.numel(); i++)
+        {
+          frame_array(i) = frame_array(i) - 1;
+        }
+
+      // get index image_data(:,_,[requested frames])
+      octave_value_list idx;
+      idx(0) = idx_vector::colon;       // All rows
+      idx(1) = idx_vector::colon;       // All columns
+      idx(2) = idx_vector(frame_array); // Specific pages
+
+      retval(0) = retval(0).index_op(idx);
+    }
+
   if (nargout > 1)
     {
       // we want to putput the cmap
@@ -287,4 +381,12 @@ image =\n\
 %! data.Filename = testfile;
 %! rd=dicomread(data);
 %! assert(rd(100,101),int16(128));
+
+%!test
+%! file = file_in_loadpath("imdata/US-PAL-8-10x-echo.dcm");
+%! X = dicomread (file);
+%! A = dicomread (file, "frames", [1]);
+%! assert(X(:,:,1), A)
+%! A = dicomread (file, "frames", [1, 10]);
+%! assert(X(:,:,[1,10]), A)
 */

@@ -155,6 +155,15 @@ OF_OCTAVE_LIST_ALT_SYMS([
 ],
 
 [dnl
+  [is_integer_type],
+  [isinteger],
+  [[octave_value ().isinteger ();]],
+  [OV_ISINTEGER],
+  [],
+  []
+],
+
+[dnl
   [valid_identifier],
   [octave::valid_identifier],
   [[octave::valid_identifier("");]],
