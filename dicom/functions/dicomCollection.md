@@ -2,7 +2,7 @@
 layout: "default"
 permalink: "/functions/15_dicomCollection/"
 pkg_name: "dicom"
-pkg_version: "0.7.2"
+pkg_version: "0.7.3"
 pkg_description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 title: "Dicom Toolkit - dicomCollection"
 category: "Dicom Functions"

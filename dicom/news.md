@@ -3,7 +3,7 @@ layout: "default"
 permalink: "/news/"
 title: "Dicom Toolkit - News"
 pkg_name: "dicom"
-version: "0.7.2"
+version: "0.7.3"
 description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 navigation:
 - id: "overview"
@@ -19,6 +19,19 @@ navigation:
   url: "/manual"
 ---
 <pre>
+ Summary of important user-visible changes for dicom 0.7.3 (2026/06/05):
+-------------------------------------------------------------------------
+
+ * minor doc updates
+
+ * update for octave 12+ compatibility
+
+ * dicomread: updates for bigendian issues, add property input processing and retrieval of cmap
+
+ * dicomdict: updates to minimize compiler warnings
+
+ * dicomCollection: updates of unit tests for available struct2table available
+
  Summary of important user-visible changes for dicom 0.7.2 (2026/04/06):
 -------------------------------------------------------------------------
 

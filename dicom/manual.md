@@ -3,7 +3,7 @@ layout: "default"
 permalink: "/manual/"
 title: "Dicom Toolkit - Manual"
 pkg_name: "dicom"
-version: "0.7.2"
+version: "0.7.3"
 description: "Digital communications in medicine (DICOM) file io.   Depends on Grassroots DICOM (GDCM). This package is not available   in repos for all distros."
 navigation:
 - id: "overview"
@@ -104,7 +104,7 @@ octave-forge using the following command within <abbr class="acronym">GNU</abbr>
 <abbr class="acronym">GNU</abbr> Octave, the package can be installed using the following command within <abbr class="acronym">GNU</abbr> Octave:
 </p>
 <div class="example">
-<pre class="example-preformatted">pkg install dicom-0.7.2.tar.gz
+<pre class="example-preformatted">pkg install dicom-0.7.3.tar.gz
 </pre></div>
 </div>
 <div class="section-level-extent" id="Loading">
@@ -486,6 +486,8 @@ elm = 16
 <dl class="first-deftypefn def-block">
 <dt class="deftypefn def-line" id="index-_003d-8"><span><code class="def-type"><var class="var">image</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomread (<var class="var">filename</var>)</code></span></dt>
 <dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-9"><span><code class="def-type"><var class="var">image</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomread (<var class="var">structure</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-_003d-10"><span><code class="def-type"><var class="var">image</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomread (___, <var class="var">propertyname</var>, <var class="var">propertyvalue</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-cmap_005d"><span><code class="def-type">[<var class="var">image</var>,</code> <strong class="def-name"><var class="var">cmap</var>]</strong> <code class="def-code-arguments">= dicomread (___)</code></span></dt>
 <dd>
 <p>Load the image from a DICOM file. 
 </p><h4 class="subsubheading" id="Inputs-7">Inputs</h4>
@@ -493,10 +495,23 @@ elm = 16
 </p>
 <p><var class="var">structure</var> - a structure with a field <code class="code">Filename</code> (such as returned by <code class="code">dicominfo</code>).
 </p>
-<p><var class="var">image</var> - may be two or three dimensional, depending on the content of the file. 
+<p><var class="var">propertyname</var>, <var class="var">propertyvalue</var> - property name (string), property value for additional properties to function.
 </p>
+<p>Known properties are:
+</p><dl class="table">
+<dt>frames</dt>
+<dd><p>Either &rsquo;all&rsquo; (default), a scalar frame value or vector of frame values.
+</p></dd>
+<dt>UseRVHeuristic</dt>
+<dd><p>Value is currently silently ignored.
+</p></dd>
+</dl>
 <h4 class="subsubheading" id="Outputs-8">Outputs</h4>
-<p><var class="var">image</var> - An integer or float matrix will be returned, the number of bits will depend on the file. 
+<p><var class="var">image</var> - An integer or float matrix will be returned, the number of bits will depend on the file.
+The image may be two or three dimensional, depending on the content of the file. 
+</p>
+<p><var class="var">cmap</var> - Cx3 colormap associated with the image. Each row is a 3 element RGB triplet ion the range of 0 .. 1.
+If the image does not have a color map, colormap is []
 </p>
 <h4 class="subsubheading" id="Examples-4">Examples</h4>
 <p>Load the image data of a dcm file:
@@ -515,6 +530,12 @@ image =
 0  0  0  0  0
 0  0  0  0  0
 </pre></div>
+<p>Load the 1st and 10th frame of image data from a dcm file:
+</p>
+<div class="example">
+<pre class="example-preformatted">&gt; file = file_in_loadpath('imdata/US-PAL-8-10x-echo.dcm');
+&gt; X = dicomread (file, 'frames;, [1, 10]);
+</pre></div>
 <p><strong class="strong">See also:</strong> dicominfo.
 </p></dd></dl>
 </div>
@@ -522,7 +543,7 @@ image =
 <h4 class="subsection">3.1.9 dicomuid</h4>
 <a class="index-entry-id" id="index-dicomuid"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d-10"><span><code class="def-type"><var class="var">uuid</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomuid ()</code></span></dt>
+<dt class="deftypefn def-line" id="index-_003d-11"><span><code class="def-type"><var class="var">uuid</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">dicomuid ()</code></span></dt>
 <dd>
 <p>Generate a DICOM unique id . 
 </p>
@@ -609,7 +630,7 @@ uid = 1.2.826.0.1.3680043.2.1143.3114589836670200378351641061429967573
 <h4 class="subsection">3.1.12 images.dicom.decodeUID</h4>
 <a class="index-entry-id" id="index-decodeUID"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d-11"><span><code class="def-type"><var class="var">uidinfo</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">images.dicom.decodeUID(<var class="var">uid</var>)</code></span></dt>
+<dt class="deftypefn def-line" id="index-_003d-12"><span><code class="def-type"><var class="var">uidinfo</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">images.dicom.decodeUID(<var class="var">uid</var>)</code></span></dt>
 <dd><p>Look up information about a uid string
 </p>
 <h4 class="subsubheading" id="Inputs-11">Inputs</h4>
@@ -635,7 +656,7 @@ uid = 1.2.826.0.1.3680043.2.1143.3114589836670200378351641061429967573
 <h4 class="subsection">3.1.13 images.dicom.parseDICOMDIR</h4>
 <a class="index-entry-id" id="index-parseDICOMDIR"></a>
 <dl class="first-deftypefn def-block">
-<dt class="deftypefn def-line" id="index-_003d-12"><span><code class="def-type"><var class="var">info</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">images.dicom.parseDICOMDIR(<var class="var">filename</var>)</code></span></dt>
+<dt class="deftypefn def-line" id="index-_003d-13"><span><code class="def-type"><var class="var">info</var></code> <strong class="def-name">=</strong> <code class="def-code-arguments">images.dicom.parseDICOMDIR(<var class="var">filename</var>)</code></span></dt>
 <dd><p>Parse a DICOMDIR file and return the information as a struct.
 </p>
 <h4 class="subsubheading" id="Inputs-12">Inputs</h4>
