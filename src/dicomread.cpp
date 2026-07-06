@@ -192,7 +192,7 @@ Load the 1st and 10th frame of image data from a dcm file:\n\
             }
           else
             {
-              error (QUOTED(OCT_FN_NAME)": unkown property name '%s'", args (i).string_value ().c_str());
+              error (QUOTED(OCT_FN_NAME)": unknown property name '%s'", args (i).string_value ().c_str());
 	      return octave_value();
             }
         }
